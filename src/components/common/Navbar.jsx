@@ -81,32 +81,16 @@ export const Navbar = () => {
 
           {/* Right Action */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              to={user ? "/admin/dashboard" : "/admin/login"}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold tracking-wide border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-400 transition-all shadow-sm group"
-            >
-              <Shield className="w-3.5 h-3.5 text-indigo-400 group-hover:rotate-12 transition-transform" />
-              <span>{user ? 'Admin Dashboard' : 'CMS Admin'}</span>
-              <ArrowUpRight className="w-3 h-3 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
-
             <button
               onClick={() => handleNavClick('/#contact')}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-brand-primary to-brand-accent text-white hover:opacity-95 shadow-md shadow-indigo-600/25 active:scale-95 transition-all"
+              className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-mono font-bold hover:opacity-95 shadow-neon-cyan active:scale-95 transition-all"
             >
-              Hire Me
+              Get in Touch
             </button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            <Link
-              to={user ? "/admin/dashboard" : "/admin/login"}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-indigo-400"
-              title="CMS Admin"
-            >
-              <Shield className="w-4 h-4" />
-            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none"

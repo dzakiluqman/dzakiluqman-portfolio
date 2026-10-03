@@ -107,16 +107,6 @@ export const Home = () => {
     <div className="min-h-screen bg-dark-950 text-slate-100 flex flex-col selection:bg-neon-cyan selection:text-dark-950">
       <Navbar />
 
-      {/* Demo Notice Banner if Supabase is unconfigured */}
-      {!isSupabaseConfigured && (
-        <div className="bg-dark-900/90 border-b border-neon-cyan/30 px-4 py-2 text-center text-xs text-neon-cyan flex items-center justify-center gap-2 mt-16 sm:mt-18 font-mono">
-          <Radio className="w-3.5 h-3.5 animate-pulse text-neon-cyan" />
-          <span>
-            <strong>PREVIEW DEMO MODE:</strong> Populate <code className="text-white bg-dark-950 px-1 py-0.5 rounded border border-slate-700">VITE_SUPABASE_URL</code> in <code className="text-white">.env</code> to stream live database records.
-          </span>
-        </div>
-      )}
-
       {/* Main Content */}
       <main className="flex-1">
         {/* 1. 3D Interactive Hero Canvas with 3D Male Avatar */}
