@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 import { ArrowDown, Github, Linkedin, Mail, MapPin, Sparkles, FileText, Send } from 'lucide-react'
 
 export const Hero = ({ profile }) => {
-  const name = profile?.full_name || 'Dzaki Luqman'
-  const headline = profile?.headline || 'Senior Fullstack Software Engineer & Cloud Architect'
-  const bio = profile?.bio || 'Building resilient web systems, scalable cloud platforms, and intuitive interfaces with modern engineering practices.'
-  const location = profile?.location || 'Jakarta, Indonesia'
+  const name = profile?.full_name || 'Dzakii Luqman Faid'
+  const headline = profile?.headline || 'Junior Software Developer'
+  const bio = profile?.bio || 'An enthusiastic, fast-learning Junior Software Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.'
+  const location = profile?.location || 'Kota Magelang, Indonesia'
   const socialLinks = profile?.social_links || {}
 
   const scrollToSection = (id) => {

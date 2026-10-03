@@ -1,9 +1,9 @@
 export const mockProfile = {
   id: '00000000-0000-0000-0000-000000000001',
   full_name: 'Dzakii Luqman Faid',
-  headline: 'Senior Fullstack Software Engineer & Cloud Architect',
-  bio: 'Passionate full-stack developer with 5+ years of experience engineering scalable web applications, real-time distributed systems, and intuitive user experiences. Specialized in React, Node.js, TypeScript, and modern cloud databases.',
-  location: 'Jakarta, Indonesia',
+  headline: 'Junior Software Developer',
+  bio: 'An enthusiastic, fast-learning Junior Software Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.',
+  location: 'Kota Magelang, Indonesia',
   avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
   social_links: {
     github: 'https://github.com/dzakiluqman',

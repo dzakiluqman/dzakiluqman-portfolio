@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Terminal, Shield, ArrowUpRight, Sparkles } from 'lucide-react'
-import { useAuth } from '../../context/AuthContext'
+import { Menu, X, Terminal, ArrowUpRight } from 'lucide-react'
 
-export const Navbar = () => {
+export const Navbar = ({ profile }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const { user } = useAuth()
   const location = useLocation()
 
   useEffect(() => {
@@ -59,10 +57,12 @@ export const Navbar = () => {
             </div>
             <div>
               <span className="font-bold text-lg text-white tracking-tight flex items-center gap-1.5 font-mono">
-                Dzakii Luqman Faid
+                {profile?.full_name || 'Dzakii Luqman Faid'}
                 <span className="inline-block w-2 h-2 rounded-full bg-neon-cyan animate-ping" title="Available for projects"></span>
               </span>
-              <p className="text-[11px] text-slate-400 font-mono tracking-wider uppercase">Senior Fullstack</p>
+              <p className="text-[11px] text-slate-400 font-mono tracking-wider uppercase">
+                {profile?.headline || 'Junior Software Developer'}
+              </p>
             </div>
           </Link>
 
@@ -79,13 +79,14 @@ export const Navbar = () => {
             ))}
           </nav>
 
-          {/* Right Action */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Right Action: Pinned "Hire Me" Button */}
+          <div className="hidden md:flex items-center">
             <button
               onClick={() => handleNavClick('/#contact')}
-              className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-mono font-bold hover:opacity-95 shadow-neon-cyan active:scale-95 transition-all"
+              className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-mono font-bold hover:shadow-neon-cyan hover:scale-[1.02] shadow-neon-cyan active:scale-95 transition-all flex items-center gap-1.5"
             >
-              Get in Touch
+              <span>Hire Me</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -115,18 +116,12 @@ export const Navbar = () => {
             </button>
           ))}
           <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
-            <Link
-              to={user ? "/admin/dashboard" : "/admin/login"}
-              onClick={() => setIsOpen(false)}
-              className="w-full text-center px-4 py-2.5 rounded-lg text-sm font-medium bg-slate-800 text-indigo-300 border border-indigo-500/20"
-            >
-              {user ? 'Go to Admin Dashboard' : 'Open CMS Admin Login'}
-            </Link>
             <button
               onClick={() => handleNavClick('/#contact')}
-              className="w-full text-center px-4 py-2.5 rounded-lg text-sm font-medium bg-brand-primary text-white shadow-lg shadow-indigo-600/30"
+              className="w-full text-center px-4 py-2.5 rounded-lg text-xs font-mono font-bold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-lg shadow-neon-cyan/20 uppercase tracking-wider flex items-center justify-center gap-1.5"
             >
-              Contact Me
+              <span>Hire Me</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

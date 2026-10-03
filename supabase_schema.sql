@@ -142,9 +142,9 @@ CREATE POLICY "Authenticated users can manage messages" ON public.messages FOR A
 INSERT INTO public.profiles (full_name, headline, bio, location, avatar_url, social_links)
 VALUES (
   'Dzakii Luqman Faid',
-  'Senior Fullstack Software Engineer & Cloud Architect',
-  'Passionate full-stack developer with 5+ years of experience engineering scalable web applications, real-time distributed systems, and intuitive user experiences. Specialized in React, Node.js, TypeScript, and modern cloud databases.',
-  'Jakarta, Indonesia',
+  'Junior Software Developer',
+  'An enthusiastic, fast-learning Junior Software Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.',
+  'Kota Magelang, Indonesia',
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
   '{"github": "https://github.com/dzakiluqman", "linkedin": "https://linkedin.com/in/dzakiluqman", "twitter": "https://twitter.com/dzakiluqman", "email": "dzakiluqman@example.com"}'::jsonb
 ) ON CONFLICT DO NOTHING;

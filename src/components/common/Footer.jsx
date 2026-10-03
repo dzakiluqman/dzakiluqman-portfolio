@@ -1,5 +1,6 @@
 import React from 'react'
-import { Github, Linkedin, Twitter, Mail, ArrowUp, Heart } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Github, Linkedin, Twitter, Mail, ArrowUp, Heart, Shield } from 'lucide-react'
 
 export const Footer = ({ profile }) => {
   const scrollToTop = () => {
@@ -24,7 +25,7 @@ export const Footer = ({ profile }) => {
               </span>
             </h3>
             <p className="text-sm text-slate-400 max-w-md leading-relaxed">
-              {profile?.headline || 'Senior Fullstack Software Engineer specializing in modern web architecture, distributed systems, and delightful developer tooling.'}
+              {profile?.headline || 'Junior Software Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.'}
             </p>
             <div className="flex items-center gap-3 pt-2">
               {socialLinks.github && (
@@ -80,6 +81,12 @@ export const Footer = ({ profile }) => {
               <li><a href="#skills" className="hover:text-indigo-400 transition-colors">Tech Stack & Skills</a></li>
               <li><a href="#education" className="hover:text-indigo-400 transition-colors">Education & Certs</a></li>
               <li><a href="#contact" className="hover:text-indigo-400 transition-colors">Get in Touch</a></li>
+              <li className="pt-1.5 border-t border-slate-800/80">
+                <Link to="/admin/login" className="text-slate-500 hover:text-neon-cyan transition-colors inline-flex items-center gap-1.5 font-mono text-xs">
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>CMS Admin</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -99,6 +106,14 @@ export const Footer = ({ profile }) => {
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} {profile?.full_name || 'Dzakii Luqman Faid'}. All rights reserved.</p>
           <div className="flex items-center gap-4">
+            <Link
+              to="/admin/login"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-neon-cyan hover:border-slate-700 transition-colors font-mono py-1 px-2.5 rounded-lg bg-slate-900/80 border border-slate-800"
+              title="Access CMS Administration Portal"
+            >
+              <Shield className="w-3.5 h-3.5 text-slate-400" />
+              <span>CMS Admin</span>
+            </Link>
             <span className="flex items-center gap-1">
               Crafted with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> & clean code
             </span>

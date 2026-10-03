@@ -49,13 +49,22 @@ export const Home = () => {
       try {
         setLoading(true)
 
-        // 1. Fetch Profile
+        // 1. Fetch Profile Dynamically
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
           .limit(1)
-          .single()
-        if (profileData) setProfile(profileData)
+          .maybeSingle()
+        if (profileData) {
+          setProfile(prev => ({
+            ...prev,
+            ...profileData,
+            full_name: profileData.full_name || prev.full_name,
+            headline: profileData.headline || prev.headline,
+            location: profileData.location || prev.location,
+            bio: profileData.bio || prev.bio
+          }))
+        }
 
         // 2. Fetch Published Projects
         const { data: projectsData } = await supabase
@@ -105,7 +114,7 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen bg-dark-950 text-slate-100 flex flex-col selection:bg-neon-cyan selection:text-dark-950">
-      <Navbar />
+      <Navbar profile={profile} />
 
       {/* Main Content */}
       <main className="flex-1">
@@ -284,7 +293,7 @@ export const Home = () => {
                     <div>
                       <p className="text-xs text-slate-500 font-mono">NODE LOCATION</p>
                       <p className="text-sm font-semibold text-white font-mono">
-                        {profile?.location || 'Jakarta, Indonesia'} (UTC+7)
+                        {profile?.location || 'Kota Magelang, Indonesia'} (UTC+7)
                       </p>
                     </div>
                   </div>
