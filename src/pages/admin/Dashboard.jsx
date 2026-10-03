@@ -15,7 +15,8 @@ import {
   Cpu,
   Radio,
   Activity,
-  Terminal
+  Terminal,
+  ShieldCheck
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { mockProjects, mockExperiences, mockSkills, mockMessages } from '../../lib/mockData'
@@ -93,41 +94,41 @@ export const Dashboard = () => {
 
       <div className="flex-1 flex flex-col min-w-0">
         <AdminHeader
-          title="SCI-FI HUD // TELEMETRY DASHBOARD"
-          subtitle="Real-time CMS telemetry, neural node health, and database metrics"
+          title="Portfolio Overview & Management"
+          subtitle="Real-time CMS overview, database records, and inbound inquiries"
           action={
             <Link
               to="/admin/projects"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-neon-cyan hover:opacity-95 transition-all"
             >
               <Plus className="w-4 h-4" />
-              <span>DEPLOY_PROJECT</span>
+              <span>New Project</span>
             </Link>
           }
         />
 
         <main className="flex-1 p-6 lg:p-8 space-y-8 overflow-y-auto">
           {loading ? (
-            <LoadingSpinner text="Connecting telemetry streams..." />
+            <LoadingSpinner text="Loading dashboard metrics..." />
           ) : (
             <>
-              {/* Top HUD Telemetry Bar */}
-              <div className="p-4 rounded-2xl hud-glass border border-neon-cyan/20 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+              {/* System Status Bar */}
+              <div className="p-4 rounded-2xl hud-glass border border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-neon-cyan">
-                    <Activity className="w-4 h-4 animate-pulse" />
-                    <span className="font-bold">SYSTEM_PULSE: NORMAL</span>
+                  <div className="flex items-center gap-2 text-slate-200">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span className="font-semibold">Supabase Connected</span>
                   </div>
                   <span className="text-slate-600">|</span>
-                  <div className="flex items-center gap-1 text-slate-300">
-                    <Radio className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>SOCKET: RLS_ENFORCED</span>
+                  <div className="flex items-center gap-1.5 text-slate-300">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Row Level Security (RLS) Active</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 text-slate-400">
-                  <span>LATENCY: ~18ms</span>
-                  <span className="text-neon-cyan font-bold">NODE: ASIA-SOUTHEAST</span>
+                  <span>Region: Asia Southeast</span>
+                  <span className="text-neon-cyan font-semibold">Live Mode</span>
                 </div>
               </div>
 
@@ -136,7 +137,7 @@ export const Dashboard = () => {
                 {/* Total Projects */}
                 <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-neon-cyan/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Total Deployments</span>
+                    <span className="text-xs font-mono uppercase text-slate-400">Total Projects</span>
                     <div className="w-9 h-9 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
                       <FolderGit2 className="w-4 h-4" />
                     </div>
@@ -157,7 +158,7 @@ export const Dashboard = () => {
                 {/* Work Experiences */}
                 <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-neon-violet/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Career Tenures</span>
+                    <span className="text-xs font-mono uppercase text-slate-400">Work Experience</span>
                     <div className="w-9 h-9 rounded-xl bg-neon-violet/10 border border-neon-violet/30 flex items-center justify-center text-neon-violet">
                       <Briefcase className="w-4 h-4" />
                     </div>
@@ -178,14 +179,14 @@ export const Dashboard = () => {
                 {/* Skills Listed */}
                 <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-emerald-500/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Tech Capabilities</span>
+                    <span className="text-xs font-mono uppercase text-slate-400">Technical Skills</span>
                     <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                       <Code className="w-4 h-4" />
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-3xl font-extrabold text-white">{stats.totalSkills}</span>
-                    <span className="text-xs text-slate-400 font-mono">Stack nodes</span>
+                    <span className="text-xs text-slate-400 font-mono">Skills listed</span>
                   </div>
                   <Link
                     to="/admin/cv"
@@ -199,7 +200,7 @@ export const Dashboard = () => {
                 {/* Inquiries */}
                 <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-rose-500/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Inbound Packets</span>
+                    <span className="text-xs font-mono uppercase text-slate-400">Inbound Messages</span>
                     <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                       <Mail className="w-4 h-4" />
                     </div>
@@ -225,19 +226,19 @@ export const Dashboard = () => {
                   <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-neon-cyan" />
-                      <h3 className="font-bold text-white text-base font-mono">INBOUND_MESSAGE_STREAM</h3>
+                      <h3 className="font-bold text-white text-base">Recent Inbound Messages</h3>
                     </div>
                     <Link
                       to="/admin/messages"
                       className="text-xs font-mono text-neon-cyan hover:underline"
                     >
-                      OPEN INBOX ({stats.unreadMessages} UNREAD)
+                      VIEW INBOX ({stats.unreadMessages} UNREAD)
                     </Link>
                   </div>
 
                   {recentMessages.length === 0 ? (
                     <div className="py-8 text-center text-slate-500 text-xs font-mono">
-                      No inbound packets logged. Real-time form submissions stream here.
+                      No messages logged yet. Real-time form submissions stream here.
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -269,9 +270,9 @@ export const Dashboard = () => {
 
                 {/* Right Panel: Supabase DB Architecture */}
                 <div className="lg:col-span-5 hud-glass rounded-2xl p-6 space-y-5 border border-slate-800">
-                  <div className="flex items-center gap-2 pb-4 border-b border-slate-800 font-mono">
+                  <div className="flex items-center gap-2 pb-4 border-b border-slate-800">
                     <Database className="w-4 h-4 text-neon-cyan" />
-                    <h3 className="font-bold text-white text-base">POSTGRES_SCHEMA_RLS</h3>
+                    <h3 className="font-bold text-white text-base">Supabase Database Architecture</h3>
                   </div>
 
                   <div className="space-y-3 text-xs leading-relaxed text-slate-300">
@@ -290,11 +291,11 @@ export const Dashboard = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-500">experiences:</span>
-                        <span className="text-neon-violet">Circuit Timeline Sync</span>
+                        <span className="text-neon-violet">Timeline Sync</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-500">skills:</span>
-                        <span className="text-amber-400">3D Orbit Node Sync</span>
+                        <span className="text-amber-400">3D Tech Sphere Sync</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-slate-500">messages:</span>
@@ -310,7 +311,7 @@ export const Dashboard = () => {
                         className="w-full py-2.5 px-4 rounded-xl bg-dark-950 border border-neon-cyan/40 hover:bg-neon-cyan/10 text-neon-cyan text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-colors"
                       >
                         <ExternalLink className="w-4 h-4" />
-                        <span>OPEN_PUBLIC_PORTFOLIO_3D</span>
+                        <span>View Live Portfolio</span>
                       </a>
                     </div>
                   </div>

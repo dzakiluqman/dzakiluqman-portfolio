@@ -40,8 +40,8 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
             <FileCheck className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-white font-mono">CURRICULUM_VITAE.SYS</h4>
-            <p className="text-xs text-slate-400">Validated engineering record synchronized with Supabase DB</p>
+            <h4 className="text-sm font-bold text-white font-mono">Curriculum Vitae</h4>
+            <p className="text-xs text-slate-400">Professional career trajectory, education, and credentials</p>
           </div>
         </div>
 
@@ -50,7 +50,7 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
           className="px-4 py-2.5 rounded-xl font-mono text-xs font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-neon-cyan hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
         >
           <Printer className="w-4 h-4" />
-          <span>PREVIEW / EXPORT CV</span>
+          <span>Preview & Print CV</span>
         </button>
       </div>
 
@@ -78,7 +78,7 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
                 }`}
               >
                 {exp.is_current && (
-                  <div className="w-2 h-2 rounded-full bg-neon-cyan absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-ping" />
+                  <div className="w-2 h-2 rounded-full bg-neon-cyan absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                 )}
               </div>
 
@@ -151,8 +151,8 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
               {/* Modal Bar */}
               <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-dark-950">
                 <div className="flex items-center gap-2 font-mono text-xs text-neon-cyan">
-                  <Terminal className="w-4 h-4" />
-                  <span>PREVIEW_CV_DOCUMENT</span>
+                  <FileCheck className="w-4 h-4" />
+                  <span>Curriculum Vitae Preview</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -160,7 +160,7 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
                     className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold bg-neon-cyan text-dark-950 hover:opacity-90 flex items-center gap-1.5"
                   >
                     <Printer className="w-3.5 h-3.5" />
-                    <span>PRINT / SAVE PDF</span>
+                    <span>Print / Save PDF</span>
                   </button>
                   <button
                     onClick={() => setShowCvModal(false)}

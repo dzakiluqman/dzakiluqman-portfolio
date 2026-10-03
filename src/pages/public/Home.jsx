@@ -133,7 +133,7 @@ export const Home = () => {
             <div className="text-center max-w-2xl mx-auto mb-14">
               <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
                 <Briefcase className="w-4 h-4 text-neon-cyan" />
-                <span>CHRONOLOGICAL_EXPERIENCE // TIMELINE</span>
+                <span>Experience & Career Path</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
                 Career Progression
@@ -241,7 +241,7 @@ export const Home = () => {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-xs font-semibold text-neon-cyan hover:text-white pt-2 border-t border-slate-800 font-mono"
                       >
-                        <span>AUTHENTICATE</span>
+                        <span>View Credential</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                     )}
@@ -260,13 +260,13 @@ export const Home = () => {
                 <div>
                   <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
                     <Radio className="w-4 h-4 text-neon-cyan" />
-                    <span>ENCRYPTED_TRANSMISSION // CONTACT</span>
+                    <span>Contact & Inquiries</span>
                   </div>
                   <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-                    Establish Direct Link
+                    Let's Connect & Collaborate
                   </h2>
                   <p className="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
-                    Initiate an inquiry regarding architectural advisory, distributed engineering systems, or contract collaboration.
+                    Have an opportunity, a project in mind, or just want to connect? Reach out anytime.
                   </p>
                 </div>
 
@@ -276,7 +276,7 @@ export const Home = () => {
                       <Code className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs text-slate-500 font-mono">DIRECT COMM</p>
+                      <p className="text-xs text-slate-500 font-mono">EMAIL ADDRESS</p>
                       <a 
                         href={`mailto:${profile?.social_links?.email || 'dzakiluqman@example.com'}`}
                         className="text-sm font-semibold text-white hover:text-neon-cyan transition-colors font-mono"
@@ -291,7 +291,7 @@ export const Home = () => {
                       <Sparkles className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs text-slate-500 font-mono">NODE LOCATION</p>
+                      <p className="text-xs text-slate-500 font-mono">LOCATION</p>
                       <p className="text-sm font-semibold text-white font-mono">
                         {profile?.location || 'Kota Magelang, Indonesia'} (UTC+7)
                       </p>

@@ -121,13 +121,13 @@ export const SkillsSphere = ({ skills = [] }) => {
         <div className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
             <Cpu className="w-4 h-4 text-neon-cyan" />
-            <span>NEURAL_CAPABILITIES // SKILL_SPHERE_3D</span>
+            <span>Technical Capabilities</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
             Technical Competencies
           </h2>
           <p className="mt-2 text-slate-400 text-sm sm:text-base">
-            Fullstack frameworks, cloud distributed topologies, 3D WebGL, and reactive state systems.
+            Frontend frameworks, modern web tooling, backend development, and databases.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-2 mt-8 p-1.5 rounded-2xl bg-dark-900 border border-slate-800 max-w-lg mx-auto">
@@ -150,8 +150,8 @@ export const SkillsSphere = ({ skills = [] }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-5 h-[380px] sm:h-[450px] relative rounded-2xl hud-glass overflow-hidden border border-neon-cyan/20">
             <div className="absolute top-4 left-4 z-10 font-mono text-[11px] text-neon-cyan flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-neon-cyan animate-ping" />
-              <span>ORBIT_ENGINE // 3D_SPHERE</span>
+              <span className="w-2 h-2 rounded-full bg-neon-cyan" />
+              <span>Interactive Tech Sphere</span>
             </div>
 
             <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }} className="w-full h-full">
@@ -164,8 +164,8 @@ export const SkillsSphere = ({ skills = [] }) => {
             </Canvas>
 
             <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between text-[10px] font-mono text-slate-400 bg-dark-950/80 p-2.5 rounded-xl border border-slate-800">
-              <span>ACTIVE_CAPABILITIES: {filteredSkills.length}</span>
-              <span className="text-neon-cyan">REALTIME_SYNC::OK</span>
+              <span>Skills in View: {filteredSkills.length}</span>
+              <span className="text-neon-cyan font-semibold">Interactive Orbit</span>
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Terminal, ArrowUpRight } from 'lucide-react'
+import { Menu, X, Terminal, Code, ArrowUpRight } from 'lucide-react'
 
 export const Navbar = ({ profile }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -52,13 +52,13 @@ export const Navbar = ({ profile }) => {
           >
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-primary to-brand-accent p-0.5 shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all">
               <div className="w-full h-full bg-dark-950 rounded-[10px] flex items-center justify-center">
-                <Terminal className="w-5 h-5 text-indigo-400 group-hover:scale-110 transition-transform" />
+                <Code className="w-5 h-5 text-indigo-400 group-hover:scale-110 transition-transform" />
               </div>
             </div>
             <div>
-              <span className="font-bold text-lg text-white tracking-tight flex items-center gap-1.5 font-mono">
+              <span className="font-bold text-lg text-white tracking-tight flex items-center gap-2">
                 {profile?.full_name || 'Dzakii Luqman Faid'}
-                <span className="inline-block w-2 h-2 rounded-full bg-neon-cyan animate-ping" title="Available for projects"></span>
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" title="Available for opportunities"></span>
               </span>
               <p className="text-[11px] text-slate-400 font-mono tracking-wider uppercase">
                 {profile?.headline || 'Junior Software Developer'}

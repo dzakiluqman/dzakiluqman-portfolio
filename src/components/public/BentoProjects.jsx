@@ -91,13 +91,13 @@ export const BentoProjects = ({ projects = [] }) => {
           <div>
             <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
               <FolderGit2 className="w-4 h-4 text-neon-cyan" />
-              <span>BENTO_PROJECT_MATRIX // V2</span>
+              <span>Portfolio Showcase</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Engineered Deployments
+              Featured Projects
             </h2>
             <p className="mt-2 text-slate-400 text-sm sm:text-base max-w-xl">
-              High-impact distributed applications, cloud telemetry, and AI systems with full 3D interactive preview.
+              A showcase of modern web applications, interactive user interfaces, and full-stack solutions.
             </p>
           </div>
 
@@ -264,7 +264,7 @@ export const BentoProjects = ({ projects = [] }) => {
                 <div className="p-4 rounded-xl bg-dark-950/80 border border-slate-800/80 text-xs text-slate-300 space-y-3 font-mono leading-relaxed">
                   <div className="text-neon-cyan font-bold flex items-center gap-1.5">
                     <Code2 className="w-4 h-4" />
-                    <span>SYSTEM_DESIGN & ARCHITECTURE</span>
+                    <span>Architecture & Overview</span>
                   </div>
                   <p>{selectedModalProject.content || selectedModalProject.description}</p>
                 </div>
@@ -292,7 +292,7 @@ export const BentoProjects = ({ projects = [] }) => {
                       className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-dark-950 border border-slate-700 text-slate-200 hover:text-white hover:border-slate-500 transition-colors flex items-center gap-2 font-mono"
                     >
                       <Github className="w-4 h-4" />
-                      <span>REPOSITORY</span>
+                      <span>Source Code</span>
                     </a>
                   )}
                   {selectedModalProject.demo_url && (
@@ -303,7 +303,7 @@ export const BentoProjects = ({ projects = [] }) => {
                       className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-neon-cyan hover:opacity-95 transition-all flex items-center gap-2 font-mono font-bold"
                     >
                       <ExternalLink className="w-4 h-4" />
-                      <span>INITIALIZE_DEMO</span>
+                      <span>Live Demo</span>
                     </a>
                   )}
                 </div>

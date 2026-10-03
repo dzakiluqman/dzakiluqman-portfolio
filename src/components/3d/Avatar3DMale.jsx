@@ -103,46 +103,45 @@ export const Avatar3DMale = ({ scale = 1.0 }) => {
     { pos: [0, 0.85, 0.45], color: '#a855f7' }, // Forehead Apex
   ], [])
 
-  // Smooth cursor tracking, breathing oscillation, and holographic animation
+  // Smooth cursor tracking, breathing oscillation, and clean interaction
   useFrame((state, delta) => {
     const { mouse, clock } = state
     const elapsedTime = clock.getElapsedTime()
 
-    // Smooth head tracking mouse
+    // Smooth head tracking mouse with natural lerp
     if (headGroup.current) {
       const targetRotY = mouse.x * 0.65
       const targetRotX = -mouse.y * 0.45
-      headGroup.current.rotation.y = THREE.MathUtils.lerp(headGroup.current.rotation.y, targetRotY, 0.08)
-      headGroup.current.rotation.x = THREE.MathUtils.lerp(headGroup.current.rotation.x, targetRotX, 0.08)
+      headGroup.current.rotation.y = THREE.MathUtils.lerp(headGroup.current.rotation.y, targetRotY, 0.07)
+      headGroup.current.rotation.x = THREE.MathUtils.lerp(headGroup.current.rotation.x, targetRotX, 0.07)
 
-      // Idle subtle breathing and floating
-      headGroup.current.position.y = Math.sin(elapsedTime * 2.0) * 0.06
+      // Idle subtle breathing and floating naturally at eye-level
+      headGroup.current.position.y = -0.05 + Math.sin(elapsedTime * 1.6) * 0.035
     }
 
     // Whole avatar group slight response
     if (avatarGroup.current) {
-      const targetGroupY = mouse.x * 0.2 + (hovered ? 0.05 : 0)
+      const targetGroupY = mouse.x * 0.15 + (hovered ? 0.03 : 0)
       avatarGroup.current.rotation.y = THREE.MathUtils.lerp(avatarGroup.current.rotation.y, targetGroupY, 0.05)
     }
 
-    // Biometric holographic scan ring sweep
+    // Gentle halo ring rotation
     if (scanRingRef.current) {
-      const scanSpeed = hovered ? 3.0 : 1.6
-      scanRingRef.current.position.y = Math.sin(elapsedTime * scanSpeed) * 1.05
-      scanRingRef.current.rotation.z += delta * (hovered ? 1.5 : 0.6)
+      scanRingRef.current.position.y = -0.05 + Math.sin(elapsedTime * 1.2) * 0.15
+      scanRingRef.current.rotation.z += delta * (hovered ? 0.8 : 0.35)
     }
 
-    // Neon wireframe glow pulse
+    // Wireframe glow illumination
     if (wireMatRef.current) {
-      const baseIntensity = hovered ? 1.6 : 0.95
-      wireMatRef.current.emissiveIntensity = baseIntensity + Math.sin(elapsedTime * 3.5) * 0.3
+      const baseIntensity = hovered ? 1.4 : 0.9
+      wireMatRef.current.emissiveIntensity = baseIntensity + Math.sin(elapsedTime * 2.5) * 0.15
     }
 
-    // Ocular cyber iris pulse
+    // Ocular cyber iris subtle glow
     if (leftEyeRef.current && rightEyeRef.current) {
-      const eyeIntensity = hovered ? 2.2 : 1.3
-      leftEyeRef.current.material.emissiveIntensity = eyeIntensity + Math.sin(elapsedTime * 4.0) * 0.4
-      rightEyeRef.current.material.emissiveIntensity = eyeIntensity + Math.sin(elapsedTime * 4.0) * 0.4
+      const eyeIntensity = hovered ? 1.8 : 1.2
+      leftEyeRef.current.material.emissiveIntensity = eyeIntensity + Math.sin(elapsedTime * 3.0) * 0.25
+      rightEyeRef.current.material.emissiveIntensity = eyeIntensity + Math.sin(elapsedTime * 3.0) * 0.25
     }
   })
 
@@ -156,9 +155,9 @@ export const Avatar3DMale = ({ scale = 1.0 }) => {
       onClick={() => setClicked(!clicked)}
       cursor="pointer"
     >
-      {/* HUMAN HEAD TOPOLOGY MESH */}
-      <group ref={headGroup} position={[0, 0.2, 0]}>
-        
+      {/* HUMAN HEAD TOPOLOGY MESH - Centered at eye-level */}
+      <group ref={headGroup} position={[0, -0.05, 0]}>
+
         {/* 1. Outer Neon Human Wireframe Topology */}
         <mesh geometry={headGeometry}>
           <meshStandardMaterial
