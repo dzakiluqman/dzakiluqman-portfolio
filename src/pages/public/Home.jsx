@@ -5,15 +5,10 @@ import {
   GraduationCap, 
   Award, 
   Code, 
-  Layers, 
   Sparkles, 
-  FolderGit2, 
-  Terminal, 
-  Mail, 
-  MapPin, 
-  Calendar,
   ExternalLink,
-  Info
+  Info,
+  Radio
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { 
@@ -26,10 +21,10 @@ import {
 } from '../../lib/mockData'
 import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
-import Hero from '../../components/public/Hero'
-import ProjectCard from '../../components/public/ProjectCard'
+import Hero3D from '../../components/public/Hero3D'
+import ProjectSection from '../../components/public/ProjectSection'
+import SkillsVisualizer from '../../components/public/SkillsVisualizer'
 import ExperienceTimeline from '../../components/public/ExperienceTimeline'
-import SkillBadge from '../../components/public/SkillBadge'
 import ContactForm from '../../components/public/ContactForm'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 
@@ -42,13 +37,11 @@ export const Home = () => {
   const [certifications, setCertifications] = useState(mockCertifications)
   
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('All')
   const [activeCvTab, setActiveCvTab] = useState('experience')
 
   useEffect(() => {
     async function loadPortfolioData() {
       if (!isSupabaseConfigured) {
-        // Use rich mock data immediately
         setLoading(false)
         return
       }
@@ -56,7 +49,7 @@ export const Home = () => {
       try {
         setLoading(true)
 
-        // Fetch Profile
+        // 1. Fetch Profile
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
@@ -64,7 +57,7 @@ export const Home = () => {
           .single()
         if (profileData) setProfile(profileData)
 
-        // Fetch Published Projects
+        // 2. Fetch Published Projects
         const { data: projectsData } = await supabase
           .from('projects')
           .select('*')
@@ -72,28 +65,28 @@ export const Home = () => {
           .order('sort_order', { ascending: true })
         if (projectsData && projectsData.length > 0) setProjects(projectsData)
 
-        // Fetch Experiences
+        // 3. Fetch Experiences
         const { data: expData } = await supabase
           .from('experiences')
           .select('*')
           .order('start_date', { ascending: false })
         if (expData && expData.length > 0) setExperiences(expData)
 
-        // Fetch Educations
+        // 4. Fetch Educations
         const { data: eduData } = await supabase
           .from('educations')
           .select('*')
           .order('start_year', { ascending: false })
         if (eduData && eduData.length > 0) setEducations(eduData)
 
-        // Fetch Skills
+        // 5. Fetch Skills
         const { data: skillsData } = await supabase
           .from('skills')
           .select('*')
           .order('sort_order', { ascending: true })
         if (skillsData && skillsData.length > 0) setSkills(skillsData)
 
-        // Fetch Certifications
+        // 6. Fetch Certifications
         const { data: certsData } = await supabase
           .from('certifications')
           .select('*')
@@ -101,7 +94,7 @@ export const Home = () => {
         if (certsData && certsData.length > 0) setCertifications(certsData)
 
       } catch (err) {
-        console.warn('Could not fetch all Supabase live tables, utilizing sample data fallback:', err)
+        console.warn('Supabase fetch encountered warning, utilizing fallback:', err)
       } finally {
         setLoading(false)
       }
@@ -110,118 +103,64 @@ export const Home = () => {
     loadPortfolioData()
   }, [])
 
-  // Categories filter list
-  const categories = ['All', ...new Set(projects.map((p) => p.category).filter(Boolean))]
-  const filteredProjects = activeCategory === 'All' 
-    ? projects 
-    : projects.filter((p) => p.category === activeCategory)
-
-  // Skill groupings by category
-  const skillCategories = [...new Set(skills.map((s) => s.category))]
-
   return (
-    <div className="min-h-screen bg-dark-950 text-slate-100 flex flex-col selection:bg-brand-primary selection:text-white">
+    <div className="min-h-screen bg-dark-950 text-slate-100 flex flex-col selection:bg-neon-cyan selection:text-dark-950">
       <Navbar />
 
-      {/* Demo Notice Banner if Supabase is in preview mode */}
+      {/* Demo Notice Banner if Supabase is unconfigured */}
       {!isSupabaseConfigured && (
-        <div className="bg-indigo-950/70 border-b border-indigo-800/60 px-4 py-2 text-center text-xs text-indigo-200 flex items-center justify-center gap-2 mt-16 sm:mt-18">
-          <Info className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+        <div className="bg-dark-900/90 border-b border-neon-cyan/30 px-4 py-2 text-center text-xs text-neon-cyan flex items-center justify-center gap-2 mt-16 sm:mt-18 font-mono">
+          <Radio className="w-3.5 h-3.5 animate-pulse text-neon-cyan" />
           <span>
-            <strong>Preview Demo Mode:</strong> Add <code className="bg-indigo-900/80 px-1 py-0.5 rounded text-white">VITE_SUPABASE_URL</code> & <code className="bg-indigo-900/80 px-1 py-0.5 rounded text-white">VITE_SUPABASE_ANON_KEY</code> in <code className="text-white">.env</code> to connect live database.
+            <strong>PREVIEW DEMO MODE:</strong> Populate <code className="text-white bg-dark-950 px-1 py-0.5 rounded border border-slate-700">VITE_SUPABASE_URL</code> in <code className="text-white">.env</code> to stream live database records.
           </span>
         </div>
       )}
 
       {/* Main Content */}
       <main className="flex-1">
-        {/* 1. Hero Section */}
-        <Hero profile={profile} />
+        {/* 1. 3D Interactive Hero Canvas */}
+        <Hero3D profile={profile} />
 
-        {/* 2. Projects Section */}
-        <section id="projects" className="py-24 border-t border-slate-800/80 relative">
+        {/* 2. Futuristic Bento Grid & 3D Tilt Project Showcase */}
+        <ProjectSection projects={projects} />
+
+        {/* 3. 3D Orbit / Futuristic Skill Sphere */}
+        <SkillsVisualizer skills={skills} />
+
+        {/* 4. Glowing Cyberpunk Timeline for Experience & CV */}
+        <section id="experience" className="py-24 border-t border-slate-800/80 bg-dark-900/20 relative cyber-grid">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-              <div>
-                <div className="flex items-center gap-2 text-indigo-400 text-xs font-mono uppercase tracking-wider mb-2">
-                  <FolderGit2 className="w-4 h-4" />
-                  <span>Featured Work</span>
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                  Crafted with Precision
-                </h2>
-                <p className="mt-2 text-slate-400 text-base max-w-xl">
-                  A curated collection of fullstack web applications, cloud systems, and open-source software architectures.
-                </p>
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
+                <Briefcase className="w-4 h-4 text-neon-cyan" />
+                <span>CHRONOLOGICAL_EXPERIENCE // TIMELINE</span>
               </div>
-
-              {/* Category Filter Pills */}
-              <div className="flex flex-wrap gap-2">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
-                      activeCategory === cat
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                        : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {loading ? (
-              <LoadingSpinner text="Loading published projects..." />
-            ) : filteredProjects.length === 0 ? (
-              <div className="text-center py-16 bg-dark-900/50 rounded-2xl border border-slate-800">
-                <p className="text-slate-400 text-sm">No projects found in this category.</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredProjects.map((project, idx) => (
-                  <ProjectCard key={project.id || idx} project={project} index={idx} />
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* 3. Interactive CV Section */}
-        <section id="experience" className="py-24 border-t border-slate-800/80 bg-dark-900/30 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-12">
-              <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-mono uppercase tracking-wider mb-2">
-                <Briefcase className="w-4 h-4" />
-                <span>Interactive Curriculum Vitae</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Experience & Qualifications
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+                Career Progression
               </h2>
               <p className="mt-2 text-slate-400 text-sm sm:text-base">
-                Track record in software engineering, leadership, academic foundations, and professional accreditations.
+                Engineering milestones, leadership tenures, university education, and industry credentials.
               </p>
 
               {/* CV Section Tabs */}
               <div className="flex items-center justify-center gap-2 mt-8 p-1.5 rounded-2xl bg-dark-900 border border-slate-800 max-w-md mx-auto">
                 <button
                   onClick={() => setActiveCvTab('experience')}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all ${
                     activeCvTab === 'experience'
-                      ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md'
+                      ? 'bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-bold shadow-neon-cyan'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   <Briefcase className="w-3.5 h-3.5" />
-                  <span>Work Experience</span>
+                  <span>Experience</span>
                 </button>
                 <button
                   onClick={() => setActiveCvTab('education')}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all ${
                     activeCvTab === 'education'
-                      ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md'
+                      ? 'bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-bold shadow-neon-cyan'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -230,14 +169,14 @@ export const Home = () => {
                 </button>
                 <button
                   onClick={() => setActiveCvTab('certs')}
-                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-all ${
                     activeCvTab === 'certs'
-                      ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md'
+                      ? 'bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-bold shadow-neon-cyan'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   <Award className="w-3.5 h-3.5" />
-                  <span>Certificates</span>
+                  <span>Certs</span>
                 </button>
               </div>
             </div>
@@ -245,7 +184,12 @@ export const Home = () => {
             {/* Tab 1: Experience */}
             {activeCvTab === 'experience' && (
               <div className="max-w-4xl mx-auto">
-                <ExperienceTimeline experiences={experiences} />
+                <ExperienceTimeline 
+                  experiences={experiences} 
+                  educations={educations} 
+                  certifications={certifications}
+                  profile={profile} 
+                />
               </div>
             )}
 
@@ -255,17 +199,17 @@ export const Home = () => {
                 {educations.map((edu, idx) => (
                   <div
                     key={edu.id || idx}
-                    className="p-6 rounded-2xl bg-dark-900/80 border border-slate-800 hover:border-slate-700 transition-all space-y-3"
+                    className="p-6 rounded-2xl hud-glass hud-glass-hover border border-slate-800 space-y-3"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                    <div className="w-10 h-10 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
                       <GraduationCap className="w-5 h-5" />
                     </div>
                     <div>
                       <h4 className="text-base font-bold text-white">{edu.institution}</h4>
-                      <p className="text-sm text-indigo-400 font-medium">{edu.degree}</p>
+                      <p className="text-sm text-neon-cyan font-mono">{edu.degree}</p>
                       <p className="text-xs text-slate-400 mt-1">{edu.field_of_study}</p>
                     </div>
-                    <div className="pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-500">
+                    <div className="pt-2 border-t border-slate-800 text-xs font-mono text-slate-500">
                       <span>{edu.start_year} — {edu.end_year || 'Present'}</span>
                     </div>
                   </div>
@@ -279,16 +223,16 @@ export const Home = () => {
                 {certifications.map((cert, idx) => (
                   <div
                     key={cert.id || idx}
-                    className="p-6 rounded-2xl bg-dark-900/80 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between space-y-4"
+                    className="p-6 rounded-2xl hud-glass hud-glass-hover border border-slate-800 flex flex-col justify-between space-y-4"
                   >
                     <div className="space-y-2">
                       <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
                         <Award className="w-5 h-5" />
                       </div>
                       <h4 className="text-base font-bold text-white">{cert.title}</h4>
-                      <p className="text-xs text-slate-400 font-medium">Issued by: <span className="text-slate-300">{cert.issuer}</span></p>
+                      <p className="text-xs text-slate-400 font-medium">Issuer: <span className="text-slate-200">{cert.issuer}</span></p>
                       {cert.issue_date && (
-                        <p className="text-xs text-slate-500 font-mono">Date: {cert.issue_date}</p>
+                        <p className="text-xs text-slate-500 font-mono">Verified: {cert.issue_date}</p>
                       )}
                     </div>
                     {cert.credential_url && (
@@ -296,9 +240,9 @@ export const Home = () => {
                         href={cert.credential_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 pt-2 border-t border-slate-800"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-neon-cyan hover:text-white pt-2 border-t border-slate-800 font-mono"
                       >
-                        <span>Verify Credential</span>
+                        <span>AUTHENTICATE</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                     )}
@@ -309,89 +253,49 @@ export const Home = () => {
           </div>
         </section>
 
-        {/* 4. Skills Section */}
-        <section id="skills" className="py-24 border-t border-slate-800/80 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <div className="inline-flex items-center gap-2 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-2">
-                <Code className="w-4 h-4" />
-                <span>Technical Arsenal</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Skills & Technologies
-              </h2>
-              <p className="mt-2 text-slate-400 text-sm sm:text-base">
-                Tools and languages utilized across fullstack development, infrastructure, and databases.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {skillCategories.map((category) => (
-                <div
-                  key={category}
-                  className="rounded-2xl bg-dark-900/60 border border-slate-800 p-6 space-y-4"
-                >
-                  <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-                    <span className="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
-                    <h3 className="font-bold text-white text-base tracking-wide">{category}</h3>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {skills
-                      .filter((s) => s.category === category)
-                      .map((skill) => (
-                        <SkillBadge key={skill.id || skill.name} skill={skill} />
-                      ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 5. Contact Section */}
-        <section id="contact" className="py-24 border-t border-slate-800/80 bg-dark-900/40 relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 5. Real-time Transmission / Contact Section */}
+        <section id="contact" className="py-24 border-t border-slate-800/80 bg-dark-950 relative cyber-grid">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               {/* Left Column */}
               <div className="lg:col-span-5 space-y-6">
                 <div>
-                  <div className="inline-flex items-center gap-2 text-indigo-400 text-xs font-mono uppercase tracking-wider mb-2">
-                    <Mail className="w-4 h-4" />
-                    <span>Get In Touch</span>
+                  <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
+                    <Radio className="w-4 h-4 text-neon-cyan" />
+                    <span>ENCRYPTED_TRANSMISSION // CONTACT</span>
                   </div>
-                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                    Let's Build Something Exceptional Together
+                  <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+                    Establish Direct Link
                   </h2>
                   <p className="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
-                    Whether you have an upcoming project, need architectural consulting, or want to discuss full-time engineering roles, I'd love to hear from you.
+                    Initiate an inquiry regarding architectural advisory, distributed engineering systems, or contract collaboration.
                   </p>
                 </div>
 
                 <div className="space-y-4 pt-2">
-                  <div className="flex items-center gap-3.5 p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <div className="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
-                      <Mail className="w-5 h-5" />
+                  <div className="flex items-center gap-3.5 p-4 rounded-xl hud-glass border border-slate-800">
+                    <div className="w-10 h-10 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan shrink-0">
+                      <Code className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs text-slate-400 font-mono">Email Directly</p>
+                      <p className="text-xs text-slate-500 font-mono">DIRECT COMM</p>
                       <a 
                         href={`mailto:${profile?.social_links?.email || 'dzakiluqman@example.com'}`}
-                        className="text-sm font-semibold text-white hover:text-indigo-400 transition-colors"
+                        className="text-sm font-semibold text-white hover:text-neon-cyan transition-colors font-mono"
                       >
                         {profile?.social_links?.email || 'dzakiluqman@example.com'}
                       </a>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3.5 p-4 rounded-xl bg-slate-900/80 border border-slate-800">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-                      <MapPin className="w-5 h-5" />
+                  <div className="flex items-center gap-3.5 p-4 rounded-xl hud-glass border border-slate-800">
+                    <div className="w-10 h-10 rounded-lg bg-neon-violet/10 border border-neon-violet/30 flex items-center justify-center text-neon-violet shrink-0">
+                      <Sparkles className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-xs text-slate-400 font-mono">Current Base</p>
-                      <p className="text-sm font-semibold text-white">
-                        {profile?.location || 'Jakarta, Indonesia'} (GMT+7)
+                      <p className="text-xs text-slate-500 font-mono">NODE LOCATION</p>
+                      <p className="text-sm font-semibold text-white font-mono">
+                        {profile?.location || 'Jakarta, Indonesia'} (UTC+7)
                       </p>
                     </div>
                   </div>

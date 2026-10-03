@@ -11,7 +11,11 @@ import {
   ExternalLink,
   Clock,
   Sparkles,
-  Database
+  Database,
+  Cpu,
+  Radio,
+  Activity,
+  Terminal
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { mockProjects, mockExperiences, mockSkills, mockMessages } from '../../lib/mockData'
@@ -53,7 +57,6 @@ export const Dashboard = () => {
       }
 
       try {
-        // Live Supabase queries
         const [projectsRes, expRes, skillsRes, messagesRes] = await Promise.all([
           supabase.from('projects').select('id, is_published'),
           supabase.from('experiences').select('id'),
@@ -85,132 +88,156 @@ export const Dashboard = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-dark-950 flex flex-col md:flex-row text-slate-100">
+    <div className="min-h-screen bg-dark-950 flex flex-col md:flex-row text-slate-100 cyber-grid">
       <Sidebar unreadCount={stats.unreadMessages} />
 
       <div className="flex-1 flex flex-col min-w-0">
         <AdminHeader
-          title="Overview & Analytics"
-          subtitle="Portfolio management control center and live metrics"
+          title="SCI-FI HUD // TELEMETRY DASHBOARD"
+          subtitle="Real-time CMS telemetry, neural node health, and database metrics"
           action={
             <Link
               to="/admin/projects"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-600/30 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-neon-cyan hover:opacity-95 transition-all"
             >
               <Plus className="w-4 h-4" />
-              <span>New Project</span>
+              <span>DEPLOY_PROJECT</span>
             </Link>
           }
         />
 
         <main className="flex-1 p-6 lg:p-8 space-y-8 overflow-y-auto">
           {loading ? (
-            <LoadingSpinner text="Compiling metrics..." />
+            <LoadingSpinner text="Connecting telemetry streams..." />
           ) : (
             <>
-              {/* Metric Cards Grid */}
+              {/* Top HUD Telemetry Bar */}
+              <div className="p-4 rounded-2xl hud-glass border border-neon-cyan/20 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5 text-neon-cyan">
+                    <Activity className="w-4 h-4 animate-pulse" />
+                    <span className="font-bold">SYSTEM_PULSE: NORMAL</span>
+                  </div>
+                  <span className="text-slate-600">|</span>
+                  <div className="flex items-center gap-1 text-slate-300">
+                    <Radio className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>SOCKET: RLS_ENFORCED</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-slate-400">
+                  <span>LATENCY: ~18ms</span>
+                  <span className="text-neon-cyan font-bold">NODE: ASIA-SOUTHEAST</span>
+                </div>
+              </div>
+
+              {/* Sci-Fi Metric Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div className="p-6 rounded-2xl bg-dark-900 border border-slate-800 relative overflow-hidden group hover:border-indigo-500/40 transition-colors">
+                {/* Total Projects */}
+                <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-neon-cyan/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Total Projects</span>
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                    <span className="text-xs font-mono uppercase text-slate-400">Total Deployments</span>
+                    <div className="w-9 h-9 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
                       <FolderGit2 className="w-4 h-4" />
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-3xl font-extrabold text-white">{stats.totalProjects}</span>
-                    <span className="text-xs text-emerald-400 font-mono">({stats.publishedProjects} Published)</span>
+                    <span className="text-xs text-neon-cyan font-mono">({stats.publishedProjects} Live)</span>
                   </div>
                   <Link
                     to="/admin/projects"
-                    className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-indigo-400 hover:text-indigo-300"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-neon-cyan hover:text-white"
                   >
-                    <span>Manage projects</span>
+                    <span>Inspect repo matrix</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-dark-900 border border-slate-800 relative overflow-hidden group hover:border-emerald-500/40 transition-colors">
+                {/* Work Experiences */}
+                <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-neon-violet/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Work History</span>
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <span className="text-xs font-mono uppercase text-slate-400">Career Tenures</span>
+                    <div className="w-9 h-9 rounded-xl bg-neon-violet/10 border border-neon-violet/30 flex items-center justify-center text-neon-violet">
                       <Briefcase className="w-4 h-4" />
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-3xl font-extrabold text-white">{stats.totalExperiences}</span>
-                    <span className="text-xs text-slate-400 font-mono">Positions recorded</span>
+                    <span className="text-xs text-slate-400 font-mono">Positions logged</span>
                   </div>
                   <Link
                     to="/admin/cv"
-                    className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-emerald-400 hover:text-emerald-300"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-neon-violet hover:text-white"
                   >
-                    <span>Update CV items</span>
+                    <span>Update trajectory</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-dark-900 border border-slate-800 relative overflow-hidden group hover:border-cyan-500/40 transition-colors">
+                {/* Skills Listed */}
+                <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-emerald-500/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Skills Listed</span>
-                    <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                    <span className="text-xs font-mono uppercase text-slate-400">Tech Capabilities</span>
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                       <Code className="w-4 h-4" />
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-3xl font-extrabold text-white">{stats.totalSkills}</span>
-                    <span className="text-xs text-slate-400 font-mono">Tech badges</span>
+                    <span className="text-xs text-slate-400 font-mono">Stack nodes</span>
                   </div>
                   <Link
                     to="/admin/cv"
-                    className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-cyan-400 hover:text-cyan-300"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-emerald-400 hover:text-white"
                   >
-                    <span>Edit competencies</span>
+                    <span>Reconfigure skills</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-dark-900 border border-slate-800 relative overflow-hidden group hover:border-rose-500/40 transition-colors">
+                {/* Inquiries */}
+                <div className="p-6 rounded-2xl hud-glass border border-slate-800 hover:border-rose-500/50 transition-all group">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono uppercase text-slate-400">Unread Messages</span>
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+                    <span className="text-xs font-mono uppercase text-slate-400">Inbound Packets</span>
+                    <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                       <Mail className="w-4 h-4" />
                     </div>
                   </div>
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-3xl font-extrabold text-white">{stats.unreadMessages}</span>
-                    <span className="text-xs text-slate-400 font-mono">Inquiries pending</span>
+                    <span className="text-xs text-rose-400 font-mono">Unread inquiries</span>
                   </div>
                   <Link
                     to="/admin/messages"
-                    className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-rose-400 hover:text-rose-300"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-rose-400 hover:text-white"
                   >
-                    <span>Open Inbox</span>
+                    <span>Review inbox</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
 
-              {/* Quick Actions & Recent Messages Grid */}
+              {/* Grid: Recent Inbound Messages & DB Topology */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* Recent Messages Preview */}
-                <div className="lg:col-span-7 bg-dark-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                {/* Recent Messages */}
+                <div className="lg:col-span-7 hud-glass rounded-2xl p-6 space-y-4 border border-slate-800">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-indigo-400" />
-                      <h3 className="font-bold text-white text-base">Recent Inbound Inquiries</h3>
+                      <Mail className="w-4 h-4 text-neon-cyan" />
+                      <h3 className="font-bold text-white text-base font-mono">INBOUND_MESSAGE_STREAM</h3>
                     </div>
                     <Link
                       to="/admin/messages"
-                      className="text-xs font-mono text-indigo-400 hover:text-indigo-300"
+                      className="text-xs font-mono text-neon-cyan hover:underline"
                     >
-                      View all ({stats.unreadMessages} unread)
+                      OPEN INBOX ({stats.unreadMessages} UNREAD)
                     </Link>
                   </div>
 
                   {recentMessages.length === 0 ? (
                     <div className="py-8 text-center text-slate-500 text-xs font-mono">
-                      No inbound messages yet. Submissions from the contact form will appear here.
+                      No inbound packets logged. Real-time form submissions stream here.
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -219,8 +246,8 @@ export const Dashboard = () => {
                           key={msg.id}
                           className={`p-4 rounded-xl border transition-all ${
                             msg.is_read
-                              ? 'bg-dark-950/60 border-slate-800 text-slate-400'
-                              : 'bg-indigo-950/20 border-indigo-500/30 text-white'
+                              ? 'bg-dark-950/60 border-slate-800/80 text-slate-400'
+                              : 'bg-neon-cyan/5 border-neon-cyan/40 text-white shadow-neon-cyan/10'
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
@@ -232,7 +259,7 @@ export const Dashboard = () => {
                               {new Date(msg.created_at).toLocaleDateString()}
                             </span>
                           </div>
-                          <p className="text-xs text-indigo-400 font-mono">{msg.sender_email}</p>
+                          <p className="text-xs text-neon-cyan font-mono">{msg.sender_email}</p>
                           <p className="text-xs text-slate-300 mt-2 line-clamp-2">{msg.message}</p>
                         </div>
                       ))}
@@ -240,41 +267,39 @@ export const Dashboard = () => {
                   )}
                 </div>
 
-                {/* Right side: Database & Schema Info */}
-                <div className="lg:col-span-5 bg-dark-900 border border-slate-800 rounded-2xl p-6 space-y-5">
-                  <div className="flex items-center gap-2 pb-4 border-b border-slate-800">
-                    <Database className="w-4 h-4 text-emerald-400" />
-                    <h3 className="font-bold text-white text-base">Supabase Backend Status</h3>
+                {/* Right Panel: Supabase DB Architecture */}
+                <div className="lg:col-span-5 hud-glass rounded-2xl p-6 space-y-5 border border-slate-800">
+                  <div className="flex items-center gap-2 pb-4 border-b border-slate-800 font-mono">
+                    <Database className="w-4 h-4 text-neon-cyan" />
+                    <h3 className="font-bold text-white text-base">POSTGRES_SCHEMA_RLS</h3>
                   </div>
 
                   <div className="space-y-3 text-xs leading-relaxed text-slate-300">
                     <p>
-                      Your application is wired for Supabase PostgreSQL with Row-Level Security (RLS) policies.
+                      Direct connection configured via <code className="text-neon-cyan font-mono">@supabase/supabase-js</code> with Row Level Security.
                     </p>
 
-                    <div className="p-3.5 rounded-xl bg-dark-950 border border-slate-800 font-mono text-[11px] space-y-1">
+                    <div className="p-3.5 rounded-xl bg-dark-950 border border-slate-800 font-mono text-[11px] space-y-1.5">
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Profiles:</span>
-                        <span className="text-emerald-400">Public Read / Auth Write</span>
+                        <span className="text-slate-500">profiles:</span>
+                        <span className="text-neon-cyan">Public Read / Auth Write</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Projects:</span>
-                        <span className="text-emerald-400">Full CRUD for Admin</span>
+                        <span className="text-slate-500">projects:</span>
+                        <span className="text-emerald-400">Bento Grid CRUD</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Experiences / Skills:</span>
-                        <span className="text-emerald-400">Dynamic CV sync</span>
+                        <span className="text-slate-500">experiences:</span>
+                        <span className="text-neon-violet">Circuit Timeline Sync</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Messages:</span>
-                        <span className="text-emerald-400">Public Insert / Admin Inbox</span>
+                        <span className="text-slate-500">skills:</span>
+                        <span className="text-amber-400">3D Orbit Node Sync</span>
                       </div>
-                    </div>
-
-                    <div className="pt-2">
-                      <p className="text-[11px] text-slate-400">
-                        A ready-to-run SQL schema file is included in <code className="text-white bg-slate-800 px-1 py-0.5 rounded">supabase_schema.sql</code>. Copy & paste into your Supabase SQL editor to create all tables and seed data automatically.
-                      </p>
+                      <div className="flex justify-between">
+                        <span className="text-slate-500">messages:</span>
+                        <span className="text-rose-400">Inbound Form Submissions</span>
+                      </div>
                     </div>
 
                     <div className="pt-2">
@@ -282,10 +307,10 @@ export const Dashboard = () => {
                         href="/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+                        className="w-full py-2.5 px-4 rounded-xl bg-dark-950 border border-neon-cyan/40 hover:bg-neon-cyan/10 text-neon-cyan text-xs font-mono font-semibold flex items-center justify-center gap-2 transition-colors"
                       >
-                        <ExternalLink className="w-4 h-4 text-indigo-400" />
-                        <span>Preview Live Portfolio Front-end</span>
+                        <ExternalLink className="w-4 h-4" />
+                        <span>OPEN_PUBLIC_PORTFOLIO_3D</span>
                       </a>
                     </div>
                   </div>
