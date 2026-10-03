@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useRef, useState, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Float, Sphere, Cylinder, Torus, Ring } from '@react-three/drei'
 import * as THREE from 'three'
@@ -103,15 +103,27 @@ export const Avatar3DMale = ({ scale = 1.0 }) => {
     { pos: [0, 0.85, 0.45], color: '#a855f7' }, // Forehead Apex
   ], [])
 
-  // Smooth cursor tracking, breathing oscillation, and clean interaction
+  const mousePos = useRef({ x: 0, y: 0 })
+
+  // Listen to mouse pointer anywhere across the entire viewport (100vw / 100vh)
+  useEffect(() => {
+    const handlePointerMove = (e) => {
+      mousePos.current.x = (e.clientX / window.innerWidth) * 2 - 1
+      mousePos.current.y = -(e.clientY / window.innerHeight) * 2 + 1
+    }
+    window.addEventListener('pointermove', handlePointerMove, { passive: true })
+    return () => window.removeEventListener('pointermove', handlePointerMove)
+  }, [])
+
+  // Smooth cursor tracking across entire 100vw / 100vh, breathing oscillation, and clean interaction
   useFrame((state, delta) => {
-    const { mouse, clock } = state
+    const { clock } = state
     const elapsedTime = clock.getElapsedTime()
 
-    // Smooth head tracking mouse with natural lerp
+    // Smooth head tracking mouse with natural lerp across the full viewport
     if (headGroup.current) {
-      const targetRotY = mouse.x * 0.65
-      const targetRotX = -mouse.y * 0.45
+      const targetRotY = mousePos.current.x * 0.7
+      const targetRotX = -mousePos.current.y * 0.5
       headGroup.current.rotation.y = THREE.MathUtils.lerp(headGroup.current.rotation.y, targetRotY, 0.07)
       headGroup.current.rotation.x = THREE.MathUtils.lerp(headGroup.current.rotation.x, targetRotX, 0.07)
 
@@ -121,7 +133,7 @@ export const Avatar3DMale = ({ scale = 1.0 }) => {
 
     // Whole avatar group slight response
     if (avatarGroup.current) {
-      const targetGroupY = mouse.x * 0.15 + (hovered ? 0.03 : 0)
+      const targetGroupY = mousePos.current.x * 0.15 + (hovered ? 0.03 : 0)
       avatarGroup.current.rotation.y = THREE.MathUtils.lerp(avatarGroup.current.rotation.y, targetGroupY, 0.05)
     }
 

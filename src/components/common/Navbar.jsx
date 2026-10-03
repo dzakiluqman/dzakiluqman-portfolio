@@ -19,7 +19,7 @@ export const Navbar = ({ profile }) => {
     { name: 'Projects', href: '/#projects' },
     { name: 'Experience', href: '/#experience' },
     { name: 'Skills & Education', href: '/#skills' },
-    { name: 'Contact', href: '/#contact' },
+    { name: 'Get in touch', href: '/#contact' },
   ]
 
   const handleNavClick = (href) => {
@@ -39,66 +39,45 @@ export const Navbar = ({ profile }) => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-dark-950/85 backdrop-blur-xl border-b border-slate-800/80 shadow-lg shadow-black/20 py-3'
+          ? 'bg-dark-950/85 backdrop-blur-xl border-b border-slate-800/80 shadow-lg shadow-black/20 py-3.5'
           : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Top-Left: Clean 1:1 Aspect Ratio Square Logo Placeholder */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 group focus:outline-none"
+            className="w-10 h-10 aspect-square rounded-xl bg-slate-900 border border-slate-800 text-white font-mono font-bold text-xs flex items-center justify-center hover:border-slate-700 hover:text-neon-cyan transition-all shrink-0"
+            aria-label="Home"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-primary to-brand-accent p-0.5 shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all">
-              <div className="w-full h-full bg-dark-950 rounded-[10px] flex items-center justify-center">
-                <Code className="w-5 h-5 text-indigo-400 group-hover:scale-110 transition-transform" />
-              </div>
-            </div>
-            <div>
-              <span className="font-bold text-lg text-white tracking-tight flex items-center gap-2">
-                {profile?.full_name || 'Dzakii Luqman Faid'}
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" title="Available for opportunities"></span>
-              </span>
-              <p className="text-[11px] text-slate-400 font-mono tracking-wider uppercase">
-                {profile?.headline || 'Junior Software Developer'}
-              </p>
-            </div>
+            <span>DL</span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-900/60 p-1.5 rounded-full border border-slate-800/80 backdrop-blur-md">
-            {navLinks.map((link) => (
+          {/* Far Right: Clean Minimalist Navigation Links (No Hire Me button) */}
+          <div className="flex items-center gap-8 ml-auto">
+            <nav className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => handleNavClick(link.href)}
+                  className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                >
+                  {link.name}
+                </button>
+              ))}
+            </nav>
+
+            {/* Mobile Menu Toggle Button */}
+            <div className="md:hidden flex items-center">
               <button
-                key={link.name}
-                onClick={() => handleNavClick(link.href)}
-                className="px-4 py-1.5 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-full transition-all"
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none"
+                aria-label="Toggle Navigation Menu"
               >
-                {link.name}
+                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
-            ))}
-          </nav>
-
-          {/* Right Action: Pinned "Hire Me" Button */}
-          <div className="hidden md:flex items-center">
-            <button
-              onClick={() => handleNavClick('/#contact')}
-              className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 font-mono font-bold hover:shadow-neon-cyan hover:scale-[1.02] shadow-neon-cyan active:scale-95 transition-all flex items-center gap-1.5"
-            >
-              <span>Hire Me</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none"
-              aria-label="Toggle Navigation Menu"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            </div>
           </div>
         </div>
       </div>
@@ -115,15 +94,6 @@ export const Navbar = ({ profile }) => {
               {link.name}
             </button>
           ))}
-          <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
-            <button
-              onClick={() => handleNavClick('/#contact')}
-              className="w-full text-center px-4 py-2.5 rounded-lg text-xs font-mono font-bold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-lg shadow-neon-cyan/20 uppercase tracking-wider flex items-center justify-center gap-1.5"
-            >
-              <span>Hire Me</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
         </div>
       )}
     </header>

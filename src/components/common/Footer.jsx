@@ -11,7 +11,7 @@ export const Footer = ({ profile }) => {
     github: 'https://github.com/dzakiluqman',
     linkedin: 'https://linkedin.com/in/dzakiluqman',
     twitter: 'https://twitter.com/dzakiluqman',
-    email: 'dzakiluqman@example.com'
+    email: 'dzakiluqman275@gmail.com'
   }
 
   return (

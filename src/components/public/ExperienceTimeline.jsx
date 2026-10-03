@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Briefcase, 
-  Calendar, 
-  MapPin, 
-  CheckCircle2, 
-  Download, 
-  Printer, 
-  X, 
-  GraduationCap, 
+import {
+  Briefcase,
+  Calendar,
+  MapPin,
+  CheckCircle2,
+  Download,
+  Printer,
+  X,
+  GraduationCap,
   Award,
   Terminal,
   FileCheck
@@ -71,11 +71,10 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
             >
               {/* Glowing Cyber Circuit Node */}
               <div
-                className={`absolute -left-[31px] md:-left-[49px] top-1.5 w-5 h-5 rounded-full border-2 transition-all ${
-                  exp.is_current
+                className={`absolute -left-[31px] md:-left-[49px] top-1.5 w-5 h-5 rounded-full border-2 transition-all ${exp.is_current
                     ? 'border-neon-cyan bg-dark-950 shadow-[0_0_15px_#00f2fe]'
                     : 'border-slate-700 bg-dark-950 group-hover:border-neon-violet group-hover:shadow-[0_0_12px_#a855f7]'
-                }`}
+                  }`}
               >
                 {exp.is_current && (
                   <div className="w-2 h-2 rounded-full bg-neon-cyan absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -177,7 +176,7 @@ export const ExperienceTimeline = ({ experiences = [], educations = [], certific
                   <h2 className="text-3xl font-extrabold text-white">{profile?.full_name || 'Dzaki Luqman'}</h2>
                   <p className="text-base font-semibold text-neon-cyan mt-1">{profile?.headline}</p>
                   <p className="text-xs text-slate-400 mt-1 font-mono">
-                    {profile?.location} • {profile?.social_links?.email || 'dzakiluqman@example.com'}
+                    {profile?.location} • {profile?.social_links?.email || 'dzakiluqman275@gmail.com'}
                   </p>
                 </div>
 
