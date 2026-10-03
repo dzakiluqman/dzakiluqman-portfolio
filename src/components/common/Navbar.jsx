@@ -58,9 +58,9 @@ export const Navbar = () => {
               </div>
             </div>
             <div>
-              <span className="font-bold text-lg text-white tracking-tight flex items-center gap-1.5">
-                Dzaki Luqman
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="Available for projects"></span>
+              <span className="font-bold text-lg text-white tracking-tight flex items-center gap-1.5 font-mono">
+                Dzakii Luqman Faid
+                <span className="inline-block w-2 h-2 rounded-full bg-neon-cyan animate-ping" title="Available for projects"></span>
               </span>
               <p className="text-[11px] text-slate-400 font-mono tracking-wider uppercase">Senior Fullstack</p>
             </div>

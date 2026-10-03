@@ -19,8 +19,8 @@ export const Footer = ({ profile }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800/60">
           <div className="md:col-span-2 space-y-4">
             <h3 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-              <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-                {profile?.full_name || 'Dzaki Luqman'}
+              <span className="bg-gradient-to-r from-neon-cyan via-white to-neon-violet bg-clip-text text-transparent font-mono">
+                {profile?.full_name || 'Dzakii Luqman Faid'}
               </span>
             </h3>
             <p className="text-sm text-slate-400 max-w-md leading-relaxed">
@@ -97,7 +97,7 @@ export const Footer = ({ profile }) => {
         </div>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} {profile?.full_name || 'Dzaki Luqman'}. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {profile?.full_name || 'Dzakii Luqman Faid'}. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               Crafted with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> & clean code

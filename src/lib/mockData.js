@@ -1,6 +1,6 @@
 export const mockProfile = {
   id: '00000000-0000-0000-0000-000000000001',
-  full_name: 'Dzaki Luqman',
+  full_name: 'Dzakii Luqman Faid',
   headline: 'Senior Fullstack Software Engineer & Cloud Architect',
   bio: 'Passionate full-stack developer with 5+ years of experience engineering scalable web applications, real-time distributed systems, and intuitive user experiences. Specialized in React, Node.js, TypeScript, and modern cloud databases.',
   location: 'Jakarta, Indonesia',
@@ -140,8 +140,8 @@ export const mockEducations = [
 export const mockSkills = [
   { id: '40000000-0000-0000-0000-000000000001', category: 'Frontend', name: 'React / Next.js', level: 'Expert', icon_name: 'Code' },
   { id: '40000000-0000-0000-0000-000000000002', category: 'Frontend', name: 'TypeScript', level: 'Expert', icon_name: 'FileCode' },
-  { id: '40000000-0000-0000-0000-000000000003', category: 'Frontend', name: 'Tailwind CSS', level: 'Expert', icon_name: 'Palette' },
-  { id: '40000000-0000-0000-0000-000000000004', category: 'Frontend', name: 'Framer Motion', level: 'Advanced', icon_name: 'Sparkles' },
+  { id: '40000000-0000-0000-0000-000000000003', category: 'Frontend', name: 'Three.js / R3F', level: 'Expert', icon_name: 'Sparkles' },
+  { id: '40000000-0000-0000-0000-000000000004', category: 'Frontend', name: 'Tailwind CSS', level: 'Expert', icon_name: 'Palette' },
   { id: '40000000-0000-0000-0000-000000000005', category: 'Backend', name: 'Node.js & Express', level: 'Expert', icon_name: 'Server' },
   { id: '40000000-0000-0000-0000-000000000006', category: 'Backend', name: 'Supabase & PostgreSQL', level: 'Expert', icon_name: 'Database' },
   { id: '40000000-0000-0000-0000-000000000007', category: 'Backend', name: 'Go / Golang', level: 'Intermediate', icon_name: 'Cpu' },
@@ -173,7 +173,7 @@ export const mockMessages = [
     sender_name: 'Sarah Jenkins',
     sender_email: 'sarah.j@venturecapital.io',
     subject: 'Potential Tech Advisory Role & Partnership',
-    message: 'Hi Dzaki, I came across your CloudScale project and was extremely impressed by the telemetry architecture. We are building a high-growth fintech startup and would love to discuss advisory or engineering consulting opportunities.',
+    message: 'Hi Dzakii, I came across your CloudScale project and was extremely impressed by the telemetry architecture. We are building a high-growth fintech startup and would love to discuss advisory or engineering consulting opportunities.',
     is_read: false,
     created_at: new Date(Date.now() - 3600000 * 4).toISOString()
   },
@@ -182,7 +182,7 @@ export const mockMessages = [
     sender_name: 'David Chen',
     sender_email: 'david@enterprisecloud.com',
     subject: 'Speaking invitation: Cloud Architecture Summit',
-    message: 'Hello Dzaki! Would you be interested in delivering a keynote session on Supabase + React real-time patterns at our upcoming virtual developer summit in November?',
+    message: 'Hello Dzakii! Would you be interested in delivering a keynote session on Supabase + React real-time patterns at our upcoming virtual developer summit in November?',
     is_read: true,
     created_at: new Date(Date.now() - 86400000 * 2).toISOString()
   }

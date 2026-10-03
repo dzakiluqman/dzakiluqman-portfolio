@@ -141,7 +141,7 @@ CREATE POLICY "Authenticated users can manage messages" ON public.messages FOR A
 -- Seed Profile
 INSERT INTO public.profiles (full_name, headline, bio, location, avatar_url, social_links)
 VALUES (
-  'Dzaki Luqman',
+  'Dzakii Luqman Faid',
   'Senior Fullstack Software Engineer & Cloud Architect',
   'Passionate full-stack developer with 5+ years of experience engineering scalable web applications, real-time distributed systems, and intuitive user experiences. Specialized in React, Node.js, TypeScript, and modern cloud databases.',
   'Jakarta, Indonesia',

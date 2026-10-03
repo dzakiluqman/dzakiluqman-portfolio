@@ -21,9 +21,9 @@ import {
 } from '../../lib/mockData'
 import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
-import Hero3D from '../../components/public/Hero3D'
-import ProjectSection from '../../components/public/ProjectSection'
-import SkillsVisualizer from '../../components/public/SkillsVisualizer'
+import Hero3D from '../../components/3d/Hero3D'
+import BentoProjects from '../../components/public/BentoProjects'
+import SkillsSphere from '../../components/3d/SkillsSphere'
 import ExperienceTimeline from '../../components/public/ExperienceTimeline'
 import ContactForm from '../../components/public/ContactForm'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -119,14 +119,14 @@ export const Home = () => {
 
       {/* Main Content */}
       <main className="flex-1">
-        {/* 1. 3D Interactive Hero Canvas */}
+        {/* 1. 3D Interactive Hero Canvas with 3D Male Avatar */}
         <Hero3D profile={profile} />
 
         {/* 2. Futuristic Bento Grid & 3D Tilt Project Showcase */}
-        <ProjectSection projects={projects} />
+        <BentoProjects projects={projects} />
 
         {/* 3. 3D Orbit / Futuristic Skill Sphere */}
-        <SkillsVisualizer skills={skills} />
+        <SkillsSphere skills={skills} />
 
         {/* 4. Glowing Cyberpunk Timeline for Experience & CV */}
         <section id="experience" className="py-24 border-t border-slate-800/80 bg-dark-900/20 relative cyber-grid">
@@ -253,11 +253,10 @@ export const Home = () => {
           </div>
         </section>
 
-        {/* 5. Real-time Transmission / Contact Section */}
+        {/* 5. Contact Section */}
         <section id="contact" className="py-24 border-t border-slate-800/80 bg-dark-950 relative cyber-grid">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-              {/* Left Column */}
               <div className="lg:col-span-5 space-y-6">
                 <div>
                   <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
@@ -302,7 +301,6 @@ export const Home = () => {
                 </div>
               </div>
 
-              {/* Right Column: Contact Form */}
               <div className="lg:col-span-7">
                 <ContactForm />
               </div>
