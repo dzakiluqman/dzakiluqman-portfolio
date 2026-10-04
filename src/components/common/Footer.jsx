@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Github, Linkedin, Twitter, Mail, ArrowUp, Heart, Shield } from 'lucide-react'
+import { Github, Linkedin, Twitter, Mail, ArrowUp, Shield } from 'lucide-react'
 
 export const Footer = ({ profile }) => {
   const scrollToTop = () => {
@@ -106,17 +106,6 @@ export const Footer = ({ profile }) => {
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} {profile?.full_name || 'Dzakii Luqman Faid'}. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link
-              to="/admin/login"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-neon-cyan hover:border-slate-700 transition-colors font-mono py-1 px-2.5 rounded-lg bg-slate-900/80 border border-slate-800"
-              title="Access CMS Administration Portal"
-            >
-              <Shield className="w-3.5 h-3.5 text-slate-400" />
-              <span>CMS Admin</span>
-            </Link>
-            <span className="flex items-center gap-1">
-              Crafted with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> & clean code
-            </span>
             <button
               onClick={scrollToTop}
               className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1.5"
