@@ -62,7 +62,11 @@ export const Home = () => {
             full_name: profileData.full_name || prev.full_name,
             headline: profileData.headline || prev.headline,
             location: profileData.location || prev.location,
-            bio: profileData.bio || prev.bio
+            bio: profileData.bio || prev.bio,
+            social_links: {
+              ...prev.social_links,
+              ...(profileData.social_links || {})
+            }
           }))
         }
 
