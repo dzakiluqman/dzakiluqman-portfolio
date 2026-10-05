@@ -1,159 +1,272 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Float, Sphere, Cylinder, Torus, Ring } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js'
 
-/**
- * Procedurally sculpts an anatomical human cranium and facial topology mesh.
- * Deforms an IcosahedronGeometry into realistic human cranial curves,
- * cheekbone contours, eye socket cavities, nose bridge, jawline, and chin.
- */
-function createHumanHeadGeometry() {
-  const geo = new THREE.IcosahedronGeometry(1.2, 3)
-  const pos = geo.attributes.position
-  const v = new THREE.Vector3()
-
-  for (let i = 0; i < pos.count; i++) {
-    v.fromBufferAttribute(pos, i)
-
-    // 1. Cranium height and occipital (rear skull) fullness
-    if (v.y > 0) {
-      v.y *= 1.1
-      if (v.z < 0) {
-        v.z *= 1.15 // occipital rounding
-      }
-    }
-
-    // 2. Jaw and chin taper downwards
-    if (v.y < 0.1) {
-      const jawFactor = THREE.MathUtils.lerp(1.0, 0.48, Math.min(1.0, (-v.y + 0.1) / 1.15))
-      v.x *= jawFactor
-
-      // Defined chin protrusion
-      if (v.z > 0 && v.y < -0.3) {
-        const chinWeight = Math.max(0, 1.0 - Math.abs(v.x) * 2.2) * Math.max(0, -v.y - 0.25)
-        v.z += chinWeight * 0.42
-      }
-    }
-
-    // 3. Facial feature sculpted topology (front facing, +Z)
-    if (v.z > 0.08) {
-      const absX = Math.abs(v.x)
-
-      // Eye socket (orbital cavities) indentation
-      if (v.y > 0.06 && v.y < 0.32 && absX > 0.20 && absX < 0.52) {
-        v.z -= 0.16
-      }
-
-      // Brow ridge protrusion
-      if (v.y >= 0.26 && v.y < 0.42 && absX < 0.55) {
-        v.z += 0.12
-      }
-
-      // Nose bridge and apex
-      if (v.y > -0.18 && v.y < 0.26 && absX < 0.18) {
-        const noseWeight = (1.0 - absX / 0.18) * (1.0 - Math.abs(v.y - 0.04) / 0.22)
-        v.z += Math.max(0, noseWeight) * 0.32
-      }
-
-      // Cheekbones (zygomatic arch)
-      if (v.y > -0.12 && v.y < 0.16 && absX > 0.38 && absX < 0.68) {
-        v.z += 0.14
-        v.x *= 1.08
-      }
-
-      // Mouth & lip contour
-      if (v.y > -0.45 && v.y < -0.22 && absX < 0.30) {
-        v.z += 0.08
-      }
-    }
-
-    pos.setXYZ(i, v.x, v.y, v.z)
-  }
-
-  geo.computeVertexNormals()
-  return geo
-}
-
-export const Avatar3DMale = ({ scale = 1.0 }) => {
+export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
   const avatarGroup = useRef()
-  const headGroup = useRef()
-  const scanRingRef = useRef()
-  const wireMatRef = useRef()
-  const leftEyeRef = useRef()
-  const rightEyeRef = useRef()
+  const headBoneRef = useRef(null)
+  const neckBoneRef = useRef(null)
+  const leftShoulderRef = useRef(null)
+  const rightShoulderRef = useRef(null)
+  const leftArmRef = useRef(null)
+  const rightArmRef = useRef(null)
+  const leftForeArmRef = useRef(null)
+  const rightForeArmRef = useRef(null)
+  const leftHandRef = useRef(null)
+  const rightHandRef = useRef(null)
+  const eyeLRef = useRef(null)
+  const eyeRRef = useRef(null)
+
+  const initialHeadRot = useRef(new THREE.Euler())
+  const initialNeckRot = useRef(new THREE.Euler())
+  const initialLeftShoulderRot = useRef(new THREE.Euler())
+  const initialRightShoulderRot = useRef(new THREE.Euler())
+  const initialLeftArmRot = useRef(new THREE.Euler())
+  const initialRightArmRot = useRef(new THREE.Euler())
+  const initialLeftForeArmRot = useRef(new THREE.Euler())
+  const initialRightForeArmRot = useRef(new THREE.Euler())
+  const initialEyeLRot = useRef(new THREE.Euler())
+  const initialEyeRRot = useRef(new THREE.Euler())
 
   const [hovered, setHovered] = useState(false)
-  const [clicked, setClicked] = useState(false)
 
-  // Memoize sculpted geometry and landmark nodes
-  const headGeometry = useMemo(() => createHumanHeadGeometry(), [])
+  // 1. Model Loader: Load model from /models/newmodel.glb
+  const { scene } = useGLTF('/models/newmodel.glb')
 
-  // Key facial landmark coordinates for glowing neural data nodes
-  const facialNodes = useMemo(() => [
-    { pos: [0, 0.32, 1.15], color: '#00f2fe' }, // Brow Center / Neural Core
-    { pos: [0, 0.02, 1.34], color: '#38bdf8' }, // Nose Apex
-    { pos: [0, -0.62, 0.98], color: '#00f2fe' }, // Chin Landmark
-    { pos: [-0.48, 0.02, 0.95], color: '#a855f7' }, // Left Cheekbone
-    { pos: [0.48, 0.02, 0.95], color: '#a855f7' }, // Right Cheekbone
-    { pos: [-0.78, 0.18, 0.22], color: '#00f2fe' }, // Left Temple
-    { pos: [0.78, 0.18, 0.22], color: '#00f2fe' }, // Right Temple
-    { pos: [-0.42, -0.42, 0.52], color: '#38bdf8' }, // Left Jaw Angle
-    { pos: [0.42, -0.42, 0.52], color: '#38bdf8' }, // Right Jaw Angle
-    { pos: [0, 0.85, 0.45], color: '#a855f7' }, // Forehead Apex
-  ], [])
+  // Clone with SkeletonUtils to retain independent skeleton binding
+  const clonedScene = useMemo(() => clone(scene), [scene])
 
-  const mousePos = useRef({ x: 0, y: 0 })
-
-  // Listen to mouse pointer anywhere across the entire viewport (100vw / 100vh)
+  // 2. Discover bones, relax shoulders & arms, tune materials for soft studio lighting
   useEffect(() => {
-    const handlePointerMove = (e) => {
-      mousePos.current.x = (e.clientX / window.innerWidth) * 2 - 1
-      mousePos.current.y = -(e.clientY / window.innerHeight) * 2 + 1
-    }
-    window.addEventListener('pointermove', handlePointerMove, { passive: true })
-    return () => window.removeEventListener('pointermove', handlePointerMove)
-  }, [])
+    let head = null
+    let neck = null
+    let leftShoulder = null
+    let rightShoulder = null
+    let leftArm = null
+    let rightArm = null
+    let leftForeArm = null
+    let rightForeArm = null
+    let leftHand = null
+    let rightHand = null
+    let eyeL = null
+    let eyeR = null
 
-  // Smooth cursor tracking across entire 100vw / 100vh, breathing oscillation, and clean interaction
-  useFrame((state, delta) => {
-    const { clock } = state
+    // Node Discovery: traverse clonedScene
+    clonedScene.traverse((node) => {
+      const name = node.name.toLowerCase()
+      if (!head && (node.name === 'Head' || name.includes('mixamorighead') || name === 'head')) {
+        head = node
+      }
+      if (!neck && (node.name === 'Neck' || name.includes('mixamorigneck') || name === 'neck')) {
+        neck = node
+      }
+      if (!leftShoulder && (node.name === 'LeftShoulder' || name.includes('mixamorigleftshoulder') || name === 'leftshoulder')) {
+        leftShoulder = node
+      }
+      if (!rightShoulder && (node.name === 'RightShoulder' || name.includes('mixamorigrightshoulder') || name === 'rightshoulder')) {
+        rightShoulder = node
+      }
+      if (!leftArm && (node.name === 'LeftArm' || name.includes('mixamorigleftarm') || name === 'leftarm')) {
+        leftArm = node
+      }
+      if (!rightArm && (node.name === 'RightArm' || name.includes('mixamorigrightarm') || name === 'rightarm')) {
+        rightArm = node
+      }
+      if (!leftForeArm && (node.name === 'LeftForeArm' || name.includes('mixamorigleftforearm') || name === 'leftforearm')) {
+        leftForeArm = node
+      }
+      if (!rightForeArm && (node.name === 'RightForeArm' || name.includes('mixamorigrightforearm') || name === 'rightforearm')) {
+        rightForeArm = node
+      }
+      if (!leftHand && (node.name === 'LeftHand' || name.includes('mixamoriglefthand') || name === 'lefthand')) {
+        leftHand = node
+      }
+      if (!rightHand && (node.name === 'RightHand' || name.includes('mixamorigrighthand') || name === 'righthand')) {
+        rightHand = node
+      }
+      if (!eyeL && (name.includes('eyel') || name.includes('lefteye') || name.includes('eye_l') || name.includes('eye.l'))) {
+        eyeL = node
+      }
+      if (!eyeR && (name.includes('eyer') || name.includes('righteye') || name.includes('eye_r') || name.includes('eye.r'))) {
+        eyeR = node
+      }
+    })
+
+    if (head) {
+      headBoneRef.current = head
+      initialHeadRot.current.copy(head.rotation)
+    }
+    if (neck) {
+      neckBoneRef.current = neck
+      initialNeckRot.current.copy(neck.rotation)
+    }
+
+    // Relax and slope shoulders downward (eliminates stiff/overly upright posture)
+    if (leftShoulder) {
+      leftShoulderRef.current = leftShoulder
+      initialLeftShoulderRot.current.copy(leftShoulder.rotation)
+      leftShoulder.rotation.y = initialLeftShoulderRot.current.y - 0.12
+    }
+    if (rightShoulder) {
+      rightShoulderRef.current = rightShoulder
+      initialRightShoulderRot.current.copy(rightShoulder.rotation)
+      rightShoulder.rotation.y = initialRightShoulderRot.current.y + 0.12
+    }
+
+    // Lower upper arms downward and inward toward sides
+    if (leftArm) {
+      leftArmRef.current = leftArm
+      initialLeftArmRot.current.copy(leftArm.rotation)
+      leftArm.rotation.x = initialLeftArmRot.current.x + 1.30
+      leftArm.rotation.y = initialLeftArmRot.current.y - 0.10
+      leftArm.rotation.z = initialLeftArmRot.current.z - 0.06
+    }
+    if (rightArm) {
+      rightArmRef.current = rightArm
+      initialRightArmRot.current.copy(rightArm.rotation)
+      rightArm.rotation.x = initialRightArmRot.current.x + 1.30
+      rightArm.rotation.y = initialRightArmRot.current.y + 0.10
+      rightArm.rotation.z = initialRightArmRot.current.z + 0.06
+    }
+
+    // Natural relaxed elbow curve
+    if (leftForeArm) {
+      leftForeArmRef.current = leftForeArm
+      initialLeftForeArmRot.current.copy(leftForeArm.rotation)
+      leftForeArm.rotation.x = initialLeftForeArmRot.current.x - 0.14
+      leftForeArm.rotation.z = initialLeftForeArmRot.current.z + 0.08
+    }
+    if (rightForeArm) {
+      rightForeArmRef.current = rightForeArm
+      initialRightForeArmRot.current.copy(rightForeArm.rotation)
+      rightForeArm.rotation.x = initialRightForeArmRot.current.x - 0.14
+      rightForeArm.rotation.z = initialRightForeArmRot.current.z - 0.08
+    }
+
+    if (leftHand) leftHandRef.current = leftHand
+    if (rightHand) rightHandRef.current = rightHand
+    if (eyeL) {
+      eyeLRef.current = eyeL
+      initialEyeLRot.current.copy(eyeL.rotation)
+    }
+    if (eyeR) {
+      eyeRRef.current = eyeR
+      initialEyeRRot.current.copy(eyeR.rotation)
+    }
+
+    // Material Balancing:
+    // Retain textures, tone down specular reflections, soften fabric highlights for crisp collar details
+    clonedScene.traverse((child) => {
+      if (child.isMesh) {
+        const name = child.name.toLowerCase()
+        if (name.includes('shoes') || name.includes('footwear')) {
+          child.visible = false
+          return
+        }
+
+        child.visible = true
+        if (child.material) {
+          child.material.wireframe = false
+          child.castShadow = true
+          child.receiveShadow = true
+
+          // Soften fabric material: high roughness, zero metalness to avoid blown-out white specular highlights
+          if (name.includes('look') || name.includes('top') || name.includes('outfit')) {
+            child.material.roughness = 0.88
+            child.material.metalness = 0.02
+          } else if (name.includes('body')) {
+            // Soft realistic skin material
+            child.material.roughness = 0.68
+            child.material.metalness = 0.04
+          }
+        }
+      }
+    })
+  }, [clonedScene])
+
+  // 3. Smooth cursor tracking (Head, Neck, Eyes) and relaxed posture micro-movements
+  useFrame((state) => {
+    const { pointer, clock } = state
     const elapsedTime = clock.getElapsedTime()
 
-    // Smooth head tracking mouse with natural lerp across the full viewport
-    if (headGroup.current) {
-      const targetRotY = mousePos.current.x * 0.7
-      const targetRotX = -mousePos.current.y * 0.5
-      headGroup.current.rotation.y = THREE.MathUtils.lerp(headGroup.current.rotation.y, targetRotY, 0.07)
-      headGroup.current.rotation.x = THREE.MathUtils.lerp(headGroup.current.rotation.x, targetRotX, 0.07)
+    // 1. Head Tracking (smooth lerp with cursor)
+    const targetHeadY = pointer.x * 0.38
+    const targetHeadX = -pointer.y * 0.25
 
-      // Idle subtle breathing and floating naturally at eye-level
-      headGroup.current.position.y = -0.05 + Math.sin(elapsedTime * 1.6) * 0.035
+    if (headBoneRef.current) {
+      headBoneRef.current.rotation.y = THREE.MathUtils.lerp(
+        headBoneRef.current.rotation.y,
+        initialHeadRot.current.y + targetHeadY,
+        0.065
+      )
+      headBoneRef.current.rotation.x = THREE.MathUtils.lerp(
+        headBoneRef.current.rotation.x,
+        initialHeadRot.current.x + targetHeadX,
+        0.065
+      )
     }
 
-    // Whole avatar group slight response
+    // 2. Neck Proportional Articulation (~22% natural articulation)
+    if (neckBoneRef.current) {
+      neckBoneRef.current.rotation.y = THREE.MathUtils.lerp(
+        neckBoneRef.current.rotation.y,
+        initialNeckRot.current.y + targetHeadY * 0.22,
+        0.05
+      )
+      neckBoneRef.current.rotation.x = THREE.MathUtils.lerp(
+        neckBoneRef.current.rotation.x,
+        initialNeckRot.current.x + targetHeadX * 0.22,
+        0.05
+      )
+    }
+
+    // 3. Eye Node Tracking (if dedicated eye bones exist in model)
+    if (eyeLRef.current && eyeRRef.current) {
+      const maxEyeAngle = 0.32
+      const eyeRotY = THREE.MathUtils.clamp(pointer.x * 0.35, -maxEyeAngle, maxEyeAngle)
+      const eyeRotX = THREE.MathUtils.clamp(-pointer.y * 0.25, -maxEyeAngle, maxEyeAngle)
+
+      eyeLRef.current.rotation.y = THREE.MathUtils.lerp(eyeLRef.current.rotation.y, initialEyeLRot.current.y + eyeRotY, 0.1)
+      eyeLRef.current.rotation.x = THREE.MathUtils.lerp(eyeLRef.current.rotation.x, initialEyeLRot.current.x + eyeRotX, 0.1)
+      eyeRRef.current.rotation.y = THREE.MathUtils.lerp(eyeRRef.current.rotation.y, initialEyeRRot.current.y + eyeRotY, 0.1)
+      eyeRRef.current.rotation.x = THREE.MathUtils.lerp(eyeRRef.current.rotation.x, initialEyeRRot.current.x + eyeRotX, 0.1)
+    }
+
+    // 4. Relaxed Shoulder & Arm Posture with organic breathing micro-movements
+    const breath = Math.sin(elapsedTime * 1.5) * 0.006
+
+    if (leftShoulderRef.current) {
+      leftShoulderRef.current.rotation.y = initialLeftShoulderRot.current.y - 0.12 + breath * 0.2
+    }
+    if (rightShoulderRef.current) {
+      rightShoulderRef.current.rotation.y = initialRightShoulderRot.current.y + 0.12 - breath * 0.2
+    }
+
+    if (leftArmRef.current) {
+      leftArmRef.current.rotation.x = initialLeftArmRot.current.x + 1.30 + breath
+      leftArmRef.current.rotation.y = initialLeftArmRot.current.y - 0.10
+      leftArmRef.current.rotation.z = initialLeftArmRot.current.z - 0.06
+    }
+    if (rightArmRef.current) {
+      rightArmRef.current.rotation.x = initialRightArmRot.current.x + 1.30 + breath
+      rightArmRef.current.rotation.y = initialRightArmRot.current.y + 0.10
+      rightArmRef.current.rotation.z = initialRightArmRot.current.z + 0.06
+    }
+
+    if (leftForeArmRef.current) {
+      leftForeArmRef.current.rotation.x = initialLeftForeArmRot.current.x - 0.14
+      leftForeArmRef.current.rotation.z = initialLeftForeArmRot.current.z + 0.08
+    }
+    if (rightForeArmRef.current) {
+      rightForeArmRef.current.rotation.x = initialRightForeArmRot.current.x - 0.14
+      rightForeArmRef.current.rotation.z = initialRightForeArmRot.current.z - 0.08
+    }
+
+    // Subtle natural breathing float
     if (avatarGroup.current) {
-      const targetGroupY = mousePos.current.x * 0.15 + (hovered ? 0.03 : 0)
-      avatarGroup.current.rotation.y = THREE.MathUtils.lerp(avatarGroup.current.rotation.y, targetGroupY, 0.05)
-    }
-
-    // Gentle halo ring rotation
-    if (scanRingRef.current) {
-      scanRingRef.current.position.y = -0.05 + Math.sin(elapsedTime * 1.2) * 0.15
-      scanRingRef.current.rotation.z += delta * (hovered ? 0.8 : 0.35)
-    }
-
-    // Wireframe glow illumination
-    if (wireMatRef.current) {
-      const baseIntensity = hovered ? 1.4 : 0.9
-      wireMatRef.current.emissiveIntensity = baseIntensity + Math.sin(elapsedTime * 2.5) * 0.15
-    }
-
-    // Ocular cyber iris subtle glow
-    if (leftEyeRef.current && rightEyeRef.current) {
-      const eyeIntensity = hovered ? 1.8 : 1.2
-      leftEyeRef.current.material.emissiveIntensity = eyeIntensity + Math.sin(elapsedTime * 3.0) * 0.25
-      rightEyeRef.current.material.emissiveIntensity = eyeIntensity + Math.sin(elapsedTime * 3.0) * 0.25
+      avatarGroup.current.position.y = position[1] + Math.sin(elapsedTime * 1.5) * 0.004
     }
   })
 
@@ -161,177 +274,16 @@ export const Avatar3DMale = ({ scale = 1.0 }) => {
     <group
       ref={avatarGroup}
       scale={scale}
-      position={[0, 0, 0]}
+      position={position}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      onClick={() => setClicked(!clicked)}
       cursor="pointer"
     >
-      {/* HUMAN HEAD TOPOLOGY MESH - Centered at eye-level */}
-      <group ref={headGroup} position={[0, -0.05, 0]}>
-
-        {/* 1. Outer Neon Human Wireframe Topology */}
-        <mesh geometry={headGeometry}>
-          <meshStandardMaterial
-            ref={wireMatRef}
-            wireframe={true}
-            color="#00f2fe"
-            emissive="#00f2fe"
-            emissiveIntensity={0.95}
-            roughness={0.2}
-            metalness={0.8}
-          />
-        </mesh>
-
-        {/* 2. Inner Semi-transparent Holographic Solid Core */}
-        <mesh geometry={headGeometry} scale={[0.985, 0.985, 0.985]}>
-          <meshStandardMaterial
-            color="#050914"
-            emissive="#031525"
-            emissiveIntensity={0.5}
-            transparent={true}
-            opacity={0.84}
-            roughness={0.25}
-            metalness={0.92}
-            flatShading={true}
-          />
-        </mesh>
-
-        {/* 3. Cybernetic Ocular Lenses (Eyes) */}
-        {/* Left Eye */}
-        <group position={[-0.34, 0.16, 0.88]}>
-          <Torus ref={leftEyeRef} args={[0.09, 0.018, 16, 32]}>
-            <meshStandardMaterial
-              color="#00f2fe"
-              emissive="#00f2fe"
-              emissiveIntensity={1.4}
-              roughness={0.1}
-            />
-          </Torus>
-          <Sphere args={[0.045, 16, 16]} position={[0, 0, 0.02]}>
-            <meshStandardMaterial
-              color="#a855f7"
-              emissive="#a855f7"
-              emissiveIntensity={1.8}
-            />
-          </Sphere>
-        </group>
-
-        {/* Right Eye */}
-        <group position={[0.34, 0.16, 0.88]}>
-          <Torus ref={rightEyeRef} args={[0.09, 0.018, 16, 32]}>
-            <meshStandardMaterial
-              color="#00f2fe"
-              emissive="#00f2fe"
-              emissiveIntensity={1.4}
-              roughness={0.1}
-            />
-          </Torus>
-          <Sphere args={[0.045, 16, 16]} position={[0, 0, 0.02]}>
-            <meshStandardMaterial
-              color="#a855f7"
-              emissive="#a855f7"
-              emissiveIntensity={1.8}
-            />
-          </Sphere>
-        </group>
-
-        {/* 4. Facial Neural Landmark Nodes (Glow Points) */}
-        {facialNodes.map((node, idx) => (
-          <Sphere key={idx} args={[0.024, 12, 12]} position={node.pos}>
-            <meshStandardMaterial
-              color={node.color}
-              emissive={node.color}
-              emissiveIntensity={hovered ? 2.5 : 1.6}
-            />
-          </Sphere>
-        ))}
-
-        {/* 5. Temporal Neural Interface / Headset Accents */}
-        <group position={[-1.15, 0.1, -0.05]} rotation={[0, 0, Math.PI / 2]}>
-          <Cylinder args={[0.18, 0.18, 0.08, 24]}>
-            <meshStandardMaterial color="#0c1424" metalness={0.9} roughness={0.2} />
-          </Cylinder>
-          <Torus args={[0.18, 0.025, 16, 24]}>
-            <meshStandardMaterial color="#00f2fe" emissive="#00f2fe" emissiveIntensity={1.2} />
-          </Torus>
-        </group>
-
-        <group position={[1.15, 0.1, -0.05]} rotation={[0, 0, Math.PI / 2]}>
-          <Cylinder args={[0.18, 0.18, 0.08, 24]}>
-            <meshStandardMaterial color="#0c1424" metalness={0.9} roughness={0.2} />
-          </Cylinder>
-          <Torus args={[0.18, 0.025, 16, 24]}>
-            <meshStandardMaterial color="#00f2fe" emissive="#00f2fe" emissiveIntensity={1.2} />
-          </Torus>
-        </group>
-
-        {/* 6. Biometric Holographic Scan Ring (Sweeps vertically) */}
-        <group ref={scanRingRef} position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <Torus args={[1.28, 0.016, 16, 48]}>
-            <meshStandardMaterial
-              color="#00f2fe"
-              emissive="#00f2fe"
-              emissiveIntensity={hovered ? 2.2 : 1.4}
-              transparent
-              opacity={0.85}
-            />
-          </Torus>
-          <Ring args={[0.9, 1.25, 32]}>
-            <meshBasicMaterial
-              color="#00f2fe"
-              transparent
-              opacity={0.12}
-              side={THREE.DoubleSide}
-            />
-          </Ring>
-        </group>
-
-        {/* 7. Stylized Cybernetic Neck Column */}
-        <group position={[0, -1.3, -0.05]}>
-          {/* Wireframe Neck Cylinder */}
-          <Cylinder args={[0.38, 0.44, 0.55, 16]} position={[0, 0.15, 0]}>
-            <meshStandardMaterial
-              wireframe={true}
-              color="#00f2fe"
-              emissive="#00f2fe"
-              emissiveIntensity={0.7}
-              roughness={0.3}
-            />
-          </Cylinder>
-          {/* Inner Neck Core */}
-          <Cylinder args={[0.35, 0.41, 0.55, 16]} position={[0, 0.15, 0]}>
-            <meshStandardMaterial color="#070c18" metalness={0.85} roughness={0.3} />
-          </Cylinder>
-          {/* Collar Rings */}
-          <Torus args={[0.48, 0.035, 16, 32]} rotation={[Math.PI / 2, 0, 0]} position={[0, 0.28, 0]}>
-            <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={0.8} />
-          </Torus>
-          <Torus args={[0.55, 0.04, 16, 32]} rotation={[Math.PI / 2, 0, 0]} position={[0, -0.05, 0]}>
-            <meshStandardMaterial color="#a855f7" emissive="#a855f7" emissiveIntensity={0.9} />
-          </Torus>
-        </group>
-      </group>
-
-      {/* 8. Tech Platform / Holographic Base Halo */}
-      <group position={[0, -1.65, 0]}>
-        <Torus args={[1.35, 0.025, 16, 48]} rotation={[Math.PI / 2, 0, 0]}>
-          <meshStandardMaterial
-            color="#00f2fe"
-            emissive="#00f2fe"
-            emissiveIntensity={hovered ? 1.8 : 1.0}
-          />
-        </Torus>
-        <Torus args={[1.55, 0.015, 16, 48]} rotation={[Math.PI / 2, 0, 0]}>
-          <meshStandardMaterial
-            color="#a855f7"
-            emissive="#a855f7"
-            emissiveIntensity={0.7}
-          />
-        </Torus>
-      </group>
+      <primitive object={clonedScene} />
     </group>
   )
 }
+
+useGLTF.preload('/models/newmodel.glb')
 
 export default Avatar3DMale

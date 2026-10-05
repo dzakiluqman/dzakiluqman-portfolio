@@ -26,14 +26,14 @@ function createCircleTexture() {
   return texture
 }
 
-// Clean White Circular Particle Field (Dense, Round & Clean)
-function ParticleField({ count = 650 }) {
+// Clean White Circular Particle Field (Dense, Round & Clean ambient halo)
+function ParticleField({ count = 280 }) {
   const circleTexture = useMemo(() => createCircleTexture(), [])
 
   const [positions] = useState(() => {
     const p = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
-      const radius = 10 * Math.cbrt(Math.random())
+      const radius = 0.45 + 1.8 * Math.cbrt(Math.random())
       const theta = Math.random() * 2 * Math.PI
       const phi = Math.acos(2 * Math.random() - 1)
       p[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
@@ -46,8 +46,8 @@ function ParticleField({ count = 650 }) {
   const ref = useRef()
   useFrame((state, delta) => {
     if (ref.current) {
-      ref.current.rotation.y += delta * 0.035
-      ref.current.rotation.x += delta * 0.018
+      ref.current.rotation.y += delta * 0.025
+      ref.current.rotation.x += delta * 0.012
     }
   })
 
@@ -62,11 +62,11 @@ function ParticleField({ count = 650 }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.032}
+        size={0.018}
         color="#ffffff"
         map={circleTexture}
         transparent={true}
-        opacity={0.85}
+        opacity={0.8}
         sizeAttenuation={true}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
@@ -107,26 +107,26 @@ export const Hero3D = ({ profile }) => {
   const isTablet = viewportSize.width >= 768 && viewportSize.width < 1024
   const isCompactHeight = viewportSize.height < 800
 
-  // Adapt camera FOV & distance dynamically so the 3D model scales proportionally on all aspect ratios & screen heights
+  // Precision head-level portrait camera framing: frames head down to collar & upper chest dead-center
   const cameraConfig = useMemo(() => {
     if (isMobile) {
-      return { position: [0, 0, 4.6], fov: 55 }
+      return { position: [0, 0, 1.05], fov: 36 }
     }
     if (isTablet) {
-      return { position: [0, 0, 4.3], fov: 48 }
+      return { position: [0, 0, 0.95], fov: 34 }
     }
     if (isCompactHeight) {
-      return { position: [0, 0, 4.2], fov: 45 }
+      return { position: [0, 0, 0.90], fov: 34 }
     }
-    return { position: [0, 0, 4.0], fov: 45 }
+    return { position: [0, 0, 0.88], fov: 34 }
   }, [isMobile, isTablet, isCompactHeight])
 
-  // Scale model down proportionally so it fits 1 full screen perfectly without encroaching on text
+  // Scale model proportionally for medium portrait framing
   const avatarScale = useMemo(() => {
-    if (isMobile) return 0.8
-    if (isTablet) return 1.0
-    if (isCompactHeight) return 1.1
-    return 1.25
+    if (isMobile) return 0.92
+    if (isTablet) return 0.98
+    if (isCompactHeight) return 0.95
+    return 1.02
   }, [isMobile, isTablet, isCompactHeight])
 
   const scrollToSection = (id) => {
@@ -140,27 +140,36 @@ export const Hero3D = ({ profile }) => {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-b from-neon-cyan/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[500px] bg-indigo-500/5 rounded-full blur-[130px] pointer-events-none -z-10" />
 
-      {/* Fullscreen 3D Canvas spanning 100vw by 100vh with centered 3D Head and dense particle field */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+      {/* Fullscreen 3D Canvas with soft bottom alpha mask for seamless torso fade */}
+      <div
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        style={{
+          maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.7) 72%, rgba(0,0,0,0) 88%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.7) 72%, rgba(0,0,0,0) 88%)'
+        }}
+      >
         <Canvas
           camera={cameraConfig}
           gl={{ antialias: true, alpha: true }}
           className="w-full h-full"
         >
-          <ambientLight intensity={0.95} />
-          <directionalLight position={[4, 6, 5]} intensity={1.4} color="#ffffff" />
-          <pointLight position={[3, 2, 3]} intensity={2.0} color="#00f2fe" />
-          <pointLight position={[-3, 2, 2.5]} intensity={1.6} color="#818cf8" />
-          <pointLight position={[0, -2.5, 3]} intensity={0.8} color="#38bdf8" />
+          {/* Studio Soft Lighting: Balanced ambient, warm key light, cool soft fill, subtle rim */}
+          <ambientLight intensity={0.9} />
+          <directionalLight position={[2.5, 3.5, 2.5]} intensity={1.1} color="#fff6eb" />
+          <directionalLight position={[-2.5, 2.0, 2.0]} intensity={0.45} color="#e0f2fe" />
+          <directionalLight position={[0, 3.0, -2.5]} intensity={0.4} color="#f8fafc" />
 
           <Suspense fallback={null}>
             <ParticleField />
-            <Float speed={2.0} rotationIntensity={0.12} floatIntensity={0.25}>
+            <Float speed={1.8} rotationIntensity={0.03} floatIntensity={0.04}>
               <Avatar3DMale scale={avatarScale} />
             </Float>
           </Suspense>
         </Canvas>
       </div>
+
+      {/* Bottom edge seamless gradient fade dissolving lower torso into the dark background */}
+      <div className="absolute inset-x-0 bottom-0 h-44 sm:h-56 lg:h-64 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent pointer-events-none z-[1]" />
 
       {/* Top Section: Raw Minimalist Typography (Zero cards or containers) */}
       <motion.div
