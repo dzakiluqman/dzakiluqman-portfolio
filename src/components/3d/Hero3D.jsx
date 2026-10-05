@@ -76,6 +76,7 @@ function ParticleField({ count = 280 }) {
 }
 
 export const Hero3D = ({ profile }) => {
+  const containerRef = useRef(null)
   const name = profile?.full_name || 'Dzakii Luqman Faid'
   const headline = profile?.headline || 'Junior Software Developer'
   const bio = profile?.bio || 'An enthusiastic, fast-learning Junior Software Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.'
@@ -135,20 +136,50 @@ export const Hero3D = ({ profile }) => {
   }
 
   return (
-    <section className="relative w-full flex flex-col justify-between items-center px-4 sm:px-6 lg:px-8 min-h-[100dvh] lg:h-screen lg:max-h-screen lg:overflow-hidden pt-20 sm:pt-24 lg:pt-20 xl:pt-24 pb-8 sm:pb-12 lg:pb-8 xl:pb-10 overflow-x-hidden">
-      {/* Subtle ambient lighting glows behind 3D canvas */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-b from-neon-cyan/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[500px] bg-indigo-500/5 rounded-full blur-[130px] pointer-events-none -z-10" />
+    <section
+      ref={containerRef}
+      className="relative w-full h-[100dvh] lg:h-screen lg:max-h-screen overflow-hidden flex flex-col justify-between items-center select-none"
+    >
+      {/* ============================================================== */}
+      {/* LAYER 1 (z-0 isolate): Background Glows & Giant Name Stack     */}
+      {/* ============================================================== */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-0 isolate pointer-events-none select-none overflow-hidden pb-14 sm:pb-18 lg:pb-24">
+        {/* Ambient lighting glows */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-b from-neon-cyan/15 via-indigo-600/10 to-transparent rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[500px] bg-indigo-500/10 rounded-full blur-[130px]" />
 
-      {/* Fullscreen 3D Canvas with soft bottom alpha mask for seamless torso fade */}
-      <div
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
-        style={{
-          maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.7) 72%, rgba(0,0,0,0) 88%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.7) 72%, rgba(0,0,0,0) 88%)'
-        }}
-      >
+        {/* ONLY Giant Display Name Stack strictly BEHIND the 3D Canvas */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center justify-center text-center leading-none"
+        >
+          {/* Line 1: DZAKII */}
+          <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight text-white/90 leading-[0.84] drop-shadow-[0_15px_45px_rgba(0,0,0,0.85)]">
+            DZAKII
+          </span>
+
+          {/* Line 2: LUQMAN FAID */}
+          <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight text-white/90 leading-[0.84] drop-shadow-[0_15px_45px_rgba(0,0,0,0.85)] mt-1 sm:mt-2">
+            LUQMAN FAID
+          </span>
+
+          {/* Spacer matching subtitle height for layout parity */}
+          <div className="h-6 sm:h-8 mt-2 sm:mt-3 invisible" aria-hidden="true">
+            <span className="text-xs sm:text-sm md:text-base lg:text-lg font-mono uppercase tracking-[0.28em]">
+              {headline}
+            </span>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* ============================================================== */}
+      {/* LAYER 2 (z-10): 3D Model Canvas (Naturally Occludes the Name)  */}
+      {/* ============================================================== */}
+      <div className="relative z-10 w-full h-full pointer-events-none">
         <Canvas
+          eventSource={containerRef}
           camera={cameraConfig}
           gl={{ antialias: true, alpha: true }}
           className="w-full h-full"
@@ -168,112 +199,112 @@ export const Hero3D = ({ profile }) => {
         </Canvas>
       </div>
 
-      {/* Bottom edge seamless gradient fade dissolving lower torso into the dark background */}
-      <div className="absolute inset-x-0 bottom-0 h-44 sm:h-56 lg:h-64 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent pointer-events-none z-[1]" />
+      {/* ============================================================== */}
+      {/* COMPACT BOTTOM GRADIENT FADE (z-[15], h-28 max to preserve shirt) */}
+      {/* ============================================================== */}
+      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#06080f] via-[#06080f]/60 to-transparent z-[15] pointer-events-none" />
 
-      {/* Top Section: Raw Minimalist Typography (Zero cards or containers) */}
-      <motion.div
-        initial={{ opacity: 0, y: -15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="relative z-10 text-center max-w-3xl mx-auto space-y-1.5 sm:space-y-2 pointer-events-auto px-2"
-      >
-        <div className="flex items-center justify-center gap-2 text-xs font-mono tracking-wider text-slate-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span className="text-slate-300">Available for work</span>
-          <span className="text-slate-600">•</span>
-          <span>{location}</span>
+      {/* ============================================================== */}
+      {/* LAYER 3 (z-20): Foreground Subtitle & Floating UI Elements     */}
+      {/* ============================================================== */}
+
+      {/* Subtitle: Positioned in foreground directly underneath line 2 (LUQMAN FAID) */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 select-none pb-14 sm:pb-18 lg:pb-24">
+        {/* Invisible mirror of Line 1 & Line 2 for pixel-perfect relative placement */}
+        <div className="invisible pointer-events-none flex flex-col items-center leading-none" aria-hidden="true">
+          <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight leading-[0.84]">
+            DZAKII
+          </span>
+          <span className="text-6xl sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight leading-[0.84] mt-1 sm:mt-2">
+            LUQMAN FAID
+          </span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl font-extrabold text-white tracking-tight leading-none pt-1">
-          {name}
-        </h1>
+        {/* Foreground subtitle directly below LUQMAN FAID */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="mt-2 sm:mt-3 pointer-events-none text-center px-4"
+        >
+          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-mono uppercase tracking-[0.28em] text-neon-cyan font-bold drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+            {headline.toUpperCase()}
+          </span>
+        </motion.div>
+      </div>
 
-        <p className="text-base sm:text-xl lg:text-2xl font-medium text-slate-300">
-          {headline}
-        </p>
-      </motion.div>
-
-      {/* Center Spacer: Dedicated Breathing Room for Dead-Center 3D Head */}
-      <div className="flex-1 w-full min-h-[60px] sm:min-h-[120px] lg:min-h-[80px] xl:min-h-[140px] pointer-events-none" />
-
-      {/* Bottom Section: Bio, Text-Based Links, Standalone Clean Icons */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.15 }}
-        className="relative z-10 text-center max-w-xl mx-auto space-y-3.5 sm:space-y-4 lg:space-y-4 xl:space-y-5 pointer-events-auto px-4"
-      >
-        {/* Short About Bio (1-2 sentences) */}
-        <p className="max-w-xs sm:max-w-md md:max-w-xl mx-auto text-xs sm:text-sm lg:text-base text-slate-300 leading-relaxed font-normal">
-          {bio}
-        </p>
-
-        {/* Text-Based Action Links (No background, No border, No card) */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 pt-0.5 text-xs sm:text-sm font-medium">
-          <button
-            onClick={() => scrollToSection('projects')}
-            className="group text-slate-200 hover:text-neon-cyan transition-colors flex items-center gap-1.5 underline-offset-4 hover:underline"
+      {/* 1. Bottom-Left: Borderless Social Media Icon Links */}
+      <div className="absolute bottom-16 md:bottom-6 left-1/2 -translate-x-1/2 md:left-10 md:translate-x-0 flex items-center gap-5 md:gap-4 z-20 pointer-events-auto text-slate-400">
+        {socialLinks.github && (
+          <a
+            href={socialLinks.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-neon-cyan hover:opacity-100 opacity-70 transition-all p-1 text-slate-400"
+            aria-label="GitHub"
+            title="GitHub Profile"
           >
-            <span>Explore Projects</span>
-            <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
-          </button>
-
-          <button
-            onClick={() => scrollToSection('contact')}
-            className="group text-slate-200 hover:text-neon-cyan transition-colors flex items-center gap-1.5 underline-offset-4 hover:underline"
+            <Github className="w-4 h-4" />
+          </a>
+        )}
+        {socialLinks.linkedin && (
+          <a
+            href={socialLinks.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-neon-cyan hover:opacity-100 opacity-70 transition-all p-1 text-slate-400"
+            aria-label="LinkedIn"
+            title="LinkedIn Profile"
           >
-            <span>Get in touch</span>
-            <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </button>
-
-          <button
-            onClick={() => scrollToSection('experience')}
-            className="group text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 underline-offset-4 hover:underline"
+            <Linkedin className="w-4 h-4" />
+          </a>
+        )}
+        {socialLinks.email && (
+          <a
+            href={`mailto:${socialLinks.email}`}
+            className="hover:text-neon-cyan hover:opacity-100 opacity-70 transition-all p-1 text-slate-400"
+            aria-label="Email"
+            title="Send Email"
           >
-            <span>View Resume</span>
-            <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </button>
-        </div>
+            <Mail className="w-4 h-4" />
+          </a>
+        )}
+      </div>
 
-        {/* Three Raw Social Icons (GitHub, LinkedIn, Email) */}
-        <div className="flex items-center justify-center gap-6 pt-1 text-slate-400">
-          {socialLinks.github && (
-            <a
-              href={socialLinks.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-neon-cyan hover:scale-110 transition-all p-1 text-slate-400"
-              aria-label="GitHub"
-              title="GitHub Profile"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-          )}
-          {socialLinks.linkedin && (
-            <a
-              href={socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-neon-cyan hover:scale-110 transition-all p-1 text-slate-400"
-              aria-label="LinkedIn"
-              title="LinkedIn Profile"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-          )}
-          {socialLinks.email && (
-            <a
-              href={`mailto:${socialLinks.email}`}
-              className="hover:text-neon-cyan hover:scale-110 transition-all p-1 text-slate-400"
-              aria-label="Email"
-              title="Send Email"
-            >
-              <Mail className="w-5 h-5" />
-            </a>
-          )}
-        </div>
-      </motion.div>
+      {/* 2. Bottom-Center: Clean Text-Only CTA Links */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-5 sm:gap-6 md:gap-8 z-20 pointer-events-auto whitespace-nowrap text-xs sm:text-sm font-medium">
+        <button
+          onClick={() => scrollToSection('projects')}
+          className="group text-slate-300 hover:text-neon-cyan transition-colors flex items-center gap-1.5"
+        >
+          <span>Explore Projects</span>
+          <span className="text-neon-cyan group-hover:translate-y-0.5 transition-transform">↓</span>
+        </button>
+
+        <button
+          onClick={() => scrollToSection('contact')}
+          className="group text-slate-300 hover:text-neon-cyan transition-colors flex items-center gap-1.5"
+        >
+          <span>Get in touch</span>
+          <span className="text-neon-cyan group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+        </button>
+
+        <button
+          onClick={() => scrollToSection('experience')}
+          className="group text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
+        >
+          <span>View Resume</span>
+          <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+        </button>
+      </div>
+
+      {/* 3. Bottom-Right: Clean Floating Status Line */}
+      <div className="absolute top-6 md:top-auto md:bottom-6 right-6 md:right-10 flex items-center gap-2 text-xs text-slate-400 z-20 pointer-events-auto">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="text-slate-300">Available for work</span>
+        <span className="text-slate-600">·</span>
+        <span>{location}</span>
+      </div>
     </section>
   )
 }

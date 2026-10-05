@@ -32,6 +32,17 @@ export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
 
   const [hovered, setHovered] = useState(false)
 
+  // Window pointer listener ensures smooth tracking even when Canvas is pointer-events-none
+  const mousePointer = useRef({ x: 0, y: 0 })
+  useEffect(() => {
+    const onPointerMove = (e) => {
+      mousePointer.current.x = (e.clientX / window.innerWidth) * 2 - 1
+      mousePointer.current.y = -(e.clientY / window.innerHeight) * 2 + 1
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onPointerMove)
+  }, [])
+
   // 1. Model Loader: Load model from /models/newmodel.glb
   const { scene } = useGLTF('/models/newmodel.glb')
 
@@ -191,9 +202,13 @@ export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
     const { pointer, clock } = state
     const elapsedTime = clock.getElapsedTime()
 
+    // Smooth cursor tracking from window mouse listener or state.pointer
+    const px = mousePointer.current.x !== 0 ? mousePointer.current.x : pointer.x
+    const py = mousePointer.current.y !== 0 ? mousePointer.current.y : pointer.y
+
     // 1. Head Tracking (smooth lerp with cursor)
-    const targetHeadY = pointer.x * 0.38
-    const targetHeadX = -pointer.y * 0.25
+    const targetHeadY = px * 0.38
+    const targetHeadX = -py * 0.25
 
     if (headBoneRef.current) {
       headBoneRef.current.rotation.y = THREE.MathUtils.lerp(
@@ -225,8 +240,8 @@ export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
     // 3. Eye Node Tracking (if dedicated eye bones exist in model)
     if (eyeLRef.current && eyeRRef.current) {
       const maxEyeAngle = 0.32
-      const eyeRotY = THREE.MathUtils.clamp(pointer.x * 0.35, -maxEyeAngle, maxEyeAngle)
-      const eyeRotX = THREE.MathUtils.clamp(-pointer.y * 0.25, -maxEyeAngle, maxEyeAngle)
+      const eyeRotY = THREE.MathUtils.clamp(px * 0.35, -maxEyeAngle, maxEyeAngle)
+      const eyeRotX = THREE.MathUtils.clamp(-py * 0.25, -maxEyeAngle, maxEyeAngle)
 
       eyeLRef.current.rotation.y = THREE.MathUtils.lerp(eyeLRef.current.rotation.y, initialEyeLRot.current.y + eyeRotY, 0.1)
       eyeLRef.current.rotation.x = THREE.MathUtils.lerp(eyeLRef.current.rotation.x, initialEyeLRot.current.x + eyeRotX, 0.1)
