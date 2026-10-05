@@ -132,7 +132,7 @@ export const Home = () => {
         <SkillsSphere skills={skills} />
 
         {/* 4. Glowing Cyberpunk Timeline for Experience & CV */}
-        <section id="experience" className="py-24 border-t border-slate-800/80 bg-dark-900/20 relative cyber-grid">
+        <section id="experience" className="py-24 border-t border-slate-800/80 bg-dark-900/20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
               <div className="inline-flex items-center gap-2 text-neon-cyan text-xs font-mono uppercase tracking-widest mb-2.5">
@@ -257,7 +257,7 @@ export const Home = () => {
         </section>
 
         {/* 5. Contact Section */}
-        <section id="contact" className="py-24 border-t border-slate-800/80 bg-dark-950 relative cyber-grid">
+        <section id="contact" className="py-24 border-t border-slate-800/80 bg-dark-950 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
               <div className="lg:col-span-5 space-y-6">

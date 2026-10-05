@@ -17,7 +17,12 @@ import AdminMessages from './pages/admin/AdminMessages'
 export function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />

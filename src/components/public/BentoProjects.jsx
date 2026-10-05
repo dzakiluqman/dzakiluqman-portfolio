@@ -82,7 +82,7 @@ export const BentoProjects = ({ projects = [] }) => {
     : projects.filter((p) => p.category === activeCategory)
 
   return (
-    <section id="projects" className="py-24 border-t border-slate-800/80 relative cyber-grid">
+    <section id="projects" className="py-24 border-t border-slate-800/80 relative">
       <div className="absolute top-1/3 left-10 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-neon-violet/5 rounded-full blur-[140px] pointer-events-none" />
 

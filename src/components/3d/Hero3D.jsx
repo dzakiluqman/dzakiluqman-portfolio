@@ -1,14 +1,36 @@
-import React, { useRef, useMemo, useState, useEffect, Suspense } from 'react'
+import React, { useRef, useState, useEffect, useMemo, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, Points, PointMaterial } from '@react-three/drei'
+import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react'
 import Avatar3DMale from './Avatar3DMale'
 
-// Primary Ambient Particle Field (Dense & Dynamic)
-function ParticleField({ count = 900 }) {
-  const points = useMemo(() => {
+// Helper to generate a crisp, smooth antialiased circular texture for points
+function createCircleTexture() {
+  if (typeof document === 'undefined') return null
+  const canvas = document.createElement('canvas')
+  canvas.width = 64
+  canvas.height = 64
+  const ctx = canvas.getContext('2d')
+
+  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 30)
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 1)')
+  gradient.addColorStop(0.6, 'rgba(255, 255, 255, 0.85)')
+  gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
+
+  ctx.fillStyle = gradient
+  ctx.fillRect(0, 0, 64, 64)
+
+  const texture = new THREE.CanvasTexture(canvas)
+  return texture
+}
+
+// Clean White Circular Particle Field (Dense, Round & Clean)
+function ParticleField({ count = 650 }) {
+  const circleTexture = useMemo(() => createCircleTexture(), [])
+
+  const [positions] = useState(() => {
     const p = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const radius = 10 * Math.cbrt(Math.random())
@@ -19,66 +41,37 @@ function ParticleField({ count = 900 }) {
       p[i * 3 + 2] = radius * Math.cos(phi)
     }
     return p
-  }, [count])
+  })
 
   const ref = useRef()
   useFrame((state, delta) => {
     if (ref.current) {
-      ref.current.rotation.y += delta * 0.038
-      ref.current.rotation.x += delta * 0.022
+      ref.current.rotation.y += delta * 0.035
+      ref.current.rotation.x += delta * 0.018
     }
   })
 
   return (
-    <Points ref={ref} positions={points} stride={3} frustumCulled={false}>
-      <PointMaterial
-        transparent
-        color="#00f2fe"
-        size={0.026}
-        sizeAttenuation={true}
-        depthWrite={false}
+    <points ref={ref} frustumCulled={false} key={count}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={positions.length / 3}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.032}
+        color="#ffffff"
+        map={circleTexture}
+        transparent={true}
         opacity={0.85}
-        blending={THREE.AdditiveBlending}
-      />
-    </Points>
-  )
-}
-
-// Secondary Faster Orbit Particle Layer (Continuous Flow & Dual-Tone Depth)
-function DriftParticles({ count = 350 }) {
-  const points = useMemo(() => {
-    const p = new Float32Array(count * 3)
-    for (let i = 0; i < count; i++) {
-      const radius = 6.5 * Math.cbrt(Math.random())
-      const theta = Math.random() * 2 * Math.PI
-      const phi = Math.acos(2 * Math.random() - 1)
-      p[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-      p[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-      p[i * 3 + 2] = radius * Math.cos(phi)
-    }
-    return p
-  }, [count])
-
-  const ref = useRef()
-  useFrame((state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.y -= delta * 0.05
-      ref.current.rotation.z += delta * 0.025
-    }
-  })
-
-  return (
-    <Points ref={ref} positions={points} stride={3} frustumCulled={false}>
-      <PointMaterial
-        transparent
-        color="#a855f7"
-        size={0.028}
         sizeAttenuation={true}
         depthWrite={false}
-        opacity={0.7}
         blending={THREE.AdditiveBlending}
       />
-    </Points>
+    </points>
   )
 }
 
@@ -142,11 +135,8 @@ export const Hero3D = ({ profile }) => {
   }
 
   return (
-    <section className="relative w-full flex flex-col justify-between items-center px-4 sm:px-6 lg:px-8 cyber-grid min-h-[100dvh] lg:h-screen lg:max-h-screen lg:overflow-hidden pt-20 sm:pt-24 lg:pt-20 xl:pt-24 pb-8 sm:pb-12 lg:pb-8 xl:pb-10 overflow-x-hidden">
-      {/* Fullscreen Cyberpunk Grid Background Layer across 100vw / 100vh */}
-      <div className="absolute inset-0 w-full h-full cyber-grid opacity-85 pointer-events-none -z-20" />
-
-      {/* Subtle ambient lighting glows behind grid and 3D canvas */}
+    <section className="relative w-full flex flex-col justify-between items-center px-4 sm:px-6 lg:px-8 min-h-[100dvh] lg:h-screen lg:max-h-screen lg:overflow-hidden pt-20 sm:pt-24 lg:pt-20 xl:pt-24 pb-8 sm:pb-12 lg:pb-8 xl:pb-10 overflow-x-hidden">
+      {/* Subtle ambient lighting glows behind 3D canvas */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-b from-neon-cyan/10 via-indigo-600/5 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[500px] bg-indigo-500/5 rounded-full blur-[130px] pointer-events-none -z-10" />
 
@@ -164,8 +154,7 @@ export const Hero3D = ({ profile }) => {
           <pointLight position={[0, -2.5, 3]} intensity={0.8} color="#38bdf8" />
 
           <Suspense fallback={null}>
-            <ParticleField count={isMobile ? 500 : 900} />
-            <DriftParticles count={isMobile ? 200 : 350} />
+            <ParticleField />
             <Float speed={2.0} rotationIntensity={0.12} floatIntensity={0.25}>
               <Avatar3DMale scale={avatarScale} />
             </Float>
