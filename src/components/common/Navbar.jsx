@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
+import dlLogo from '../../assets/images/dl-logo.png'
 
 export const Navbar = ({ profile }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -30,14 +31,14 @@ export const Navbar = ({ profile }) => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent py-5 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Top-Left: Clean 1:1 Aspect Ratio Square Logo Placeholder */}
-          <Link
-            to="/"
-            className="w-10 h-10 aspect-square rounded-xl bg-slate-900 border border-slate-800 text-white font-mono font-bold text-xs flex items-center justify-center hover:border-slate-700 hover:text-neon-cyan transition-all shrink-0"
-            aria-label="Home"
-          >
-            <span>DL</span>
-          </Link>
+          {/* Top-Left: Logo */}
+          <a href="#" className="flex items-center gap-2 group transition-transform duration-200 hover:scale-105">
+            <img 
+              src={dlLogo} 
+              alt="DL Logo" 
+              className="w-10 h-10 object-contain rounded-lg shadow-sm group-hover:opacity-90" 
+            />
+          </a>
 
           {/* Far Right: Clean Minimalist Navigation Links (No Hire Me button) */}
           <div className="flex items-center gap-8 ml-auto">
