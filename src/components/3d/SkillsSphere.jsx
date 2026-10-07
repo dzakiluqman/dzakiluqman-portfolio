@@ -154,7 +154,12 @@ export const SkillsSphere = ({ skills = [] }) => {
               <span>Interactive Tech Sphere</span>
             </div>
 
-            <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }} className="w-full h-full">
+            <Canvas
+              camera={{ position: [0, 0, 4.5], fov: 45 }}
+              dpr={[1, 1.5]}
+              gl={{ powerPreference: 'high-performance', precision: 'mediump' }}
+              className="w-full h-full"
+            >
               <ambientLight intensity={0.6} />
               <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f2fe" />
               <pointLight position={[-10, -10, -5]} intensity={1.2} color="#a855f7" />

@@ -180,8 +180,9 @@ export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
         child.visible = true
         if (child.material) {
           child.material.wireframe = false
-          child.castShadow = true
-          child.receiveShadow = true
+          // Disable dynamic shadows for maximum WebGL rendering performance
+          child.castShadow = false
+          child.receiveShadow = false
 
           // Soften fabric material: high roughness, zero metalness to avoid blown-out white specular highlights
           if (name.includes('look') || name.includes('top') || name.includes('outfit')) {
@@ -300,5 +301,6 @@ export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
 }
 
 useGLTF.preload('/models/newmodel.glb')
+useGLTF.preload('/newmodel.glb')
 
 export default Avatar3DMale

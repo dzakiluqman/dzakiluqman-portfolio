@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { useProgress } from '@react-three/drei'
+import { useProgress, useGLTF } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
 import dlLogo from '../assets/images/dl-logo.png'
 
+// Top-level module preloading to trigger instant network fetch of 3D assets
+useGLTF.preload('/models/newmodel.glb')
+useGLTF.preload('/newmodel.glb')
+
 export const Preloader = () => {
-  const { progress } = useProgress()
+  // Strict Real-Time Resource Tracking via Drei useProgress
+  const { progress, loaded, total, active } = useProgress()
   const [isExited, setIsExited] = useState(false)
   const location = useLocation()
   const isAdmin = location.pathname.startsWith('/admin')
 
-  // Lock and unlock body scroll during loading and after curtain slide completes
+  // Lock body scroll while preloading; restore once curtain slide completes
   useEffect(() => {
     if (isAdmin) {
       document.body.style.overflow = 'unset'
@@ -28,41 +33,44 @@ export const Preloader = () => {
     }
   }, [isExited, isAdmin])
 
-  // Listen to 3D asset loading progress: delay ~300ms on 100% then trigger curtain exit
+  // Trigger exit ONLY when all assets are genuinely downloaded (progress === 100, loaded === total, active === false)
+  // followed by a 200ms grace period for GPU shader compilation
   useEffect(() => {
     if (isAdmin) {
       setIsExited(true)
       return
     }
 
-    let delayTimer = null
+    let graceTimer = null
 
-    if (progress === 100) {
-      delayTimer = setTimeout(() => {
+    // Exact state guard: 100% progress, all queued assets resolved, and loading inactive
+    const isFullyLoaded = progress === 100 && loaded === total && !active
+
+    if (isFullyLoaded) {
+      graceTimer = setTimeout(() => {
         setIsExited(true)
-      }, 300)
+      }, 200)
     }
 
     return () => {
-      if (delayTimer) clearTimeout(delayTimer)
+      if (graceTimer) clearTimeout(graceTimer)
     }
-  }, [progress, isAdmin])
+  }, [progress, loaded, total, active, isAdmin])
 
-  // Safety fallback: if no 3D scene loads or network stalls, smoothly dismiss after 4s
+  // Safety guard for non-3D views or edge network timeouts (zero impact during normal load)
   useEffect(() => {
     if (isAdmin) return
-
-    const fallbackTimer = setTimeout(() => {
+    const safetyTimer = setTimeout(() => {
       setIsExited(true)
-    }, 4000)
-
-    return () => clearTimeout(fallbackTimer)
+    }, 6000)
+    return () => clearTimeout(safetyTimer)
   }, [isAdmin])
 
   if (isAdmin) {
     return null
   }
 
+  // Pure mathematical reflection of real bytes loaded — NO fake intervals or artificial progression
   const roundedProgress = Math.min(Math.max(Math.round(progress), 0), 100)
   const formattedProgress = String(roundedProgress).padStart(2, '0')
 
@@ -80,7 +88,7 @@ export const Preloader = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[999] bg-[#080b11] flex flex-col justify-between p-8 md:p-16 select-none overflow-hidden"
           aria-live="polite"
-          aria-label="Loading portfolio"
+          aria-label="Loading portfolio assets"
         >
           {/* Subtle warm neutral ambient vignette */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.02),transparent_70%)] pointer-events-none" />
@@ -113,7 +121,7 @@ export const Preloader = () => {
             </span>
           </header>
 
-          {/* Center Focus: Elegant Large Display Percentage Counter */}
+          {/* Center Focus: Strict Genuine Loading Percentage Counter */}
           <main className="relative z-10 flex-1 flex flex-col items-center justify-center my-auto">
             <div className="flex items-baseline select-none">
               <span className="text-7xl md:text-9xl font-light tracking-tighter text-slate-100 font-sans tabular-nums leading-none">

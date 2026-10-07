@@ -1,10 +1,12 @@
-import React, { useRef, useState, useEffect, useMemo, Suspense } from 'react'
+import React, { useRef, useState, useEffect, useMemo, Suspense, lazy } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react'
-import Avatar3DMale from './Avatar3DMale'
+
+// Lazy load heavy 3D avatar component to avoid blocking initial DOM paint
+const Avatar3DMale = lazy(() => import('./Avatar3DMale'))
 
 // Helper to generate a crisp, smooth antialiased circular texture for points
 function createCircleTexture() {
@@ -181,14 +183,21 @@ export const Hero3D = ({ profile }) => {
         <Canvas
           eventSource={containerRef}
           camera={cameraConfig}
-          gl={{ antialias: true, alpha: true }}
+          dpr={[1, 1.5]}
+          performance={{ min: 0.5 }}
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: 'high-performance',
+            precision: 'mediump',
+            depth: true,
+            stencil: false,
+          }}
           className="w-full h-full"
         >
-          {/* Studio Soft Lighting: Balanced ambient, warm key light, cool soft fill, subtle rim */}
+          {/* Efficient Studio Soft Lighting: 1 ambient light and 1 soft directional light */}
           <ambientLight intensity={0.9} />
           <directionalLight position={[2.5, 3.5, 2.5]} intensity={1.1} color="#fff6eb" />
-          <directionalLight position={[-2.5, 2.0, 2.0]} intensity={0.45} color="#e0f2fe" />
-          <directionalLight position={[0, 3.0, -2.5]} intensity={0.4} color="#f8fafc" />
 
           <Suspense fallback={null}>
             <ParticleField />
