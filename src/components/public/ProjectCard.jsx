@@ -1,11 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Github, ExternalLink } from 'lucide-react'
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80'
 
-export const ProjectCard = ({ project, index = 0, onSelect }) => {
+export const ProjectCard = ({ project, index = 0 }) => {
   const {
+    id,
+    slug,
     title,
     description,
     category,
@@ -16,19 +19,10 @@ export const ProjectCard = ({ project, index = 0, onSelect }) => {
     thumbnail_url,
   } = project
 
-  // Strictly render the FIRST image in the array as the card thumbnail (prevent loading secondary images in grid)
+  const projectHref = `/projects/${id || slug}`
+
+  // Render strictly the first image from the Supabase array as the thumbnail
   const thumbnailUrl = (images && images.length > 0 ? images[0] : null) || thumbnail_url || FALLBACK_IMAGE
-
-  const handleCardClick = () => {
-    onSelect?.(project)
-  }
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      onSelect?.(project)
-    }
-  }
 
   return (
     <motion.article
@@ -36,15 +30,14 @@ export const ProjectCard = ({ project, index = 0, onSelect }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: (index % 3) * 0.05 }}
-      onClick={handleCardClick}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-      aria-label={`View details for ${title}`}
-      className="group relative rounded-2xl overflow-hidden bg-white/[0.02] backdrop-blur-md border border-white/10 hover:border-white/20 transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between h-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyan-500/50"
+      className="group relative rounded-2xl overflow-hidden bg-white/[0.02] backdrop-blur-md border border-white/10 hover:border-white/20 transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between h-full"
     >
-      {/* Top Media & Content Information */}
-      <div>
+      {/* Primary Clickable Link Area covering the card for direct page navigation */}
+      <Link
+        to={projectHref}
+        className="block focus:outline-none flex-1"
+        aria-label={`View dedicated page for ${title}`}
+      >
         {/* Proportional Widescreen Image Container (Strictly renders images[0]) */}
         <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-slate-900/60 border border-white/5 mb-5">
           <img
@@ -82,10 +75,10 @@ export const ProjectCard = ({ project, index = 0, onSelect }) => {
             </p>
           )}
         </div>
-      </div>
+      </Link>
 
-      {/* Card Footer: Tech Stack & Links */}
-      <div className="pt-5 mt-5 border-t border-white/10 flex items-center justify-between gap-3">
+      {/* Card Footer: Tech Stack & Direct External Links */}
+      <div className="pt-5 mt-5 border-t border-white/10 flex items-center justify-between gap-3 relative z-10">
         {/* Minimalist Tech Tags */}
         <div className="flex flex-wrap gap-1.5 items-center">
           {tech_stack && tech_stack.length > 0 && tech_stack.slice(0, 3).map((tech, idx) => (
@@ -103,14 +96,13 @@ export const ProjectCard = ({ project, index = 0, onSelect }) => {
           )}
         </div>
 
-        {/* Minimalist Source & Demo Links (Event propagation stopped) */}
+        {/* Minimalist External Links */}
         <div className="flex items-center gap-2.5 shrink-0">
           {github_url && (
             <a
               href={github_url}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
               className="text-xs font-sans text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1 p-1"
               title="View Repository"
             >
@@ -123,7 +115,6 @@ export const ProjectCard = ({ project, index = 0, onSelect }) => {
               href={demo_url}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
               className="text-xs font-sans text-slate-400 hover:text-cyan-400 transition-colors duration-200 flex items-center gap-1 p-1"
               title="Live Deployment"
             >

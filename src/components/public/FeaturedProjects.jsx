@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ProjectCard } from './ProjectCard'
-import { ProjectDetailModal } from './ProjectDetailModal'
 
 export const FeaturedProjects = ({ projects = [] }) => {
   const [activeCategory, setActiveCategory] = useState('All')
-  const [selectedProject, setSelectedProject] = useState(null)
 
   const categories = ['All', ...new Set(projects.map((p) => p.category).filter(Boolean))]
   const filteredProjects = activeCategory === 'All'
@@ -64,7 +62,6 @@ export const FeaturedProjects = ({ projects = [] }) => {
                 key={project.id || index}
                 project={project}
                 index={index}
-                onSelect={(proj) => setSelectedProject(proj)}
               />
             ))}
           </motion.div>
@@ -76,13 +73,6 @@ export const FeaturedProjects = ({ projects = [] }) => {
           </div>
         )}
       </div>
-
-      {/* Interactive Detail Modal with Multi-Image Auto-Sliding Carousel */}
-      <ProjectDetailModal
-        project={selectedProject}
-        isOpen={Boolean(selectedProject)}
-        onClose={() => setSelectedProject(null)}
-      />
     </section>
   )
 }

@@ -29,6 +29,7 @@ export function App() {
           <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
 
           {/* Admin Authentication */}
