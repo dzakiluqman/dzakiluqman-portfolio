@@ -25,6 +25,12 @@ export const mockProjects = [
     github_url: 'https://github.com/dzakiluqman/cloudscale',
     demo_url: 'https://cloudscale.example.com',
     thumbnail_url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&auto=format&fit=crop&q=80'
+    ],
     is_featured: true,
     is_published: true,
     sort_order: 1
@@ -40,6 +46,11 @@ export const mockProjects = [
     github_url: 'https://github.com/dzakiluqman/nexusflow',
     demo_url: 'https://nexusflow.example.com',
     thumbnail_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1200&auto=format&fit=crop&q=80'
+    ],
     is_featured: true,
     is_published: true,
     sort_order: 2
@@ -55,6 +66,11 @@ export const mockProjects = [
     github_url: 'https://github.com/dzakiluqman/pulsecrypto',
     demo_url: 'https://pulsecrypto.example.com',
     thumbnail_url: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=800&auto=format&fit=crop&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1200&auto=format&fit=crop&q=80'
+    ],
     is_featured: true,
     is_published: true,
     sort_order: 3
@@ -70,6 +86,11 @@ export const mockProjects = [
     github_url: 'https://github.com/dzakiluqman/synthgen',
     demo_url: 'https://synthgen.example.com',
     thumbnail_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=1200&auto=format&fit=crop&q=80'
+    ],
     is_featured: false,
     is_published: true,
     sort_order: 4

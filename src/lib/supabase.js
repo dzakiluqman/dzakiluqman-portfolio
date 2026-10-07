@@ -36,11 +36,42 @@ const mockClient = {
     insert: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
     update: () => ({ eq: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }) }),
     delete: () => ({ eq: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }) })
-  })
+  }),
+  storage: {
+    from: () => ({
+      upload: () => Promise.resolve({ data: null, error: new Error('Supabase Storage not configured') }),
+      getPublicUrl: () => ({ data: { publicUrl: '' } })
+    })
+  }
 }
 
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
   : mockClient
+
+/**
+ * Uploads an image file to Supabase Storage and returns its public URL
+ * @param {File} file - File object to upload
+ * @param {string} bucket - Supabase Storage bucket name (default 'projects')
+ * @returns {Promise<string>} Public URL of the uploaded image
+ */
+export async function uploadProjectImage(file, bucket = 'projects') {
+  if (!isSupabaseConfigured) {
+    throw new Error('Supabase is not configured')
+  }
+
+  const fileExt = file.name.split('.').pop()
+  const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
+  const filePath = `uploads/${fileName}`
+
+  const { error: uploadError } = await supabase.storage
+    .from(bucket)
+    .upload(filePath, file, { cacheControl: '3600', upsert: false })
+
+  if (uploadError) throw uploadError
+
+  const { data } = supabase.storage.from(bucket).getPublicUrl(filePath)
+  return data.publicUrl
+}
 
 export default supabase
