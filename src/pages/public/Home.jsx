@@ -23,7 +23,7 @@ import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
 import Hero3D from '../../components/3d/Hero3D'
 import BentoProjects from '../../components/public/BentoProjects'
-import SkillsSphere from '../../components/3d/SkillsSphere'
+import TechnicalCompetencies from '../../components/public/TechnicalCompetencies'
 import ExperienceTimeline from '../../components/public/ExperienceTimeline'
 import ContactForm from '../../components/public/ContactForm'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -128,8 +128,8 @@ export const Home = () => {
         {/* 2. Futuristic Bento Grid & 3D Tilt Project Showcase */}
         <BentoProjects projects={projects} />
 
-        {/* 3. 3D Orbit / Futuristic Skill Sphere */}
-        <SkillsSphere skills={skills} />
+        {/* 3. Technical Competencies Editorial Badges */}
+        <TechnicalCompetencies skills={skills} />
 
         {/* 4. Glowing Cyberpunk Timeline for Experience & CV */}
         <section id="experience" className="py-24 border-t border-slate-800/80 bg-dark-900/20 relative">
