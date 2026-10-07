@@ -1,3 +1,3 @@
-import BentoProjects from './BentoProjects'
-export { BentoProjects as ProjectSection }
-export default BentoProjects
+import FeaturedProjects from './FeaturedProjects'
+export { FeaturedProjects as ProjectSection }
+export default FeaturedProjects

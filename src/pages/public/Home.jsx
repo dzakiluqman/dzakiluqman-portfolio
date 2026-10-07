@@ -22,7 +22,7 @@ import {
 import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
 import Hero3D from '../../components/3d/Hero3D'
-import BentoProjects from '../../components/public/BentoProjects'
+import FeaturedProjects from '../../components/public/FeaturedProjects'
 import TechnicalCompetencies from '../../components/public/TechnicalCompetencies'
 import ExperienceTimeline from '../../components/public/ExperienceTimeline'
 import ContactForm from '../../components/public/ContactForm'
@@ -121,12 +121,12 @@ export const Home = () => {
       <Navbar profile={profile} />
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 bg-[#020617]">
         {/* 1. 3D Interactive Hero Canvas with 3D Male Avatar */}
         <Hero3D profile={profile} />
 
-        {/* 2. Futuristic Bento Grid & 3D Tilt Project Showcase */}
-        <BentoProjects projects={projects} />
+        {/* 2. Redesigned Featured Projects Section with Ambient Mesh & Liquid Glass */}
+        <FeaturedProjects projects={projects} />
 
         {/* 3. Technical Competencies Editorial Badges */}
         <TechnicalCompetencies skills={skills} />
