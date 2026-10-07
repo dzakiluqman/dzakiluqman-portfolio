@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/common/ProtectedRoute'
+import Preloader from './components/Preloader'
 
 // Public Pages
 import Home from './pages/public/Home'
@@ -23,7 +24,9 @@ export function App() {
           v7_relativeSplatPath: true,
         }}
       >
-        <Routes>
+        <Suspense fallback={null}>
+          <Preloader />
+          <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
@@ -43,7 +46,8 @@ export function App() {
           {/* Fallback Redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
+      </Suspense>
+    </BrowserRouter>
     </AuthProvider>
   )
 }
