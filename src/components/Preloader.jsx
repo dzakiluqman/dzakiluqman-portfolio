@@ -86,7 +86,7 @@ export const Preloader = () => {
           initial={{ y: 0 }}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[999] bg-[#080b11] flex flex-col justify-between p-8 md:p-16 select-none overflow-hidden"
+          className="fixed inset-0 z-[999] bg-[#000000] flex flex-col justify-between p-8 md:p-16 select-none overflow-hidden"
           aria-live="polite"
           aria-label="Loading portfolio assets"
         >

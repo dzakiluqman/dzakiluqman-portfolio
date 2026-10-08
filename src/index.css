@@ -8,8 +8,8 @@
   }
   
   body {
-    background-color: #06080f;
-    color: #f1f5f9;
+    background-color: #000000;
+    color: #f4f4f5;
   }
 
   /* Custom high-tech scrollbar */
@@ -18,15 +18,14 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #06080f;
+    background: #000000;
   }
   ::-webkit-scrollbar-thumb {
-    background: #19243d;
+    background: #27272a;
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #00f2fe;
-    box-shadow: 0 0 10px #00f2fe;
+    background: #3f3f46;
   }
 }
 

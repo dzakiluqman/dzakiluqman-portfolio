@@ -11,15 +11,21 @@ export const FeaturedProjects = ({ projects = [] }) => {
     : projects.filter((p) => p.category === activeCategory)
 
   return (
-    <section id="projects" className="relative pt-16 pb-20 md:pt-20 md:pb-24 bg-[#020617]">
+    <section id="projects" className="relative pt-16 pb-20 md:pt-20 md:pb-24 bg-[#000000]">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+        >
           <div className="space-y-2 max-w-2xl">
-            <h2 className="text-3xl sm:text-4xl font-light text-slate-100 tracking-tight font-sans">
+            <h2 className="text-3xl sm:text-4xl font-light text-zinc-100 tracking-tight font-sans">
               Featured <span className="font-semibold text-white">Projects</span>
             </h2>
-            <p className="text-slate-400 text-sm md:text-base leading-relaxed font-sans">
+            <p className="text-zinc-400 text-sm md:text-base leading-relaxed font-sans">
               Curated digital products, software architectures, and interactive web applications engineered with precision.
             </p>
           </div>
@@ -36,7 +42,7 @@ export const FeaturedProjects = ({ projects = [] }) => {
                     className={`text-sm font-sans tracking-wide transition-colors whitespace-nowrap focus:outline-none ${
                       isActive
                         ? 'text-white font-medium'
-                        : 'text-slate-400 hover:text-white'
+                        : 'text-zinc-400 hover:text-white'
                     }`}
                   >
                     {cat}
@@ -45,7 +51,7 @@ export const FeaturedProjects = ({ projects = [] }) => {
               })}
             </nav>
           )}
-        </div>
+        </motion.div>
 
         {/* Structured 3-Column Grid */}
         <AnimatePresence mode="wait">
@@ -68,7 +74,7 @@ export const FeaturedProjects = ({ projects = [] }) => {
         </AnimatePresence>
 
         {filteredProjects.length === 0 && (
-          <div className="text-center py-16 text-slate-500 font-sans text-sm">
+          <div className="text-center py-16 text-zinc-500 font-sans text-sm">
             No projects found in this category.
           </div>
         )}

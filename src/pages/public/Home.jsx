@@ -111,11 +111,11 @@ export const Home = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-dark-950 text-slate-100 flex flex-col selection:bg-neon-cyan selection:text-dark-950">
+    <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-neon-cyan selection:text-black">
       <Navbar profile={profile} />
 
       {/* Main Content */}
-      <main className="flex-1 bg-[#020617]">
+      <main className="flex-1 bg-[#000000]">
         {/* 1. 3D Interactive Hero Canvas with 3D Male Avatar */}
         <Hero3D profile={profile} />
 

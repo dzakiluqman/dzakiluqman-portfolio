@@ -140,7 +140,7 @@ export const Hero3D = ({ profile }) => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[100dvh] lg:h-screen lg:max-h-screen overflow-hidden flex flex-col justify-between items-center select-none bg-[#020617]"
+      className="relative w-full h-[100dvh] lg:h-screen lg:max-h-screen overflow-hidden flex flex-col justify-between items-center select-none bg-[#000000]"
     >
       {/* ============================================================== */}
       {/* LAYER 1 (z-0 isolate): Background Glows & Giant Name Stack     */}
@@ -211,7 +211,7 @@ export const Hero3D = ({ profile }) => {
       {/* ============================================================== */}
       {/* COMPACT BOTTOM GRADIENT FADE (z-[15], h-28 max to preserve shirt) */}
       {/* ============================================================== */}
-      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#020617] via-[#020617]/60 to-transparent z-[15] pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#000000] via-[#000000]/60 to-transparent z-[15] pointer-events-none" />
 
       {/* ============================================================== */}
       {/* LAYER 3 (z-20): Foreground Subtitle & Floating UI Elements     */}

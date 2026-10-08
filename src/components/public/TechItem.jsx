@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import * as Icons from 'lucide-react'
 import {
   Code,
@@ -92,7 +93,7 @@ const getFocusDescription = (skill) => {
   return 'Engineering Core'
 }
 
-export const TechItem = ({ skill }) => {
+export const TechItem = ({ skill, index = 0 }) => {
   const IconComponent =
     (skill.icon_name && ICON_MAP[skill.icon_name]) ||
     (skill.icon_name && Icons[skill.icon_name]) ||
@@ -102,21 +103,27 @@ export const TechItem = ({ skill }) => {
   const focus = getFocusDescription(skill)
 
   return (
-    <div className="group relative flex items-center justify-between gap-4 p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/10 transition-all duration-300">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.4, delay: (index % 3) * 0.05 }}
+      className="group relative flex items-center justify-between gap-4 p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.05] backdrop-blur-md border border-white/[0.08] hover:border-white/20 transition-all duration-300"
+    >
       <div className="flex items-center gap-3.5 min-w-0">
-        <div className="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-400 group-hover:text-white transition-colors duration-200 flex-shrink-0">
+        <div className="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-zinc-400 group-hover:text-cyan-400 group-hover:border-white/20 transition-all duration-200 flex-shrink-0">
           <IconComponent className="w-4 h-4" />
         </div>
         <div className="min-w-0">
-          <div className="text-base font-medium text-slate-100 group-hover:text-white transition-colors tracking-tight truncate font-sans">
+          <div className="text-base font-medium text-zinc-100 group-hover:text-cyan-400 transition-colors duration-200 tracking-tight truncate font-sans">
             {title}
           </div>
-          <div className="text-xs text-slate-400 font-sans tracking-tight truncate mt-0.5">
+          <div className="text-xs text-zinc-500 font-sans tracking-tight truncate mt-0.5">
             {focus}
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

@@ -47,7 +47,7 @@ export const Navbar = ({ profile }) => {
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.href)}
-                  className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                  className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
                 >
                   {link.name}
                 </button>
@@ -58,7 +58,7 @@ export const Navbar = ({ profile }) => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none"
+                className="p-2 rounded-lg bg-black/80 border border-white/[0.08] text-zinc-300 hover:text-white focus:outline-none"
                 aria-label="Toggle Navigation Menu"
               >
                 {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -70,12 +70,12 @@ export const Navbar = ({ profile }) => {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden bg-dark-900/95 backdrop-blur-2xl border-b border-slate-800 px-4 pt-3 pb-6 space-y-2 mt-3 animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="md:hidden bg-black/95 backdrop-blur-2xl border-b border-white/[0.08] px-4 pt-3 pb-6 space-y-2 mt-3 animate-in fade-in slide-in-from-top-4 duration-200">
           {navLinks.map((link) => (
             <button
               key={link.name}
               onClick={() => handleNavClick(link.href)}
-              className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+              className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/[0.05] transition-colors"
             >
               {link.name}
             </button>

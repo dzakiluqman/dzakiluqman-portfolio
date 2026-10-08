@@ -94,15 +94,21 @@ export const CareerProgression = ({
   const items = experiences && experiences.length > 0 ? experiences : mockExperiences
 
   return (
-    <section id="experience" className="relative py-20 md:py-28 bg-[#020617]">
+    <section id="experience" className="relative py-20 md:py-28 bg-[#000000]">
       <div className="max-w-7xl mx-auto px-6">
         {/* Editorial Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-16"
+        >
           <div className="space-y-2 max-w-2xl">
-            <h2 className="text-3xl sm:text-4xl font-light text-slate-100 tracking-tight font-sans">
+            <h2 className="text-3xl sm:text-4xl font-light text-zinc-100 tracking-tight font-sans">
               Career <span className="font-semibold text-white">Progression</span>
             </h2>
-            <p className="text-slate-400 text-sm md:text-base leading-relaxed font-sans">
+            <p className="text-zinc-400 text-sm md:text-base leading-relaxed font-sans">
               Engineering milestones, technical leadership tenures, and high-impact distributed systems delivered in production.
             </p>
           </div>
@@ -110,15 +116,15 @@ export const CareerProgression = ({
           {/* Minimal Curriculum Vitae Trigger */}
           <button
             onClick={() => setShowCvModal(true)}
-            className="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 text-xs font-sans text-slate-300 hover:text-white transition-all duration-200"
+            className="self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 text-xs font-sans text-zinc-300 hover:text-white transition-all duration-300"
           >
-            <FileText className="w-3.5 h-3.5 text-slate-400" />
+            <FileText className="w-3.5 h-3.5 text-zinc-400" />
             <span>Curriculum Vitae</span>
           </button>
-        </div>
+        </motion.div>
 
         {/* Minimal Editorial Vertical Timeline */}
-        <div className="relative border-l border-white/10 ml-2 md:ml-4 pl-6 md:pl-10 space-y-8 md:space-y-10">
+        <div className="relative border-l border-white/[0.08] ml-2 md:ml-4 pl-6 md:pl-10 space-y-8 md:space-y-10">
           {items.map((exp, index) => {
             const start = formatDate(exp.start_date)
             const end = exp.is_current ? 'Present' : formatDate(exp.end_date)
@@ -126,54 +132,54 @@ export const CareerProgression = ({
             return (
               <motion.div
                 key={exp.id || index}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
+                transition={{ duration: 0.4, delay: (index % 3) * 0.05 }}
                 className="relative group"
               >
                 {/* Subtle Timeline Node on Hairline */}
-                <div className="absolute -left-[31px] md:-left-[47px] top-6 w-2.5 h-2.5 rounded-full bg-[#020617] border border-white/30 group-hover:border-white/60 transition-colors" />
+                <div className="absolute -left-[31px] md:-left-[47px] top-6 w-2.5 h-2.5 rounded-full bg-[#000000] border border-white/30 group-hover:border-white/60 transition-colors" />
 
                 {/* Editorial Item Container */}
-                <div className="bg-white/[0.02] border border-white/10 backdrop-blur-md p-6 sm:p-7 rounded-2xl hover:bg-white/[0.04] transition-all duration-300">
+                <div className="bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] hover:border-white/20 backdrop-blur-md p-6 sm:p-7 rounded-2xl transition-all duration-300">
                   {/* Date & Meta Header */}
-                  <div className="flex flex-wrap items-center gap-2 text-xs tracking-wider text-slate-400 uppercase font-sans mb-2">
-                    <span className="text-slate-300 font-medium">{start} — {end}</span>
+                  <div className="flex flex-wrap items-center gap-2 text-xs tracking-wider text-zinc-500 uppercase font-sans mb-2">
+                    <span className="text-zinc-300 font-medium">{start} — {end}</span>
                     {exp.location && (
                       <>
-                        <span className="text-slate-600">·</span>
+                        <span className="text-zinc-700">·</span>
                         <span>{exp.location}</span>
                       </>
                     )}
                     {exp.employment_type && (
                       <>
-                        <span className="text-slate-600">·</span>
+                        <span className="text-zinc-700">·</span>
                         <span>{exp.employment_type}</span>
                       </>
                     )}
                   </div>
 
                   {/* Role Title & Company */}
-                  <h3 className="text-xl font-medium text-slate-100 tracking-tight font-sans">
+                  <h3 className="text-xl font-medium text-zinc-100 group-hover:text-cyan-400 transition-colors duration-200 tracking-tight font-sans">
                     {exp.role}{' '}
-                    <span className="text-slate-400 font-normal">at {exp.company}</span>
+                    <span className="text-zinc-400 font-normal">at {exp.company}</span>
                   </h3>
 
                   {/* Summary Description */}
                   {exp.description && (
-                    <p className="mt-3 text-sm text-slate-300 font-sans leading-relaxed">
+                    <p className="mt-3 text-sm text-zinc-400 font-sans leading-relaxed">
                       {exp.description}
                     </p>
                   )}
 
                   {/* Key Achievements */}
                   {exp.achievements && exp.achievements.length > 0 && (
-                    <ul className="mt-4 pt-4 border-t border-white/5 space-y-2 text-xs sm:text-sm text-slate-400 font-sans">
+                    <ul className="mt-4 pt-4 border-t border-white/[0.06] space-y-2 text-xs sm:text-sm text-zinc-400 font-sans">
                       {exp.achievements.map((item, idx) => (
                         <li key={idx} className="flex items-start gap-2.5">
-                          <span className="text-slate-500 mt-1 select-none">—</span>
-                          <span className="leading-relaxed text-slate-300">{item}</span>
+                          <span className="text-zinc-600 mt-1 select-none">—</span>
+                          <span className="leading-relaxed text-zinc-300">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -194,7 +200,7 @@ export const CareerProgression = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-[#020617] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8"
+              className="relative w-full max-w-4xl max-h-[90vh] bg-[#000000] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8"
             >
               {/* Modal Top Bar */}
               <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-white/[0.01]">

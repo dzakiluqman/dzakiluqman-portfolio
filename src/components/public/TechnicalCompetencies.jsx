@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { mockSkills } from '../../lib/mockData'
 import TechItem from './TechItem'
@@ -157,41 +158,58 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
   }, [skills, propSkills])
 
   return (
-    <section id="skills" className="relative py-20 md:py-28 bg-[#020617]">
+    <section id="skills" className="relative py-20 md:py-28 bg-[#000000]">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Editorial Section Header - Eyebrow text removed for clean visual flow */}
-        <div className="max-w-2xl mb-14 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl font-light text-slate-100 tracking-tight font-sans">
+        {/* Editorial Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.4 }}
+          className="max-w-2xl mb-14 md:mb-16"
+        >
+          <h2 className="text-3xl sm:text-4xl font-light text-zinc-100 tracking-tight font-sans">
             Technical <span className="font-semibold text-white">Competencies</span>
           </h2>
-          <p className="mt-3 text-slate-400 text-sm md:text-base leading-relaxed font-sans">
+          <p className="mt-3 text-zinc-400 text-sm md:text-base leading-relaxed font-sans">
             Production-proven technologies engineered for high performance, strict type safety, 
             resilient data architectures, and automated cloud delivery.
           </p>
-        </div>
+        </motion.div>
 
         {/* 3 Domain Columns Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
-          {groupedSkills.map((domain) => (
-            <div key={domain.key} className="flex flex-col">
+          {groupedSkills.map((domain, colIdx) => (
+            <motion.div
+              key={domain.key}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.4, delay: colIdx * 0.08 }}
+              className="flex flex-col"
+            >
               {/* Domain Header with Unified Primary Sans-Serif Typography */}
-              <div className="pb-4 mb-5 border-b border-white/10">
-                <h3 className="text-xs font-sans tracking-wider text-slate-300 font-medium uppercase">
-                  <span className="text-slate-400 mr-2 font-sans">{domain.number} /</span>
+              <div className="pb-4 mb-5 border-b border-white/[0.08]">
+                <h3 className="text-xs font-sans tracking-wider text-zinc-300 font-medium uppercase">
+                  <span className="text-zinc-500 mr-2 font-sans">{domain.number} /</span>
                   {domain.label}
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-500 font-sans leading-relaxed">
+                <p className="mt-1.5 text-xs text-zinc-500 font-sans leading-relaxed">
                   {domain.summary}
                 </p>
               </div>
 
               {/* Minimal Tech Cards List */}
               <div className="space-y-3">
-                {domain.items.map((skill) => (
-                  <TechItem key={skill.id || skill.title || skill.name} skill={skill} />
+                {domain.items.map((skill, idx) => (
+                  <TechItem
+                    key={skill.id || skill.title || skill.name}
+                    skill={skill}
+                    index={idx}
+                  />
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

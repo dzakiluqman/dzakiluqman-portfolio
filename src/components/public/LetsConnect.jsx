@@ -78,16 +78,22 @@ export const LetsConnect = ({ profile }) => {
   const location = profile?.location || 'Kota Magelang, Indonesia'
 
   return (
-    <section id="contact" className="relative py-20 md:py-28 bg-[#020617]">
+    <section id="contact" className="relative py-20 md:py-28 bg-[#000000]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: High-Impact Typography & Clean Direct Links */}
-          <div className="lg:col-span-5 space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.4 }}
+            className="lg:col-span-5 space-y-8"
+          >
             <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-slate-100 tracking-tight font-sans leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-zinc-100 tracking-tight font-sans leading-tight">
                 Let's build something <span className="font-semibold text-white">extraordinary</span> together.
               </h2>
-              <p className="mt-4 text-slate-400 text-sm md:text-base leading-relaxed font-sans max-w-xl">
+              <p className="mt-4 text-zinc-400 text-sm md:text-base leading-relaxed font-sans max-w-xl">
                 Available for technical architecture consulting, software engineering leadership, 
                 and select digital product collaborations.
               </p>
@@ -98,25 +104,25 @@ export const LetsConnect = ({ profile }) => {
               {/* Email Link */}
               <a
                 href={`mailto:${email}`}
-                className="group flex items-center justify-between p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/10 transition-all duration-200"
+                className="group flex items-center justify-between p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] hover:border-white/20 transition-all duration-300"
               >
                 <div>
-                  <span className="block text-xs font-sans text-slate-500 uppercase tracking-wider">
+                  <span className="block text-xs font-sans text-zinc-500 uppercase tracking-wider">
                     Direct Inquiry
                   </span>
-                  <span className="text-sm font-medium text-slate-200 group-hover:text-white transition-colors font-sans">
+                  <span className="text-sm font-medium text-zinc-200 group-hover:text-white transition-colors font-sans">
                     {email}
                   </span>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
               </a>
 
               {/* Location Card */}
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10">
-                <span className="block text-xs font-sans text-slate-500 uppercase tracking-wider">
+              <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] transition-all duration-300">
+                <span className="block text-xs font-sans text-zinc-500 uppercase tracking-wider">
                   Location & Timezone
                 </span>
-                <span className="text-sm font-medium text-slate-200 font-sans">
+                <span className="text-sm font-medium text-zinc-200 font-sans">
                   {location} (UTC+7)
                 </span>
               </div>
@@ -127,28 +133,34 @@ export const LetsConnect = ({ profile }) => {
                   href={github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-white transition-colors duration-200 font-sans"
+                  className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
                 >
                   <span>GitHub</span>
-                  <span className="inline-block group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">↗</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
                 </a>
-                <span className="text-slate-700">·</span>
+                <span className="text-zinc-700">·</span>
                 <a
                   href={linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-white transition-colors duration-200 font-sans"
+                  className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
                 >
                   <span>LinkedIn</span>
-                  <span className="inline-block group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200">↗</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Sleek Liquid-Glass Contact Form */}
-          <div className="lg:col-span-7">
-            <div className="bg-white/[0.02] border border-white/10 backdrop-blur-md p-6 sm:p-8 rounded-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="lg:col-span-7"
+          >
+            <div className="bg-white/[0.03] hover:bg-white/[0.04] border border-white/[0.08] hover:border-white/20 backdrop-blur-md p-6 sm:p-8 rounded-2xl transition-all duration-300">
               {/* Success Notification */}
               {status.success && (
                 <motion.div
@@ -182,7 +194,7 @@ export const LetsConnect = ({ profile }) => {
                   <div>
                     <label 
                       htmlFor="sender_name" 
-                      className="block text-xs font-sans font-medium text-slate-400 uppercase tracking-wider mb-2"
+                      className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                     >
                       Your Name <span className="text-rose-400">*</span>
                     </label>
@@ -194,14 +206,14 @@ export const LetsConnect = ({ profile }) => {
                       value={formData.sender_name}
                       onChange={handleChange}
                       placeholder="e.g. John Doe"
-                      className="w-full bg-white/[0.03] border border-white/10 focus:border-white/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none transition-all font-sans text-sm"
+                      className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-white/30 rounded-xl px-4 py-3 text-zinc-100 placeholder:text-zinc-600 outline-none transition-all font-sans text-sm"
                     />
                   </div>
 
                   <div>
                     <label 
                       htmlFor="sender_email" 
-                      className="block text-xs font-sans font-medium text-slate-400 uppercase tracking-wider mb-2"
+                      className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                     >
                       Email Address <span className="text-rose-400">*</span>
                     </label>
@@ -213,7 +225,7 @@ export const LetsConnect = ({ profile }) => {
                       value={formData.sender_email}
                       onChange={handleChange}
                       placeholder="john@example.com"
-                      className="w-full bg-white/[0.03] border border-white/10 focus:border-white/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none transition-all font-sans text-sm"
+                      className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-white/30 rounded-xl px-4 py-3 text-zinc-100 placeholder:text-zinc-600 outline-none transition-all font-sans text-sm"
                     />
                   </div>
                 </div>
@@ -221,7 +233,7 @@ export const LetsConnect = ({ profile }) => {
                 <div>
                   <label 
                     htmlFor="subject" 
-                    className="block text-xs font-sans font-medium text-slate-400 uppercase tracking-wider mb-2"
+                    className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                   >
                     Subject
                   </label>
@@ -232,14 +244,14 @@ export const LetsConnect = ({ profile }) => {
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="Project Inquiry / Engineering Consultation"
-                    className="w-full bg-white/[0.03] border border-white/10 focus:border-white/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none transition-all font-sans text-sm"
+                    className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-white/30 rounded-xl px-4 py-3 text-zinc-100 placeholder:text-zinc-600 outline-none transition-all font-sans text-sm"
                   />
                 </div>
 
                 <div>
                   <label 
                     htmlFor="message" 
-                    className="block text-xs font-sans font-medium text-slate-400 uppercase tracking-wider mb-2"
+                    className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                   >
                     Message <span className="text-rose-400">*</span>
                   </label>
@@ -251,7 +263,7 @@ export const LetsConnect = ({ profile }) => {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Briefly describe your project scope, timeline, and engineering needs..."
-                    className="w-full bg-white/[0.03] border border-white/10 focus:border-white/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none transition-all font-sans text-sm resize-y"
+                    className="w-full bg-white/[0.03] border border-white/[0.08] focus:border-white/30 rounded-xl px-4 py-3 text-zinc-100 placeholder:text-zinc-600 outline-none transition-all font-sans text-sm resize-y"
                   />
                 </div>
 
@@ -259,7 +271,7 @@ export const LetsConnect = ({ profile }) => {
                 <button
                   type="submit"
                   disabled={status.submitting}
-                  className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl px-6 py-3 font-medium transition-all duration-200 font-sans flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+                  className="w-full bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/30 text-white rounded-xl px-6 py-3 font-medium transition-all duration-300 font-sans flex items-center justify-center gap-2 text-sm disabled:opacity-50"
                 >
                   {status.submitting ? (
                     <>
@@ -272,7 +284,7 @@ export const LetsConnect = ({ profile }) => {
                 </button>
               </form>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

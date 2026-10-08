@@ -30,7 +30,7 @@ export const ProjectCard = ({ project, index = 0 }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: (index % 3) * 0.05 }}
-      className="group relative rounded-2xl overflow-hidden bg-white/[0.02] backdrop-blur-md border border-white/10 hover:border-white/20 transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between h-full"
+      className="group relative rounded-2xl overflow-hidden bg-white/[0.03] hover:bg-white/[0.05] backdrop-blur-md border border-white/[0.08] hover:border-white/20 transition-all duration-300 p-5 sm:p-6 flex flex-col justify-between h-full"
     >
       {/* Primary Clickable Link Area covering the card for direct page navigation */}
       <Link
@@ -39,18 +39,18 @@ export const ProjectCard = ({ project, index = 0 }) => {
         aria-label={`View dedicated page for ${title}`}
       >
         {/* Proportional Widescreen Image Container (Strictly renders images[0]) */}
-        <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-slate-900/60 border border-white/5 mb-5">
+        <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-zinc-950/80 border border-white/[0.06] mb-5">
           <img
             src={thumbnailUrl}
             alt={title}
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent opacity-60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
 
           {/* Multi-image indicator badge if project has more than 1 image */}
           {images && images.length > 1 && (
-            <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] text-slate-300 font-sans pointer-events-none">
+            <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm border border-white/10 text-[10px] text-zinc-300 font-sans pointer-events-none">
               {images.length} photos
             </div>
           )}
@@ -58,19 +58,19 @@ export const ProjectCard = ({ project, index = 0 }) => {
 
         {/* Card Content */}
         <div className="space-y-2.5">
-          <div className="text-xs font-sans uppercase tracking-wider text-slate-400 font-medium">
+          <div className="text-xs font-sans uppercase tracking-wider text-zinc-500 font-medium">
             {category || 'Project'}
           </div>
 
-          <h3 className="text-xl font-light text-slate-100 group-hover:text-cyan-400 transition-colors duration-200 tracking-tight font-sans">
+          <h3 className="text-xl font-light text-zinc-100 group-hover:text-cyan-400 transition-colors duration-200 tracking-tight font-sans">
             <span className="inline-flex items-center gap-1.5">
               <span className="line-clamp-1">{title}</span>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors duration-200 shrink-0" />
+              <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-cyan-400 transition-colors duration-200 shrink-0" />
             </span>
           </h3>
 
           {description && (
-            <p className="text-sm text-slate-400 leading-relaxed font-sans line-clamp-2">
+            <p className="text-sm text-zinc-400 leading-relaxed font-sans line-clamp-2">
               {description}
             </p>
           )}
@@ -78,19 +78,19 @@ export const ProjectCard = ({ project, index = 0 }) => {
       </Link>
 
       {/* Card Footer: Tech Stack & Direct External Links */}
-      <div className="pt-5 mt-5 border-t border-white/10 flex items-center justify-between gap-3 relative z-10">
+      <div className="pt-5 mt-5 border-t border-white/[0.08] flex items-center justify-between gap-3 relative z-10">
         {/* Minimalist Tech Tags */}
         <div className="flex flex-wrap gap-1.5 items-center">
           {tech_stack && tech_stack.length > 0 && tech_stack.slice(0, 3).map((tech, idx) => (
             <span
               key={idx}
-              className="px-2.5 py-0.5 text-xs bg-white/5 border border-white/10 rounded-md text-slate-300 font-sans"
+              className="px-2.5 py-0.5 text-xs bg-white/[0.03] border border-white/[0.08] rounded-md text-zinc-300 font-sans"
             >
               {tech}
             </span>
           ))}
           {tech_stack && tech_stack.length > 3 && (
-            <span className="text-xs text-slate-500 font-sans px-1">
+            <span className="text-xs text-zinc-500 font-sans px-1">
               +{tech_stack.length - 3}
             </span>
           )}
@@ -103,7 +103,7 @@ export const ProjectCard = ({ project, index = 0 }) => {
               href={github_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-sans text-slate-400 hover:text-white transition-colors duration-200 flex items-center gap-1 p-1"
+              className="text-xs font-sans text-zinc-400 hover:text-white transition-colors duration-200 flex items-center gap-1 p-1"
               title="View Repository"
             >
               <Github className="w-3.5 h-3.5" />
@@ -115,7 +115,7 @@ export const ProjectCard = ({ project, index = 0 }) => {
               href={demo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-sans text-slate-400 hover:text-cyan-400 transition-colors duration-200 flex items-center gap-1 p-1"
+              className="text-xs font-sans text-zinc-400 hover:text-cyan-400 transition-colors duration-200 flex items-center gap-1 p-1"
               title="Live Deployment"
             >
               <ExternalLink className="w-3.5 h-3.5" />
