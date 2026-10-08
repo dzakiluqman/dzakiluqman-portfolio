@@ -76,11 +76,11 @@ const TECH_FOCUS_MAP = {
 }
 
 const getFocusDescription = (skill) => {
-  if (skill.focus) return skill.focus
   if (skill.subtitle) return skill.subtitle
+  if (skill.focus) return skill.focus
   if (skill.description) return skill.description
 
-  const key = (skill.name || '').trim().toLowerCase()
+  const key = (skill.title || skill.name || '').trim().toLowerCase()
   if (TECH_FOCUS_MAP[key]) return TECH_FOCUS_MAP[key]
 
   const cat = (skill.category || '').toLowerCase()
@@ -98,6 +98,7 @@ export const TechItem = ({ skill }) => {
     (skill.icon_name && Icons[skill.icon_name]) ||
     Code
 
+  const title = skill.title || skill.name || 'Technical Competency'
   const focus = getFocusDescription(skill)
 
   return (
@@ -108,9 +109,9 @@ export const TechItem = ({ skill }) => {
         </div>
         <div className="min-w-0">
           <div className="text-base font-medium text-slate-100 group-hover:text-white transition-colors tracking-tight truncate font-sans">
-            {skill.name}
+            {title}
           </div>
-          <div className="text-xs text-slate-500 font-mono tracking-tight truncate mt-0.5">
+          <div className="text-xs text-slate-400 font-sans tracking-tight truncate mt-0.5">
             {focus}
           </div>
         </div>

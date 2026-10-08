@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { 
   Briefcase, 
   GraduationCap, 
@@ -7,11 +8,12 @@ import {
   Edit3, 
   Trash2, 
   CheckCircle2, 
-  AlertCircle,
-  Calendar,
-  X,
-  Save,
-  Loader2
+  AlertCircle, 
+  Calendar, 
+  X, 
+  Save, 
+  Loader2,
+  ArrowUpRight
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { mockExperiences, mockEducations, mockSkills } from '../../lib/mockData'
@@ -496,7 +498,14 @@ export const AdminCV = () => {
               {/* TAB 3: SKILLS */}
               {activeTab === 'skills' && (
                 <div className="space-y-4">
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-end gap-3">
+                    <Link
+                      to="/admin/skills"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-dark-950 border border-slate-800 text-neon-cyan hover:text-white hover:border-neon-cyan/40 transition-all"
+                    >
+                      <span>Dedicated Skills CMS</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
                     <button
                       onClick={() => handleOpenSkillModal(null)}
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md"

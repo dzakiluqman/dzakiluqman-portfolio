@@ -3,6 +3,7 @@ import { NavLink, useNavigate, Link } from 'react-router-dom'
 import { 
   LayoutDashboard, 
   FolderGit2, 
+  Code,
   FileText, 
   Mail, 
   LogOut, 
@@ -24,6 +25,7 @@ export const Sidebar = ({ unreadCount = 0 }) => {
   const navItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Projects', path: '/admin/projects', icon: FolderGit2 },
+    { name: 'Skills & Stack', path: '/admin/skills', icon: Code },
     { name: 'CV & Experience', path: '/admin/cv', icon: FileText },
     { name: 'Messages', path: '/admin/messages', icon: Mail, badge: unreadCount > 0 ? unreadCount : null },
   ]

@@ -62,16 +62,37 @@ CREATE TABLE IF NOT EXISTS public.educations (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. SKILLS TABLE
+-- 5. SKILLS / COMPETENCIES TABLE
 CREATE TABLE IF NOT EXISTS public.skills (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  subtitle TEXT,
   category TEXT NOT NULL,
-  name TEXT NOT NULL,
-  level TEXT DEFAULT 'Expert',
   icon_name TEXT DEFAULT 'Code',
+  order_index INT DEFAULT 0,
+  -- Backwards-compatibility columns
+  name TEXT,
+  level TEXT DEFAULT 'Expert',
   sort_order INT DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration helper: in case table already exists with legacy columns (name, sort_order)
+DO $$ 
+BEGIN 
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'skills' AND column_name = 'title') THEN
+    ALTER TABLE public.skills ADD COLUMN title TEXT;
+    UPDATE public.skills SET title = name WHERE title IS NULL;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'skills' AND column_name = 'subtitle') THEN
+    ALTER TABLE public.skills ADD COLUMN subtitle TEXT;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'skills' AND column_name = 'order_index') THEN
+    ALTER TABLE public.skills ADD COLUMN order_index INT DEFAULT 0;
+    UPDATE public.skills SET order_index = sort_order WHERE order_index IS NULL OR order_index = 0;
+  END IF;
+END $$;
+
 
 -- 6. CERTIFICATIONS TABLE
 CREATE TABLE IF NOT EXISTS public.certifications (
@@ -272,18 +293,18 @@ VALUES
 ) ON CONFLICT DO NOTHING;
 
 -- Seed Skills
-INSERT INTO public.skills (category, name, level, icon_name, sort_order)
+INSERT INTO public.skills (category, title, subtitle, icon_name, order_index, name, level, sort_order)
 VALUES
-('Frontend', 'React / Next.js', 'Expert', 'Code', 1),
-('Frontend', 'TypeScript', 'Expert', 'FileCode', 2),
-('Frontend', 'Tailwind CSS', 'Expert', 'Palette', 3),
-('Frontend', 'Framer Motion', 'Advanced', 'Sparkles', 4),
-('Backend', 'Node.js & Express', 'Expert', 'Server', 5),
-('Backend', 'Supabase & PostgreSQL', 'Expert', 'Database', 6),
-('Backend', 'Go / Golang', 'Intermediate', 'Cpu', 7),
-('DevOps', 'Docker & Kubernetes', 'Advanced', 'Container', 8),
-('DevOps', 'AWS & Cloudflare', 'Advanced', 'Cloud', 9),
-('DevOps', 'CI/CD GitHub Actions', 'Expert', 'GitBranch', 10)
+('frontend', 'React / Next.js', 'UI Architecture & SSR', 'Code', 1, 'React / Next.js', 'Expert', 1),
+('frontend', 'TypeScript', 'Strict Static Typing', 'FileCode', 2, 'TypeScript', 'Expert', 2),
+('frontend', 'Three.js / R3F', 'WebGL & Spatial 3D', 'Sparkles', 3, 'Three.js / R3F', 'Expert', 3),
+('frontend', 'Tailwind CSS', 'Design Tokens & Utility', 'Palette', 4, 'Tailwind CSS', 'Expert', 4),
+('backend', 'Node.js & Express', 'High-Throughput APIs', 'Server', 5, 'Node.js & Express', 'Expert', 5),
+('backend', 'Supabase & PostgreSQL', 'Relational Data & Realtime', 'Database', 6, 'Supabase & PostgreSQL', 'Expert', 6),
+('backend', 'Go / Golang', 'Concurrent Microservices', 'Cpu', 7, 'Go / Golang', 'Intermediate', 7),
+('devops', 'Docker & Kubernetes', 'Containers & Orchestration', 'Boxes', 8, 'Docker & Kubernetes', 'Advanced', 8),
+('devops', 'AWS & Cloudflare', 'Serverless & Global Edge', 'Cloud', 9, 'AWS & Cloudflare', 'Advanced', 9),
+('devops', 'CI/CD GitHub Actions', 'Automated Deployment Pipelines', 'GitBranch', 10, 'CI/CD GitHub Actions', 'Expert', 10)
 ON CONFLICT DO NOTHING;
 
 -- Seed Certifications

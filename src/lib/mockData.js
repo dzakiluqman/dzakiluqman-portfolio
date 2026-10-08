@@ -159,16 +159,16 @@ export const mockEducations = [
 ]
 
 export const mockSkills = [
-  { id: '40000000-0000-0000-0000-000000000001', category: 'Frontend', name: 'React / Next.js', level: 'Expert', icon_name: 'Code' },
-  { id: '40000000-0000-0000-0000-000000000002', category: 'Frontend', name: 'TypeScript', level: 'Expert', icon_name: 'FileCode' },
-  { id: '40000000-0000-0000-0000-000000000003', category: 'Frontend', name: 'Three.js / R3F', level: 'Expert', icon_name: 'Sparkles' },
-  { id: '40000000-0000-0000-0000-000000000004', category: 'Frontend', name: 'Tailwind CSS', level: 'Expert', icon_name: 'Palette' },
-  { id: '40000000-0000-0000-0000-000000000005', category: 'Backend', name: 'Node.js & Express', level: 'Expert', icon_name: 'Server' },
-  { id: '40000000-0000-0000-0000-000000000006', category: 'Backend', name: 'Supabase & PostgreSQL', level: 'Expert', icon_name: 'Database' },
-  { id: '40000000-0000-0000-0000-000000000007', category: 'Backend', name: 'Go / Golang', level: 'Intermediate', icon_name: 'Cpu' },
-  { id: '40000000-0000-0000-0000-000000000008', category: 'DevOps', name: 'Docker & Kubernetes', level: 'Advanced', icon_name: 'Container' },
-  { id: '40000000-0000-0000-0000-000000000009', category: 'DevOps', name: 'AWS & Cloudflare', level: 'Advanced', icon_name: 'Cloud' },
-  { id: '40000000-0000-0000-0000-000000000010', category: 'DevOps', name: 'CI/CD GitHub Actions', level: 'Expert', icon_name: 'GitBranch' }
+  { id: '40000000-0000-0000-0000-000000000001', category: 'frontend', title: 'React / Next.js', name: 'React / Next.js', subtitle: 'UI Architecture & SSR', level: 'Expert', icon_name: 'Code', order_index: 1, sort_order: 1 },
+  { id: '40000000-0000-0000-0000-000000000002', category: 'frontend', title: 'TypeScript', name: 'TypeScript', subtitle: 'Strict Static Typing', level: 'Expert', icon_name: 'FileCode', order_index: 2, sort_order: 2 },
+  { id: '40000000-0000-0000-0000-000000000003', category: 'frontend', title: 'Three.js / R3F', name: 'Three.js / R3F', subtitle: 'WebGL & Spatial 3D', level: 'Expert', icon_name: 'Sparkles', order_index: 3, sort_order: 3 },
+  { id: '40000000-0000-0000-0000-000000000004', category: 'frontend', title: 'Tailwind CSS', name: 'Tailwind CSS', subtitle: 'Design Tokens & Utility', level: 'Expert', icon_name: 'Palette', order_index: 4, sort_order: 4 },
+  { id: '40000000-0000-0000-0000-000000000005', category: 'backend', title: 'Node.js & Express', name: 'Node.js & Express', subtitle: 'High-Throughput APIs', level: 'Expert', icon_name: 'Server', order_index: 5, sort_order: 5 },
+  { id: '40000000-0000-0000-0000-000000000006', category: 'backend', title: 'Supabase & PostgreSQL', name: 'Supabase & PostgreSQL', subtitle: 'Relational Data & Realtime', level: 'Expert', icon_name: 'Database', order_index: 6, sort_order: 6 },
+  { id: '40000000-0000-0000-0000-000000000007', category: 'backend', title: 'Go / Golang', name: 'Go / Golang', subtitle: 'Concurrent Microservices', level: 'Intermediate', icon_name: 'Cpu', order_index: 7, sort_order: 7 },
+  { id: '40000000-0000-0000-0000-000000000008', category: 'devops', title: 'Docker & Kubernetes', name: 'Docker & Kubernetes', subtitle: 'Containers & Orchestration', level: 'Advanced', icon_name: 'Boxes', order_index: 8, sort_order: 8 },
+  { id: '40000000-0000-0000-0000-000000000009', category: 'devops', title: 'AWS & Cloudflare', name: 'AWS & Cloudflare', subtitle: 'Serverless & Global Edge', level: 'Advanced', icon_name: 'Cloud', order_index: 9, sort_order: 9 },
+  { id: '40000000-0000-0000-0000-000000000010', category: 'devops', title: 'CI/CD GitHub Actions', name: 'CI/CD GitHub Actions', subtitle: 'Automated Deployment Pipelines', level: 'Expert', icon_name: 'GitBranch', order_index: 10, sort_order: 10 }
 ]
 
 export const mockCertifications = [

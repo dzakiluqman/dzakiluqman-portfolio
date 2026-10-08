@@ -93,11 +93,17 @@ export const Home = () => {
         if (eduData && eduData.length > 0) setEducations(eduData)
 
         // 5. Fetch Skills
-        const { data: skillsData } = await supabase
+        let skillsRes = await supabase
           .from('skills')
           .select('*')
-          .order('sort_order', { ascending: true })
-        if (skillsData && skillsData.length > 0) setSkills(skillsData)
+          .order('order_index', { ascending: true })
+        if (skillsRes.error && (skillsRes.error.code === '42703' || skillsRes.error.message?.includes('order_index'))) {
+          skillsRes = await supabase
+            .from('skills')
+            .select('*')
+            .order('sort_order', { ascending: true })
+        }
+        if (skillsRes.data && skillsRes.data.length > 0) setSkills(skillsRes.data)
 
         // 6. Fetch Certifications
         const { data: certsData } = await supabase

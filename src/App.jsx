@@ -12,6 +12,7 @@ import ProjectDetail from './pages/public/ProjectDetail'
 import Login from './pages/admin/Login'
 import Dashboard from './pages/admin/Dashboard'
 import AdminProjects from './pages/admin/AdminProjects'
+import AdminSkills from './pages/admin/AdminSkills'
 import AdminCV from './pages/admin/AdminCV'
 import AdminMessages from './pages/admin/AdminMessages'
 
@@ -40,6 +41,7 @@ export function App() {
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="projects" element={<AdminProjects />} />
+            <Route path="skills" element={<AdminSkills />} />
             <Route path="cv" element={<AdminCV />} />
             <Route path="messages" element={<AdminMessages />} />
           </Route>

@@ -189,10 +189,10 @@ export const Dashboard = () => {
                     <span className="text-xs text-slate-400 font-mono">Skills listed</span>
                   </div>
                   <Link
-                    to="/admin/cv"
+                    to="/admin/skills"
                     className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-emerald-400 hover:text-white"
                   >
-                    <span>Reconfigure skills</span>
+                    <span>Manage skills stack</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
