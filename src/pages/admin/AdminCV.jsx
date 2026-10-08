@@ -110,6 +110,7 @@ export const AdminCV = () => {
         }
         setExperiences(updated)
         localStorage.setItem('dzaki_demo_exp', JSON.stringify(updated))
+        window.dispatchEvent(new CustomEvent('dzaki:experiences_updated'))
         setIsExpModalOpen(false)
         showNotification(editingExp ? 'Experience updated' : 'Experience added')
         return
@@ -125,6 +126,7 @@ export const AdminCV = () => {
         showNotification('Experience added successfully')
       }
 
+      window.dispatchEvent(new CustomEvent('dzaki:experiences_updated'))
       setIsExpModalOpen(false)
       await loadData()
     } catch (err) {
@@ -141,6 +143,7 @@ export const AdminCV = () => {
       const updated = experiences.filter((e) => e.id !== id)
       setExperiences(updated)
       localStorage.setItem('dzaki_demo_exp', JSON.stringify(updated))
+      window.dispatchEvent(new CustomEvent('dzaki:experiences_updated'))
       showNotification('Experience deleted')
       return
     }
@@ -149,6 +152,7 @@ export const AdminCV = () => {
       const { error } = await supabase.from('experiences').delete().eq('id', id)
       if (error) throw error
       setExperiences(experiences.filter((e) => e.id !== id))
+      window.dispatchEvent(new CustomEvent('dzaki:experiences_updated'))
       showNotification('Experience removed from Supabase')
     } catch (err) {
       showNotification(err.message, 'error')
