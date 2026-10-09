@@ -8,16 +8,16 @@ A fullstack portfolio website with a CMS Admin Dashboard built with **React**, *
 
 ### 🌟 Public Portfolio (`/`)
 - **Dynamic Hero Section**: Personal profile data (name, headline, bio, avatar, location, social links) retrieved directly from Supabase `profiles`.
-- **Project Showcase**: Published projects filterable by categories with direct GitHub repository links, live demos, and tech stack tags.
+- **Project Showcase**: Published projects filterable by categories with direct GitHub repository links, live demos, multi-photo indicators, and tech stack tags.
+- **Dedicated Project Detail Page (`/projects/:slug`)**: Interactive image carousel and rich markdown description parser supporting **bold sub-titles**, clean paragraph breaks, and bulleted lists.
 - **Interactive CV**: Multi-tab curriculum vitae displaying work history, academic education, and professional certifications.
 - **Dynamic Technical Skills**: Filtered and grouped by domain (Frontend, Backend, DevOps) with proficiency badges.
 - **Real-time Contact Form**: Visitor inquiries inserted directly into the Supabase `messages` table with confirmation alerts.
-- **Dedicated Project Detail Page (`/project/:slug`)**: Deep dive into system design, architecture, and technology breakdown.
 
 ### 🛡️ Admin CMS Dashboard (`/admin/dashboard`)
-- **Protected Routes**: Protected by [AuthContext](file:///d:/GitHub/dzakiluqman/src/context/AuthContext.jsx) and Supabase authentication. Unauthenticated users are redirected to `/admin/login`.
+- **Protected Routes**: Protected by AuthContext and Supabase authentication. Unauthenticated users are redirected to `/admin/login`.
 - **Overview & KPI Analytics**: Real-time summary counts of projects, work experiences, skills, and unread inquiries.
-- **Project Management (`/admin/projects`)**: Full CRUD (Create, Read, Update, Delete) with interactive modal, auto-slug generator, visibility switch, and featured project badges.
+- **Project Management (`/admin/projects`)**: Full CRUD with multi-image uploader connected directly to public Supabase Storage (`projects` bucket), drag-and-drop file upload, primary card cover selector, reordering, and auto-slug generator.
 - **CV Management (`/admin/cv`)**: Comprehensive CRUD for Work Experience, Education degrees, and Technical competencies.
 - **Message Inbox (`/admin/messages`)**: Read, filter (All / Unread / Read), toggle status, delete, and reply directly via email.
 
