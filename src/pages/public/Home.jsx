@@ -19,6 +19,7 @@ export const Home = () => {
       github: 'https://github.com/dzakiluqman',
       linkedin: 'https://linkedin.com/in/dzakiluqman',
       instagram: 'https://www.instagram.com/dzak.ii_/',
+      medium: 'https://medium.com/@dzakiluqman275',
       email: 'dzakiluqman275@gmail.com'
     }
   })

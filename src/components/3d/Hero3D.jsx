@@ -4,6 +4,7 @@ import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail, Instagram } from 'lucide-react'
+import { MediumIcon } from '../common/icons/MediumIcon'
 
 // Lazy load heavy 3D avatar component to avoid blocking initial DOM paint
 const Avatar3DMale = lazy(() => import('./Avatar3DMale'))
@@ -87,6 +88,7 @@ export const Hero3D = ({ profile }) => {
     github: profile?.social_links?.github || 'https://github.com/dzakiluqman',
     linkedin: profile?.social_links?.linkedin || 'https://linkedin.com/in/dzakiluqman',
     instagram: profile?.social_links?.instagram || 'https://www.instagram.com/dzak.ii_/',
+    medium: profile?.social_links?.medium || 'https://medium.com/@dzakiluqman275',
     email: profile?.social_links?.email || 'dzakiluqman275@gmail.com'
   }
 
@@ -279,6 +281,18 @@ export const Hero3D = ({ profile }) => {
             title="Instagram Profile"
           >
             <Instagram className="w-4 h-4" />
+          </a>
+        )}
+        {socialLinks.medium && (
+          <a
+            href={socialLinks.medium}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white hover:opacity-100 opacity-70 transition-all p-1 text-zinc-400"
+            aria-label="Medium"
+            title="Medium Articles"
+          >
+            <MediumIcon className="w-4 h-4" />
           </a>
         )}
         {socialLinks.email && (

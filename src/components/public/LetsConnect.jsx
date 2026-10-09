@@ -76,6 +76,7 @@ export const LetsConnect = ({ profile }) => {
   const github = profile?.social_links?.github || 'https://github.com/dzakiluqman'
   const linkedin = profile?.social_links?.linkedin || 'https://linkedin.com/in/dzakiluqman'
   const instagram = profile?.social_links?.instagram || 'https://www.instagram.com/dzak.ii_/'
+  const medium = profile?.social_links?.medium || 'https://medium.com/@dzakiluqman275'
   const location = profile?.location || 'Kota Magelang, Indonesia'
 
   return (
@@ -129,7 +130,7 @@ export const LetsConnect = ({ profile }) => {
               </div>
 
               {/* Social Channels */}
-              <div className="flex items-center gap-4 pt-2">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
                 <a
                   href={github}
                   target="_blank"
@@ -157,6 +158,16 @@ export const LetsConnect = ({ profile }) => {
                   className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
                 >
                   <span>Instagram</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
+                </a>
+                <span className="text-zinc-700">·</span>
+                <a
+                  href={medium}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
+                >
+                  <span>Medium</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
                 </a>
               </div>

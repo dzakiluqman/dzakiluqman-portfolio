@@ -202,7 +202,7 @@ VALUES (
   'An enthusiastic, fast-learning Junior Software Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.',
   'Kota Magelang, Indonesia',
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
-  '{"github": "https://github.com/dzakiluqman", "linkedin": "https://linkedin.com/in/dzakiluqman", "instagram": "https://www.instagram.com/dzak.ii_/", "email": "dzakiluqman275@gmail.com"}'::jsonb
+  '{"github": "https://github.com/dzakiluqman", "linkedin": "https://linkedin.com/in/dzakiluqman", "instagram": "https://www.instagram.com/dzak.ii_/", "medium": "https://medium.com/@dzakiluqman275", "email": "dzakiluqman275@gmail.com"}'::jsonb
 ) ON CONFLICT DO NOTHING;
 
 -- Seed Projects

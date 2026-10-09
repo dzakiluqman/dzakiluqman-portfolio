@@ -13,6 +13,7 @@ export const Footer = ({ profile }) => {
     github: 'https://github.com/dzakiluqman',
     linkedin: 'https://linkedin.com/in/dzakiluqman',
     instagram: 'https://www.instagram.com/dzak.ii_/',
+    medium: 'https://medium.com/@dzakiluqman275',
     email: 'dzakiluqman275@gmail.com'
   }
 
@@ -110,6 +111,19 @@ export const Footer = ({ profile }) => {
                     className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
                   >
                     <span>Instagram</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  </a>
+                </li>
+              )}
+              {socialLinks.medium && (
+                <li>
+                  <a
+                    href={socialLinks.medium}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
+                  >
+                    <span>Medium</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </li>
