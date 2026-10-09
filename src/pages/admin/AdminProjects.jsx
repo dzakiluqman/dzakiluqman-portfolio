@@ -316,7 +316,7 @@ export const AdminProjects = () => {
           action={
             <button
               onClick={handleOpenCreateModal}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black shadow-lg shadow-cyan-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all cursor-pointer font-sans"
             >
               <Plus className="w-4 h-4" />
               <span>Add Project</span>
@@ -330,15 +330,15 @@ export const AdminProjects = () => {
             <div
               className={`p-4 rounded-2xl flex items-start justify-between gap-3 text-xs border backdrop-blur-md shadow-2xl transition-all ${
                 notification.type === 'error'
-                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-200'
-                  : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-200'
+                  ? 'bg-zinc-900 border-zinc-700 text-zinc-300'
+                  : 'bg-zinc-900 border-zinc-700 text-zinc-200'
               }`}
             >
               <div className="flex items-start gap-3">
                 {notification.type === 'error' ? (
-                  <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                  <AlertCircle className="w-5 h-5 text-zinc-400 shrink-0 mt-0.5" />
                 ) : (
-                  <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-white shrink-0 mt-0.5" />
                 )}
                 <div>
                   <p className="font-bold text-white text-sm">{notification.message}</p>
@@ -363,7 +363,7 @@ export const AdminProjects = () => {
                 <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Total Projects</p>
                 <p className="text-2xl font-bold text-white mt-1">{projects.length}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
                 <FolderGit2 className="w-5 h-5" />
               </div>
             </div>
@@ -371,9 +371,9 @@ export const AdminProjects = () => {
             <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Published</p>
-                <p className="text-2xl font-bold text-emerald-400 mt-1">{publishedCount}</p>
+                <p className="text-2xl font-bold text-white mt-1">{publishedCount}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
                 <Eye className="w-5 h-5" />
               </div>
             </div>
@@ -381,9 +381,9 @@ export const AdminProjects = () => {
             <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
               <div>
                 <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Featured on Home</p>
-                <p className="text-2xl font-bold text-amber-400 mt-1">{featuredCount}</p>
+                <p className="text-2xl font-bold text-white mt-1">{featuredCount}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
                 <Star className="w-5 h-5" />
               </div>
             </div>
@@ -398,7 +398,7 @@ export const AdminProjects = () => {
                 placeholder="Search title, tech stack, category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50"
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white/40"
               />
             </div>
 
@@ -410,7 +410,7 @@ export const AdminProjects = () => {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-cyan-500 text-black font-bold shadow-md shadow-cyan-500/20'
+                      ? 'bg-white text-black font-bold shadow-sm'
                       : 'bg-white/[0.03] text-zinc-400 hover:text-white border border-white/10'
                   }`}
                 >
@@ -465,7 +465,7 @@ export const AdminProjects = () => {
                                   }}
                                 />
                                 {imageCount > 1 && (
-                                  <div className="absolute bottom-0 right-0 px-1 py-0.2 bg-black/80 text-[9px] font-mono text-cyan-300 rounded-tl">
+                                  <div className="absolute bottom-0 right-0 px-1 py-0.2 bg-black/80 text-[9px] font-mono text-zinc-300 rounded-tl">
                                     {imageCount}📷
                                   </div>
                                 )}
@@ -475,7 +475,7 @@ export const AdminProjects = () => {
                                 <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
                                   <span>/{project.slug}</span>
                                   {imageCount > 0 && (
-                                    <span className="text-[10px] text-cyan-400 font-sans">
+                                    <span className="text-[10px] text-zinc-400 font-sans">
                                       • {imageCount} photo{imageCount > 1 ? 's' : ''}
                                     </span>
                                   )}
@@ -513,7 +513,7 @@ export const AdminProjects = () => {
                               onClick={() => handleTogglePublished(project)}
                               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
                                 project.is_published
-                                  ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
+                                  ? 'bg-white/[0.08] text-white border border-white/20'
                                   : 'bg-zinc-800/80 text-zinc-400 border border-zinc-700'
                               }`}
                               title="Toggle Visibility on Public Portfolio"
@@ -529,12 +529,12 @@ export const AdminProjects = () => {
                               onClick={() => handleToggleFeatured(project)}
                               className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                                 project.is_featured
-                                  ? 'text-amber-400 hover:bg-amber-500/10'
+                                  ? 'text-white hover:bg-white/10'
                                   : 'text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.04]'
                               }`}
                               title="Toggle Featured Project"
                             >
-                              <Star className={`w-4 h-4 ${project.is_featured ? 'fill-amber-400' : ''}`} />
+                              <Star className={`w-4 h-4 ${project.is_featured ? 'fill-white' : ''}`} />
                             </button>
                           </td>
 
@@ -546,7 +546,7 @@ export const AdminProjects = () => {
                                 to={`/projects/${project.id || project.slug}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-1.5 rounded-lg text-zinc-400 hover:text-cyan-400 hover:bg-white/[0.05] transition-colors"
+                                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.05] transition-colors"
                                 title="View Live Showcase Page"
                               >
                                 <Eye className="w-3.5 h-3.5" />
@@ -569,7 +569,7 @@ export const AdminProjects = () => {
                                   href={project.demo_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="p-1.5 rounded-lg text-zinc-400 hover:text-emerald-400 hover:bg-white/[0.05] transition-colors"
+                                  className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.05] transition-colors"
                                   title="Open Live Deployment"
                                 >
                                   <ExternalLink className="w-3.5 h-3.5" />
@@ -578,7 +578,7 @@ export const AdminProjects = () => {
 
                               <button
                                 onClick={() => handleOpenEditModal(project)}
-                                className="p-1.5 rounded-lg text-zinc-400 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors cursor-pointer"
+                                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
                                 title="Edit Project & Images"
                               >
                                 <Edit3 className="w-3.5 h-3.5" />
@@ -586,7 +586,7 @@ export const AdminProjects = () => {
 
                               <button
                                 onClick={() => handleDeleteProject(project.id, project.title)}
-                                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors cursor-pointer"
                                 title="Delete Project"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />

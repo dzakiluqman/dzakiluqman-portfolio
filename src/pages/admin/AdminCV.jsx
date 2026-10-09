@@ -429,7 +429,7 @@ export const AdminCV = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 flex flex-col md:flex-row text-slate-100">
+    <div className="min-h-screen bg-black flex flex-col md:flex-row text-zinc-100">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -441,25 +441,21 @@ export const AdminCV = () => {
         <main className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
           {notification && (
             <div
-              className={`p-4 rounded-xl flex items-center gap-2 text-xs font-medium ${
-                notification.type === 'error'
-                  ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
-                  : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
-              }`}
+              className="p-4 rounded-xl flex items-center gap-2 text-xs font-medium bg-zinc-900 border border-zinc-700 text-zinc-200"
             >
-              {notification.type === 'error' ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+              {notification.type === 'error' ? <AlertCircle className="w-4 h-4 text-zinc-400" /> : <CheckCircle2 className="w-4 h-4 text-white" />}
               <span>{notification.message}</span>
             </div>
           )}
 
           {/* Tab Selector */}
-          <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3 border-b border-zinc-800 pb-4 overflow-x-auto">
             <button
               onClick={() => setActiveTab('experience')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'experience'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-dark-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
               }`}
             >
               <Briefcase className="w-3.5 h-3.5" />
@@ -470,8 +466,8 @@ export const AdminCV = () => {
               onClick={() => setActiveTab('education')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'education'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-dark-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5" />
@@ -482,8 +478,8 @@ export const AdminCV = () => {
               onClick={() => setActiveTab('certifications')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'certifications'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-dark-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
               }`}
             >
               <Award className="w-3.5 h-3.5" />
@@ -494,8 +490,8 @@ export const AdminCV = () => {
               onClick={() => setActiveTab('skills')}
               className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'skills'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'bg-dark-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
               }`}
             >
               <Code className="w-3.5 h-3.5" />
@@ -516,7 +512,7 @@ export const AdminCV = () => {
                         setEditingExp(null)
                         setIsExpModalOpen(true)
                       }}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add Work Experience</span>
@@ -527,25 +523,25 @@ export const AdminCV = () => {
                     {experiences.map((exp) => (
                       <div
                         key={exp.id}
-                        className="p-5 rounded-2xl bg-dark-900 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                        className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4"
                       >
                         <div className="space-y-1">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <h4 className="font-bold text-white text-base">{exp.role}</h4>
-                            <span className="text-xs text-indigo-400 font-semibold">@ {exp.company}</span>
+                            <span className="text-xs text-zinc-300 font-semibold">@ {exp.company}</span>
                             {exp.is_current && (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-mono">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] bg-zinc-800 text-zinc-200 border border-zinc-700 font-mono">
                                 Present
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-slate-400 flex items-center gap-3 font-mono">
+                          <p className="text-xs text-zinc-400 flex items-center gap-3 font-mono flex-wrap">
                             <span>{exp.start_date} — {exp.is_current ? 'Present' : exp.end_date}</span>
                             {exp.location && <span>• {exp.location}</span>}
                             <span>• {exp.employment_type}</span>
                           </p>
                           {exp.description && (
-                            <p className="text-xs text-slate-300 mt-2 max-w-2xl">{exp.description}</p>
+                            <p className="text-xs text-zinc-300 mt-2 max-w-2xl">{exp.description}</p>
                           )}
                         </div>
 
@@ -555,14 +551,14 @@ export const AdminCV = () => {
                               setEditingExp(exp)
                               setIsExpModalOpen(true)
                             }}
-                            className="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10"
+                            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                             title="Edit"
                           >
                             <Edit3 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteExp(exp.id)}
-                            className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10"
+                            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -580,7 +576,7 @@ export const AdminCV = () => {
                   <div className="flex justify-end">
                     <button
                       onClick={() => handleOpenEduModal(null)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add Education Record</span>
@@ -591,13 +587,13 @@ export const AdminCV = () => {
                     {educations.map((edu) => (
                       <div
                         key={edu.id}
-                        className="p-5 rounded-2xl bg-dark-900 border border-slate-800 flex justify-between items-start gap-4"
+                        className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 flex justify-between items-start gap-4"
                       >
                         <div className="space-y-1">
                           <h4 className="font-bold text-white text-base">{edu.institution}</h4>
-                          <p className="text-xs font-semibold text-indigo-400">{edu.degree}</p>
-                          <p className="text-xs text-slate-400">{edu.field_of_study}</p>
-                          <p className="text-[11px] font-mono text-slate-500 mt-2">
+                          <p className="text-xs font-semibold text-zinc-300">{edu.degree}</p>
+                          <p className="text-xs text-zinc-400">{edu.field_of_study}</p>
+                          <p className="text-[11px] font-mono text-zinc-500 mt-2">
                             {edu.start_year} — {edu.end_year || 'Present'}
                           </p>
                         </div>
@@ -605,13 +601,13 @@ export const AdminCV = () => {
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleOpenEduModal(edu)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10"
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteEdu(edu.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10"
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -628,7 +624,7 @@ export const AdminCV = () => {
                   <div className="flex justify-end">
                     <button
                       onClick={() => handleOpenCertModal(null)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add Certification</span>
@@ -639,23 +635,23 @@ export const AdminCV = () => {
                     {certifications.map((cert) => (
                       <div
                         key={cert.id}
-                        className="p-5 rounded-2xl bg-dark-900 border border-slate-800 flex justify-between items-start gap-4"
+                        className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 flex justify-between items-start gap-4"
                       >
                         <div className="space-y-1">
                           <h4 className="font-bold text-white text-base">{cert.title}</h4>
-                          <p className="text-xs font-semibold text-amber-400">{cert.issuer}</p>
+                          <p className="text-xs font-semibold text-zinc-300">{cert.issuer}</p>
                           {cert.credential_id && (
-                            <p className="text-[11px] font-mono text-slate-400">ID: {cert.credential_id}</p>
+                            <p className="text-[11px] font-mono text-zinc-400">ID: {cert.credential_id}</p>
                           )}
                           {cert.issue_date && (
-                            <p className="text-[11px] font-mono text-slate-500">Issued: {cert.issue_date}</p>
+                            <p className="text-[11px] font-mono text-zinc-500">Issued: {cert.issue_date}</p>
                           )}
                           {cert.credential_url && (
                             <a
                               href={cert.credential_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:underline mt-1"
+                              className="inline-flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white hover:underline mt-1"
                             >
                               <span>Verify Link</span>
                               <ArrowUpRight className="w-3 h-3" />
@@ -666,14 +662,14 @@ export const AdminCV = () => {
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleOpenCertModal(cert)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10"
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                             title="Edit"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteCert(cert.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10"
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -688,17 +684,17 @@ export const AdminCV = () => {
               {/* TAB 4: SKILLS */}
               {activeTab === 'skills' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-end gap-3">
+                  <div className="flex items-center justify-end gap-3 flex-wrap">
                     <Link
                       to="/admin/skills"
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-dark-950 border border-slate-800 text-neon-cyan hover:text-white hover:border-neon-cyan/40 transition-all"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 transition-all"
                     >
                       <span>Dedicated Skills CMS</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </Link>
                     <button
                       onClick={() => handleOpenSkillModal(null)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add New Skill</span>
@@ -709,23 +705,23 @@ export const AdminCV = () => {
                     {skills.map((skill) => (
                       <div
                         key={skill.id}
-                        className="p-4 rounded-xl bg-dark-900 border border-slate-800 flex items-center justify-between"
+                        className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-between"
                       >
                         <div>
                           <p className="font-bold text-sm text-white">{skill.name}</p>
-                          <p className="text-[11px] font-mono text-slate-500">{skill.category} • {skill.level}</p>
+                          <p className="text-[11px] font-mono text-zinc-500">{skill.category} • {skill.level}</p>
                         </div>
 
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleOpenSkillModal(skill)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10"
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteSkill(skill.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10"
+                            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -752,101 +748,101 @@ export const AdminCV = () => {
       {/* Education Modal */}
       {isEduModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-dark-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <h3 className="font-bold text-white text-base">
                 {editingEdu ? 'Edit Education' : 'Add Education Record'}
               </h3>
-              <button onClick={() => setIsEduModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setIsEduModalOpen(false)} className="text-zinc-400 hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleSaveEdu} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Institution</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Institution</label>
                 <input
                   type="text"
                   required
                   value={eduFormData.institution}
                   onChange={(e) => setEduFormData({ ...eduFormData, institution: e.target.value })}
                   placeholder="e.g. ITB / Stanford University"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Degree</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Degree</label>
                 <input
                   type="text"
                   required
                   value={eduFormData.degree}
                   onChange={(e) => setEduFormData({ ...eduFormData, degree: e.target.value })}
                   placeholder="e.g. Bachelor of Science"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Field of Study</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Field of Study</label>
                 <input
                   type="text"
                   required
                   value={eduFormData.field_of_study}
                   onChange={(e) => setEduFormData({ ...eduFormData, field_of_study: e.target.value })}
                   placeholder="e.g. Computer Science"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 mb-1 font-mono">Start Year</label>
+                  <label className="block text-zinc-300 mb-1 font-mono">Start Year</label>
                   <input
                     type="number"
                     required
                     value={eduFormData.start_year}
                     onChange={(e) => setEduFormData({ ...eduFormData, start_year: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 mb-1 font-mono">End Year</label>
+                  <label className="block text-zinc-300 mb-1 font-mono">End Year</label>
                   <input
                     type="number"
                     value={eduFormData.end_year || ''}
                     onChange={(e) => setEduFormData({ ...eduFormData, end_year: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Key Focus / Specialization</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Key Focus / Specialization</label>
                 <input
                   type="text"
                   value={eduFormData.key_focus}
                   onChange={(e) => setEduFormData({ ...eduFormData, key_focus: e.target.value })}
                   placeholder="e.g. Distributed Systems & Algorithms"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Academic Highlights / Description</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Academic Highlights / Description</label>
                 <textarea
                   rows={3}
                   value={eduFormData.description}
                   onChange={(e) => setEduFormData({ ...eduFormData, description: e.target.value })}
                   placeholder="Graduated with honors, notable research or activities..."
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white resize-none"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white resize-none focus:outline-none focus:border-white/40"
                 />
               </div>
-              <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-2 pt-3 border-t border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsEduModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-xl text-zinc-400 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold shadow-sm transition-all"
                 >
                   Save Education
                 </button>
@@ -859,90 +855,90 @@ export const AdminCV = () => {
       {/* Certification Modal */}
       {isCertModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-dark-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <h3 className="font-bold text-white text-base">
                 {editingCert ? 'Edit Certification' : 'Add Certification'}
               </h3>
-              <button onClick={() => setIsCertModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setIsCertModalOpen(false)} className="text-zinc-400 hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleSaveCert} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Certification Title</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Certification Title</label>
                 <input
                   type="text"
                   required
                   value={certFormData.title}
                   onChange={(e) => setCertFormData({ ...certFormData, title: e.target.value })}
                   placeholder="e.g. AWS Certified Solutions Architect – Associate"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Issuer</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Issuer</label>
                 <input
                   type="text"
                   required
                   value={certFormData.issuer}
                   onChange={(e) => setCertFormData({ ...certFormData, issuer: e.target.value })}
                   placeholder="e.g. Amazon Web Services, Meta"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 mb-1 font-mono">Issue Date</label>
+                  <label className="block text-zinc-300 mb-1 font-mono">Issue Date</label>
                   <input
                     type="date"
                     value={certFormData.issue_date}
                     onChange={(e) => setCertFormData({ ...certFormData, issue_date: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 mb-1 font-mono">Credential ID</label>
+                  <label className="block text-zinc-300 mb-1 font-mono">Credential ID</label>
                   <input
                     type="text"
                     value={certFormData.credential_id}
                     onChange={(e) => setCertFormData({ ...certFormData, credential_id: e.target.value })}
                     placeholder="e.g. AWS-SAA-904218"
-                    className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                    className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Credential Verification URL</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Credential Verification URL</label>
                 <input
                   type="url"
                   value={certFormData.credential_url}
                   onChange={(e) => setCertFormData({ ...certFormData, credential_url: e.target.value })}
                   placeholder="https://..."
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Key Competencies / Skills</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Key Competencies / Skills</label>
                 <input
                   type="text"
                   value={certFormData.skills}
                   onChange={(e) => setCertFormData({ ...certFormData, skills: e.target.value })}
                   placeholder="e.g. VPC, Serverless, IAM, Microservices"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
-              <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-2 pt-3 border-t border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsCertModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-xl text-zinc-400 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold shadow-sm transition-all"
                 >
                   Save Certification
                 </button>
@@ -955,33 +951,33 @@ export const AdminCV = () => {
       {/* Skill Modal */}
       {isSkillModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-dark-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <h3 className="font-bold text-white text-base">
                 {editingSkill ? 'Edit Skill' : 'Add Technical Skill'}
               </h3>
-              <button onClick={() => setIsSkillModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setIsSkillModalOpen(false)} className="text-zinc-400 hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleSaveSkill} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Skill Name</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Skill Name</label>
                 <input
                   type="text"
                   required
                   value={skillFormData.name}
                   onChange={(e) => setSkillFormData({ ...skillFormData, name: e.target.value })}
                   placeholder="e.g. Next.js, Kubernetes"
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Category</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Category</label>
                 <select
                   value={skillFormData.category}
                   onChange={(e) => setSkillFormData({ ...skillFormData, category: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 >
                   <option value="Frontend">Frontend</option>
                   <option value="Backend">Backend</option>
@@ -991,11 +987,11 @@ export const AdminCV = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-slate-300 mb-1 font-mono">Proficiency Level</label>
+                <label className="block text-zinc-300 mb-1 font-mono">Proficiency Level</label>
                 <select
                   value={skillFormData.level}
                   onChange={(e) => setSkillFormData({ ...skillFormData, level: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 >
                   <option value="Expert">Expert</option>
                   <option value="Advanced">Advanced</option>
@@ -1003,17 +999,17 @@ export const AdminCV = () => {
                   <option value="Beginner">Beginner</option>
                 </select>
               </div>
-              <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-2 pt-3 border-t border-zinc-800">
                 <button
                   type="button"
                   onClick={() => setIsSkillModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                  className="px-4 py-2 rounded-xl text-zinc-400 hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold shadow-sm transition-all"
                 >
                   Save Skill
                 </button>

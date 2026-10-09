@@ -61,7 +61,7 @@ export const Footer = ({ profile }) => {
                   to="/admin/login"
                   className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-200"
                 >
-                  <Shield className="w-3.5 h-3.5 text-zinc-500 group-hover:text-cyan-400 transition-colors duration-200" />
+                  <Shield className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition-colors duration-200" />
                   <span>CMS Portal</span>
                 </Link>
               </li>
@@ -83,7 +83,7 @@ export const Footer = ({ profile }) => {
                     className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
                   >
                     <span>GitHub</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </li>
               )}
@@ -96,7 +96,7 @@ export const Footer = ({ profile }) => {
                     className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
                   >
                     <span>LinkedIn</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </li>
               )}
@@ -109,7 +109,7 @@ export const Footer = ({ profile }) => {
                     className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
                   >
                     <span>Twitter / X</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </li>
               )}
@@ -120,7 +120,7 @@ export const Footer = ({ profile }) => {
                     className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
                   >
                     <span>Direct Email</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </li>
               )}

@@ -84,22 +84,22 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-xl bg-dark-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-8"
+          className="relative w-full max-w-xl bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden my-8"
         >
           {/* Header */}
-          <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-dark-950/60">
+          <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between bg-black">
             <div>
               <h3 className="text-lg font-bold text-white tracking-tight">
                 {experience ? 'Edit Experience' : 'Add Work Experience'}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-zinc-400">
                 Record your professional roles and accomplishments
               </p>
             </div>
             <button
               onClick={onClose}
               disabled={isSaving}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -109,8 +109,8 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
           <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
-                  Role / Position <span className="text-rose-400">*</span>
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
+                  Role / Position <span className="text-zinc-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -119,13 +119,13 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                   value={formData.role}
                   onChange={handleChange}
                   placeholder="e.g. Lead Software Engineer"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
-                  Company Name <span className="text-rose-400">*</span>
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
+                  Company Name <span className="text-zinc-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -134,21 +134,21 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                   value={formData.company}
                   onChange={handleChange}
                   placeholder="e.g. Acme Corp"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
                   Employment Type
                 </label>
                 <select
                   name="employment_type"
                   value={formData.employment_type}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
                 >
                   <option value="Full-time">Full-time</option>
                   <option value="Part-time">Part-time</option>
@@ -159,7 +159,7 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
                   Location
                 </label>
                 <input
@@ -168,15 +168,15 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                   value={formData.location}
                   onChange={handleChange}
                   placeholder="e.g. Remote / Jakarta"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
-                  Start Date <span className="text-rose-400">*</span>
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
+                  Start Date <span className="text-zinc-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -184,12 +184,12 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                   required
                   value={formData.start_date}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
                   End Date
                 </label>
                 <input
@@ -198,26 +198,26 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                   disabled={formData.is_current}
                   value={formData.end_date}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500 disabled:opacity-40"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 disabled:opacity-40"
                 />
               </div>
             </div>
 
             <div>
-              <label className="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer pt-1">
+              <label className="flex items-center gap-2 text-xs font-medium text-zinc-300 cursor-pointer pt-1">
                 <input
                   type="checkbox"
                   name="is_current"
                   checked={formData.is_current}
                   onChange={handleChange}
-                  className="w-4 h-4 rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-0"
+                  className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 accent-white focus:ring-0"
                 />
                 <span>I am currently working in this role (Present)</span>
               </label>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
                 Job Overview
               </label>
               <textarea
@@ -226,12 +226,12 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Core responsibilities and team context..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-mono">
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-mono">
                 Key Achievements (One per line)
               </label>
               <textarea
@@ -240,24 +240,24 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
                 value={formData.achievements}
                 onChange={handleChange}
                 placeholder="Architected resilient microservices ecosystem...&#10;Reduced cloud compute costs by 30%..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-indigo-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20"
               />
             </div>
 
             {/* Buttons */}
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+            <div className="pt-4 border-t border-zinc-800 flex items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={isSaving}
-                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-600/30 hover:opacity-95 transition-all flex items-center gap-2 disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-white text-black hover:bg-zinc-200 shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
               >
                 {isSaving ? (
                   <>

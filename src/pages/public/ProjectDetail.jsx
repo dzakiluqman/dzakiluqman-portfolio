@@ -339,7 +339,7 @@ export const ProjectDetail = () => {
   } = project
 
   return (
-    <div className="min-h-screen bg-[#000000] text-zinc-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-black">
+    <div className="min-h-screen bg-[#000000] text-zinc-100 flex flex-col font-sans selection:bg-white selection:text-black">
       <Navbar />
 
       <main className="flex-1 pt-24 pb-24">
@@ -355,7 +355,7 @@ export const ProjectDetail = () => {
             </Link>
 
             {category && (
-              <span className="text-xs font-sans tracking-[0.2em] uppercase text-cyan-400 font-medium">
+              <span className="text-xs font-sans tracking-[0.2em] uppercase text-zinc-400 font-medium">
                 {category}
               </span>
             )}
@@ -427,7 +427,7 @@ export const ProjectDetail = () => {
                     aria-label={`Go to slide ${idx + 1}`}
                     className={`transition-all rounded-full focus:outline-none ${
                       currentIndex === idx
-                        ? 'w-6 h-1.5 bg-cyan-400'
+                        ? 'w-6 h-1.5 bg-white'
                         : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/80'
                     }`}
                   />
@@ -440,11 +440,11 @@ export const ProjectDetail = () => {
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 pb-8 border-b border-white/[0.08]">
             <div className="space-y-4 max-w-3xl">
               <div className="flex items-center gap-3">
-                <span className="text-xs uppercase tracking-wider text-cyan-400 font-medium">
+                <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">
                   {category || 'Engineering'}
                 </span>
                 {is_featured && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[10px] font-medium uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-medium uppercase tracking-wider">
                     Featured
                   </span>
                 )}
@@ -468,7 +468,7 @@ export const ProjectDetail = () => {
                   href={demo_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/20"
+                  className="px-5 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold text-sm transition-all flex items-center gap-2 shadow-sm"
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span>Live Deployment</span>
@@ -536,7 +536,7 @@ export const ProjectDetail = () => {
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-white/5">
                   <span className="text-zinc-400">Status</span>
-                  <span className="text-cyan-400 font-medium flex items-center gap-1">
+                  <span className="text-white font-medium flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>{is_published ? 'Production' : 'Development'}</span>
                   </span>

@@ -111,7 +111,7 @@ export const Home = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-neon-cyan selection:text-black">
+    <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-white selection:text-black">
       <Navbar profile={profile} />
 
       {/* Main Content */}

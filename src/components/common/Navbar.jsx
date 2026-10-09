@@ -113,7 +113,7 @@ export const Navbar = ({ profile }) => {
                   >
                     <span>{link.name}</span>
                     {isActive && (
-                      <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] rounded-full animate-in fade-in duration-200" />
+                      <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-white shadow-[0_0_8px_rgba(255,255,255,0.7)] rounded-full animate-in fade-in duration-200" />
                     )}
                   </button>
                 )
@@ -146,13 +146,13 @@ export const Navbar = ({ profile }) => {
                 onClick={() => handleNavClick(link.href, link.id)}
                 className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-sans transition-all flex items-center justify-between ${
                   isActive
-                    ? 'text-white bg-white/[0.08] font-medium border-l-2 border-cyan-400'
+                    ? 'text-white bg-white/[0.08] font-medium border-l-2 border-white'
                     : 'text-zinc-300 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
                 <span>{link.name}</span>
                 {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.9)]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
                 )}
               </button>
             )

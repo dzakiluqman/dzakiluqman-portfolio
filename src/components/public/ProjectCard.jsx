@@ -67,10 +67,10 @@ export const ProjectCard = ({ project, index = 0 }) => {
             {category || 'Project'}
           </div>
 
-          <h3 className="text-xl font-light text-zinc-100 group-hover:text-cyan-400 transition-colors duration-200 tracking-tight font-sans">
+          <h3 className="text-xl font-light text-zinc-100 group-hover:text-white transition-colors duration-200 tracking-tight font-sans">
             <span className="inline-flex items-center gap-1.5">
               <span className="line-clamp-1">{title}</span>
-              <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-cyan-400 transition-colors duration-200 shrink-0" />
+              <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors duration-200 shrink-0" />
             </span>
           </h3>
 
@@ -120,7 +120,7 @@ export const ProjectCard = ({ project, index = 0 }) => {
               href={demo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-sans text-zinc-400 hover:text-cyan-400 transition-colors duration-200 flex items-center gap-1 p-1"
+              className="text-xs font-sans text-zinc-400 hover:text-white transition-colors duration-200 flex items-center gap-1 p-1"
               title="Live Deployment"
             >
               <ExternalLink className="w-3.5 h-3.5" />

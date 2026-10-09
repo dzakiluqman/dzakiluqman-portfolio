@@ -151,27 +151,23 @@ export const AdminMessages = () => {
         <main className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
           {notification && (
             <div
-              className={`p-4 rounded-xl flex items-center gap-2 text-xs font-medium ${
-                notification.type === 'error'
-                  ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
-                  : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
-              }`}
+              className="p-4 rounded-xl flex items-center gap-2 text-xs font-medium bg-zinc-900 border border-zinc-700 text-zinc-200"
             >
-              {notification.type === 'error' ? <AlertCircle className="w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
+              {notification.type === 'error' ? <AlertCircle className="w-4 h-4 text-zinc-400" /> : <CheckCircle className="w-4 h-4 text-white" />}
               <span>{notification.message}</span>
             </div>
           )}
 
           {/* Filter Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-dark-900 border border-slate-800 p-4 rounded-2xl">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-zinc-950 border border-zinc-800 p-4 rounded-2xl">
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="text"
                 placeholder="Search messages by name, email, or content..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-dark-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#000000] border border-zinc-800 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white/40"
               />
             </div>
 
@@ -180,8 +176,8 @@ export const AdminMessages = () => {
                 onClick={() => setFilter('all')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   filter === 'all'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-dark-950 text-slate-400 hover:text-white border border-slate-800'
+                    ? 'bg-white text-black font-semibold shadow-sm'
+                    : 'bg-[#000000] text-zinc-400 hover:text-white border border-zinc-800'
                 }`}
               >
                 All ({messages.length})
@@ -190,8 +186,8 @@ export const AdminMessages = () => {
                 onClick={() => setFilter('unread')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   filter === 'unread'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-dark-950 text-slate-400 hover:text-white border border-slate-800'
+                    ? 'bg-white text-black font-semibold shadow-sm'
+                    : 'bg-[#000000] text-zinc-400 hover:text-white border border-zinc-800'
                 }`}
               >
                 Unread ({unreadCount})
@@ -200,8 +196,8 @@ export const AdminMessages = () => {
                 onClick={() => setFilter('read')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   filter === 'read'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-dark-950 text-slate-400 hover:text-white border border-slate-800'
+                    ? 'bg-white text-black font-semibold shadow-sm'
+                    : 'bg-[#000000] text-zinc-400 hover:text-white border border-zinc-800'
                 }`}
               >
                 Read ({messages.length - unreadCount})
@@ -213,10 +209,10 @@ export const AdminMessages = () => {
           {loading ? (
             <LoadingSpinner text="Loading message inbox..." />
           ) : filteredMessages.length === 0 ? (
-            <div className="text-center py-16 bg-dark-900 rounded-2xl border border-slate-800 space-y-3">
-              <Inbox className="w-10 h-10 text-slate-600 mx-auto" />
+            <div className="text-center py-16 bg-zinc-950 rounded-2xl border border-zinc-800 space-y-3">
+              <Inbox className="w-10 h-10 text-zinc-600 mx-auto" />
               <h3 className="text-base font-semibold text-white">No messages found</h3>
-              <p className="text-xs text-slate-400">All caught up! Inbound inquiries will appear here.</p>
+              <p className="text-xs text-zinc-400">All caught up! Inbound inquiries will appear here.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -233,42 +229,42 @@ export const AdminMessages = () => {
                       }}
                       className={`p-4 rounded-xl border cursor-pointer transition-all ${
                         isSelected
-                          ? 'bg-indigo-950/40 border-indigo-500 shadow-md shadow-indigo-500/10'
+                          ? 'bg-white/[0.08] border-white/40 shadow-sm'
                           : msg.is_read
-                          ? 'bg-dark-900/60 border-slate-800/80 hover:border-slate-700'
-                          : 'bg-dark-900 border-indigo-500/30 hover:border-indigo-400'
+                          ? 'bg-zinc-950 border-zinc-800/80 hover:border-zinc-700'
+                          : 'bg-zinc-900 border-zinc-700 hover:border-zinc-500'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className={`text-xs font-bold ${!msg.is_read ? 'text-indigo-300' : 'text-slate-300'}`}>
+                        <span className={`text-xs font-bold ${!msg.is_read ? 'text-white' : 'text-zinc-400'}`}>
                           {msg.sender_name}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-500">
+                        <span className="text-[10px] font-mono text-zinc-500">
                           {new Date(msg.created_at).toLocaleDateString()}
                         </span>
                       </div>
                       <p className="text-xs font-semibold text-white truncate">{msg.subject || 'No Subject'}</p>
-                      <p className="text-xs text-slate-400 line-clamp-2 mt-1">{msg.message}</p>
+                      <p className="text-xs text-zinc-400 line-clamp-2 mt-1">{msg.message}</p>
                     </div>
                   )
                 })}
               </div>
 
               {/* Message Details (Right) */}
-              <div className="lg:col-span-7 bg-dark-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+              <div className="lg:col-span-7 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-6">
                 {selectedMessage ? (
                   <>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-zinc-800 gap-4">
                       <div>
                         <h3 className="text-lg font-bold text-white tracking-tight">
                           {selectedMessage.subject || 'No Subject'}
                         </h3>
                         <div className="flex flex-wrap items-center gap-2 mt-1 text-xs">
-                          <span className="text-slate-300 font-semibold">{selectedMessage.sender_name}</span>
-                          <span className="text-slate-600">•</span>
+                          <span className="text-zinc-300 font-semibold">{selectedMessage.sender_name}</span>
+                          <span className="text-zinc-600">•</span>
                           <a
                             href={`mailto:${selectedMessage.sender_email}`}
-                            className="text-indigo-400 hover:underline font-mono"
+                            className="text-zinc-300 hover:text-white hover:underline font-mono"
                           >
                             {selectedMessage.sender_email}
                           </a>
@@ -278,7 +274,7 @@ export const AdminMessages = () => {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleToggleRead(selectedMessage)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 transition-colors flex items-center gap-1.5 cursor-pointer"
                           title="Toggle Read"
                         >
                           {selectedMessage.is_read ? <MailWarning className="w-3.5 h-3.5" /> : <MailCheck className="w-3.5 h-3.5" />}
@@ -287,7 +283,7 @@ export const AdminMessages = () => {
 
                         <button
                           onClick={() => handleDeleteMessage(selectedMessage.id)}
-                          className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors"
+                          className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-700 transition-colors cursor-pointer"
                           title="Delete Message"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -295,19 +291,19 @@ export const AdminMessages = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500">
+                    <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
                       <Clock className="w-3.5 h-3.5" />
                       <span>Received: {new Date(selectedMessage.created_at).toLocaleString()}</span>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-dark-950/80 border border-slate-800 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed font-sans min-h-[160px]">
+                    <div className="p-4 rounded-xl bg-[#000000] border border-zinc-800 text-sm text-zinc-200 whitespace-pre-wrap leading-relaxed font-sans min-h-[160px]">
                       {selectedMessage.message}
                     </div>
 
-                    <div className="pt-4 border-t border-slate-800 flex justify-end">
+                    <div className="pt-4 border-t border-zinc-800 flex justify-end">
                       <a
                         href={`mailto:${selectedMessage.sender_email}?subject=Re: ${encodeURIComponent(selectedMessage.subject || 'Portfolio Inquiry')}`}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-600/30 hover:opacity-95 transition-all"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
                       >
                         <Reply className="w-4 h-4" />
                         <span>Reply via Email</span>
@@ -315,7 +311,7 @@ export const AdminMessages = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="text-center py-20 text-slate-500 text-xs">
+                  <div className="text-center py-20 text-zinc-500 text-xs">
                     Select a message from the list to preview details.
                   </div>
                 )}

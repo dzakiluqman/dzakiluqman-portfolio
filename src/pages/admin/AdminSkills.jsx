@@ -65,15 +65,15 @@ const ICON_COMPONENTS = AVAILABLE_ICONS.reduce((acc, curr) => {
 const CATEGORY_CONFIG = {
   frontend: {
     label: 'Frontend & Interface',
-    badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+    badgeClass: 'bg-white/[0.06] text-zinc-200 border-white/10'
   },
   backend: {
     label: 'Backend & Architecture',
-    badgeClass: 'bg-violet-500/10 text-violet-400 border-violet-500/30'
+    badgeClass: 'bg-white/[0.06] text-zinc-200 border-white/10'
   },
   devops: {
     label: 'Infrastructure & DevOps',
-    badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+    badgeClass: 'bg-white/[0.06] text-zinc-200 border-white/10'
   }
 }
 
@@ -434,7 +434,7 @@ export const AdminSkills = () => {
               </button>
               <button
                 onClick={handleOpenCreateModal}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-neon-cyan hover:opacity-95 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Skill</span>
@@ -449,14 +449,14 @@ export const AdminSkills = () => {
             <div
               className={`flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl backdrop-blur-md border text-xs font-mono font-semibold ${
                 notification.type === 'error'
-                  ? 'bg-rose-950/90 border-rose-500/50 text-rose-200'
-                  : 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200'
+                  ? 'bg-zinc-900 border-zinc-700 text-zinc-300'
+                  : 'bg-zinc-900 border-zinc-700 text-zinc-200'
               }`}
             >
               {notification.type === 'error' ? (
-                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                <AlertCircle className="w-4 h-4 text-zinc-400 shrink-0" />
               ) : (
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
               )}
               <span>{notification.message}</span>
             </div>
@@ -466,34 +466,34 @@ export const AdminSkills = () => {
         <main className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
           {/* Domain Breakdown Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl hud-glass border border-slate-800">
-              <div className="text-[11px] font-mono text-slate-400 uppercase">Total Items</div>
+            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
+              <div className="text-[11px] font-mono text-zinc-400 uppercase">Total Items</div>
               <div className="text-2xl font-bold text-white mt-1">{stats.total}</div>
             </div>
-            <div className="p-4 rounded-xl hud-glass border border-slate-800">
-              <div className="text-[11px] font-mono text-cyan-400 uppercase">Frontend</div>
+            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
+              <div className="text-[11px] font-mono text-zinc-400 uppercase">Frontend</div>
               <div className="text-2xl font-bold text-white mt-1">{stats.frontend}</div>
             </div>
-            <div className="p-4 rounded-xl hud-glass border border-slate-800">
-              <div className="text-[11px] font-mono text-violet-400 uppercase">Backend</div>
+            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
+              <div className="text-[11px] font-mono text-zinc-400 uppercase">Backend</div>
               <div className="text-2xl font-bold text-white mt-1">{stats.backend}</div>
             </div>
-            <div className="p-4 rounded-xl hud-glass border border-slate-800">
-              <div className="text-[11px] font-mono text-emerald-400 uppercase">DevOps & Cloud</div>
+            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
+              <div className="text-[11px] font-mono text-zinc-400 uppercase">DevOps & Cloud</div>
               <div className="text-2xl font-bold text-white mt-1">{stats.devops}</div>
             </div>
           </div>
 
           {/* Search & Category Filter Bar */}
-          <div className="hud-glass p-4 rounded-2xl border border-slate-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div className="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="text"
                 placeholder="Search skills, subtitles, categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-dark-950/70 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-neon-cyan/50 transition-colors"
+                className="w-full bg-[#000000] border border-zinc-800 rounded-xl pl-10 pr-4 py-2 text-xs font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-white/40 transition-colors"
               />
             </div>
 
@@ -509,8 +509,8 @@ export const AdminSkills = () => {
                   onClick={() => setSelectedCategory(tab.id)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all shrink-0 ${
                     selectedCategory === tab.id
-                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                      : 'bg-dark-950/60 text-slate-400 hover:text-white border border-slate-800'
+                      ? 'bg-white text-black font-bold shadow-sm'
+                      : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
                   }`}
                 >
                   {tab.label}
@@ -528,7 +528,7 @@ export const AdminSkills = () => {
               <p className="text-slate-400 text-sm font-sans">No technical skills found matching your filter.</p>
               <button
                 onClick={handleOpenCreateModal}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-neon-cyan text-dark-950 hover:opacity-90"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-white text-black hover:bg-zinc-200 shadow-sm"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add first skill</span>
@@ -551,8 +551,8 @@ export const AdminSkills = () => {
                     >
                       {/* Left: Icon & Title/Subtitle */}
                       <div className="flex items-center gap-3.5 min-w-0 flex-1">
-                        <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-slate-300 shrink-0">
-                          <IconComp className="w-5 h-5 text-neon-cyan" />
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-300 shrink-0">
+                          <IconComp className="w-5 h-5 text-white" />
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -610,7 +610,7 @@ export const AdminSkills = () => {
                         {/* Delete Button */}
                         <button
                           onClick={() => handleDeleteSkill(skill.id)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                          className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-zinc-800 transition-colors"
                           title="Delete Skill"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -653,7 +653,7 @@ export const AdminSkills = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-mono font-medium text-slate-300 uppercase tracking-wider mb-1.5">
-                    Skill Title <span className="text-rose-400">*</span>
+                    Skill Title <span className="text-zinc-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -661,7 +661,7 @@ export const AdminSkills = () => {
                     placeholder="e.g. React / Next.js, Docker & Kubernetes"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white placeholder-slate-500 focus:outline-none focus:border-neon-cyan transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white placeholder-slate-500 focus:outline-none focus:border-white/40 transition-colors"
                   />
                 </div>
 
@@ -674,7 +674,7 @@ export const AdminSkills = () => {
                     placeholder="e.g. UI Architecture & SSR, Microservices & Data"
                     value={formData.subtitle}
                     onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white placeholder-slate-500 focus:outline-none focus:border-neon-cyan transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white placeholder-slate-500 focus:outline-none focus:border-white/40 transition-colors"
                   />
                 </div>
               </div>
@@ -688,7 +688,7 @@ export const AdminSkills = () => {
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white focus:outline-none focus:border-neon-cyan transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white focus:outline-none focus:border-white/40 transition-colors"
                   >
                     <option value="frontend">Frontend & Interface</option>
                     <option value="backend">Backend & Architecture</option>
@@ -705,7 +705,7 @@ export const AdminSkills = () => {
                     min="1"
                     value={formData.order_index}
                     onChange={(e) => setFormData({ ...formData, order_index: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-mono text-white focus:outline-none focus:border-neon-cyan transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-mono text-white focus:outline-none focus:border-white/40 transition-colors"
                   />
                 </div>
               </div>
@@ -726,7 +726,7 @@ export const AdminSkills = () => {
                         onClick={() => setFormData({ ...formData, icon_name: item.name })}
                         className={`p-2.5 rounded-lg flex flex-col items-center justify-center gap-1 transition-all ${
                           isSelected
-                            ? 'bg-neon-cyan/20 border border-neon-cyan text-neon-cyan shadow-sm'
+                            ? 'bg-white border border-white text-black shadow-sm'
                             : 'bg-dark-900 border border-transparent text-slate-400 hover:text-white hover:bg-slate-800'
                         }`}
                         title={item.name}
@@ -772,16 +772,16 @@ export const AdminSkills = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold bg-gradient-to-r from-neon-cyan to-indigo-600 text-dark-950 shadow-neon-cyan hover:opacity-95 transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {isSaving ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin text-black" />
                       <span>Saving...</span>
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4" />
+                      <Save className="w-4 h-4 text-black" />
                       <span>{editingSkill ? 'Update Competency' : 'Create Competency'}</span>
                     </>
                   )}

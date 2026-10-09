@@ -283,14 +283,14 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
           {/* OLED Modal Header */}
           <div className="px-6 py-4.5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <div className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
                 <FolderKanban className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
                   <span>{project ? 'Edit Project' : 'Create New Project'}</span>
                   {!isSupabaseConfigured && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-normal">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-300 font-normal">
                       Demo Mode
                     </span>
                   )}
@@ -320,7 +320,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-mono font-medium text-zinc-300 mb-1.5">
-                  Project Title <span className="text-rose-400">*</span>
+                  Project Title <span className="text-zinc-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -329,13 +329,13 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   value={formData.title}
                   onChange={handleChange}
                   placeholder="e.g. TubeMod, CloudScale Telemetry"
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-mono font-medium text-zinc-300 mb-1.5">
-                  URL Slug <span className="text-rose-400">*</span>
+                  URL Slug <span className="text-zinc-500">*</span>
                 </label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">
@@ -348,7 +348,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                     value={formData.slug}
                     onChange={handleChange}
                     placeholder="tubemod"
-                    className="w-full pl-24 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all font-mono"
+                    className="w-full pl-24 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all font-mono"
                   />
                 </div>
               </div>
@@ -358,14 +358,14 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-2">
                 <label className="block text-xs font-mono font-medium text-zinc-300 mb-1.5">
-                  Category <span className="text-rose-400">*</span>
+                  Category <span className="text-zinc-500">*</span>
                 </label>
                 <div className="relative">
                   <select
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#09090b] border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-500/50 transition-all appearance-none cursor-pointer"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#09090b] border border-white/10 text-white text-sm focus:outline-none focus:border-white/40 transition-all appearance-none cursor-pointer"
                   >
                     {COMMON_CATEGORIES.map((cat) => (
                       <option key={cat} value={cat} className="bg-zinc-950 text-white py-1">
@@ -394,7 +394,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   min="0"
                   value={formData.sort_order}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm focus:outline-none focus:border-cyan-500/50 transition-all font-mono"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm focus:outline-none focus:border-white/40 transition-all font-mono"
                 />
               </div>
             </div>
@@ -402,7 +402,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
             {/* ROW 3: Short Description */}
             <div>
               <label className="block text-xs font-mono font-medium text-zinc-300 mb-1.5">
-                Overview / Description <span className="text-rose-400">*</span>
+                Overview / Description <span className="text-zinc-500">*</span>
               </label>
               <textarea
                 name="description"
@@ -411,7 +411,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="High-level project summary displayed on portfolio showcase cards..."
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all resize-y"
+                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all resize-y"
               />
             </div>
 
@@ -422,7 +422,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   Tech Stack <span className="text-zinc-500 font-normal">(Comma-separated: e.g. PHP, MySQL, MVC or React, Supabase)</span>
                 </label>
                 {previewTechs.length > 0 && (
-                  <span className="text-[11px] font-mono text-cyan-400">
+                  <span className="text-[11px] font-mono text-zinc-400">
                     {previewTechs.length} technologies
                   </span>
                 )}
@@ -433,7 +433,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 value={formData.tech_stack}
                 onChange={handleChange}
                 placeholder="PHP, MySQL, MVC, Tailwind CSS, Docker"
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all font-mono"
+                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all font-mono"
               />
 
               {/* Live Tag Preview */}
@@ -444,7 +444,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                       key={i}
                       className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-xs font-mono flex items-center gap-1"
                     >
-                      <FileCode2 className="w-3 h-3 text-cyan-400" />
+                      <FileCode2 className="w-3 h-3 text-zinc-400" />
                       {tech}
                     </span>
                   ))}
@@ -459,14 +459,14 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4 text-cyan-400" />
+                    <ImageIcon className="w-4 h-4 text-white" />
                     <span>Project Showcase Images</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-mono">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono">
                       bucket: projects
                     </span>
                   </h4>
                   <p className="text-xs text-zinc-400 mt-0.5">
-                    Upload multiple screenshots or architecture diagrams. <span className="text-cyan-300">The 1st image is strictly the Primary Cover</span>.
+                    Upload multiple screenshots or architecture diagrams. <span className="text-zinc-200">The 1st image is strictly the Primary Cover</span>.
                   </p>
                 </div>
 
@@ -483,8 +483,8 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 onClick={() => !isUploading && fileInputRef.current?.click()}
                 className={`relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-200 ${
                   isDragging
-                    ? 'border-cyan-400 bg-cyan-500/10 scale-[0.99]'
-                    : 'border-white/15 bg-white/[0.01] hover:border-cyan-500/40 hover:bg-white/[0.03]'
+                    ? 'border-white bg-white/[0.08] scale-[0.99]'
+                    : 'border-white/15 bg-white/[0.01] hover:border-white/40 hover:bg-white/[0.03]'
                 } ${isUploading ? 'opacity-60 pointer-events-none' : ''}`}
               >
                 <input
@@ -497,17 +497,17 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 />
 
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-inner">
+                  <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white shadow-inner">
                     {isUploading ? (
-                      <Loader2 className="w-6 h-6 animate-spin text-cyan-400" />
+                      <Loader2 className="w-6 h-6 animate-spin text-white" />
                     ) : (
-                      <UploadCloud className="w-6 h-6 text-cyan-400" />
+                      <UploadCloud className="w-6 h-6 text-white" />
                     )}
                   </div>
 
                   {isUploading ? (
                     <div className="space-y-1">
-                      <p className="text-sm font-semibold text-cyan-300 flex items-center justify-center gap-2">
+                      <p className="text-sm font-semibold text-white flex items-center justify-center gap-2">
                         <span>Uploading to Supabase Storage...</span>
                         <span>({uploadProgress.completed}/{uploadProgress.total})</span>
                       </p>
@@ -518,7 +518,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   ) : (
                     <>
                       <p className="text-sm font-medium text-zinc-200">
-                        <span className="text-cyan-400 font-semibold underline underline-offset-2">Click to select images</span> or drag and drop files here
+                        <span className="text-white font-semibold underline underline-offset-2">Click to select images</span> or drag and drop files here
                       </p>
                       <p className="text-xs text-zinc-500 font-mono">
                         PNG, JPG, WebP, GIF, SVG up to 10MB each (Multi-select supported)
@@ -530,8 +530,8 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
 
               {/* Upload Error Banner */}
               {uploadError && (
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
+                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-700 text-zinc-300 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-zinc-400" />
                   <span>{uploadError}</span>
                 </div>
               )}
@@ -543,7 +543,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   placeholder="Or paste external image URL (e.g. Unsplash, CDN)..."
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
-                  className="flex-1 px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 transition-all font-mono"
+                  className="flex-1 px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs placeholder-zinc-500 focus:outline-none focus:border-white/40 transition-all font-mono"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault()
@@ -556,7 +556,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   onClick={handleAddUrl}
                   className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.05] hover:bg-white/[0.1] text-zinc-200 border border-white/10 transition-colors flex items-center gap-1.5 shrink-0"
                 >
-                  <Plus className="w-3.5 h-3.5 text-cyan-400" />
+                  <Plus className="w-3.5 h-3.5 text-zinc-400" />
                   <span>Add URL</span>
                 </button>
               </div>
@@ -568,7 +568,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
                     <span className="flex items-center gap-1.5 text-zinc-300">
-                      <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                      <Star className="w-3.5 h-3.5 text-zinc-300 fill-zinc-300" />
                       <span>Thumbnail Gallery & Ordering</span>
                     </span>
                     <span className="text-zinc-500">First image = Card Cover</span>
@@ -583,7 +583,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                           key={`${imgUrl}-${index}`}
                           className={`group relative rounded-xl overflow-hidden border transition-all duration-200 ${
                             isPrimary
-                              ? 'border-cyan-500 bg-cyan-950/20 shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-500/40'
+                              ? 'border-white bg-white/[0.08] shadow-lg shadow-white/5 ring-1 ring-white/30'
                               : 'border-white/10 bg-white/[0.02] hover:border-white/20'
                           }`}
                         >
@@ -602,7 +602,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                             {/* Badge: Primary Card Cover vs Gallery Index */}
                             <div className="absolute top-2 left-2 z-10">
                               {isPrimary ? (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-500 text-black font-bold text-[10px] tracking-wide shadow-md">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white text-black font-bold text-[10px] tracking-wide shadow-md">
                                   <Star className="w-3 h-3 fill-black text-black" />
                                   <span>Primary Card Cover / Thumbnail</span>
                                 </span>
@@ -617,7 +617,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                             <button
                               type="button"
                               onClick={() => handleRemoveImage(index)}
-                              className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-black/80 hover:bg-rose-600 text-zinc-400 hover:text-white border border-white/10 hover:border-rose-500 transition-colors"
+                              className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-black/80 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-white/10 transition-colors"
                               title="Remove image"
                             >
                               <X className="w-3.5 h-3.5" />
@@ -627,18 +627,18 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                           {/* Controls bar below thumbnail */}
                           <div className="p-2.5 flex items-center justify-between gap-1.5 bg-black/60 border-t border-white/5">
                             {isPrimary ? (
-                              <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1">
-                                <Check className="w-3.5 h-3.5" />
+                              <span className="text-[11px] font-mono text-zinc-200 flex items-center gap-1">
+                                <Check className="w-3.5 h-3.5 text-white" />
                                 <span>Default Card Cover</span>
                               </span>
                             ) : (
                               <button
                                 type="button"
                                 onClick={() => handleSetPrimary(index)}
-                                className="text-[11px] font-mono font-medium text-zinc-300 hover:text-cyan-400 hover:underline flex items-center gap-1 transition-colors"
+                                className="text-[11px] font-mono font-medium text-zinc-300 hover:text-white hover:underline flex items-center gap-1 transition-colors"
                                 title="Set this image as primary thumbnail cover"
                               >
-                                <Star className="w-3 h-3 text-amber-400" />
+                                <Star className="w-3 h-3 text-zinc-400" />
                                 <span>Make Cover</span>
                               </button>
                             )}
@@ -683,7 +683,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-mono font-medium text-zinc-300 mb-1.5 flex items-center gap-1.5">
-                  <Github className="w-3.5 h-3.5 text-indigo-400" />
+                  <Github className="w-3.5 h-3.5 text-zinc-400" />
                   <span>GitHub Repository URL</span>
                 </label>
                 <input
@@ -692,13 +692,13 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   value={formData.github_url}
                   onChange={handleChange}
                   placeholder="https://github.com/dzakiluqman/repo"
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all font-mono"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all font-mono"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-mono font-medium text-zinc-300 mb-1.5 flex items-center gap-1.5">
-                  <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
+                  <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
                   <span>Live / Demo URL (Optional)</span>
                 </label>
                 <input
@@ -707,7 +707,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   value={formData.demo_url}
                   onChange={handleChange}
                   placeholder="https://myproject-demo.com"
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all font-mono"
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all font-mono"
                 />
               </div>
             </div>
@@ -723,7 +723,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 value={formData.content}
                 onChange={handleChange}
                 placeholder="In-depth details, architecture diagrams, performance metrics, database design, and key engineering decisions..."
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.05] transition-all resize-y"
+                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.05] transition-all resize-y"
               />
             </div>
 
@@ -735,7 +735,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   name="is_published"
                   checked={formData.is_published}
                   onChange={handleChange}
-                  className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 text-cyan-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                  className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 text-white accent-white focus:ring-0 focus:ring-offset-0 cursor-pointer"
                 />
                 <span>Published (Visible publicly on portfolio)</span>
               </label>
@@ -746,10 +746,10 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   name="is_featured"
                   checked={formData.is_featured}
                   onChange={handleChange}
-                  className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 text-amber-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                  className="w-4 h-4 rounded bg-zinc-900 border-zinc-700 text-white accent-white focus:ring-0 focus:ring-offset-0 cursor-pointer"
                 />
                 <span className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
                   <span>Featured Project (Highlighted on homepage)</span>
                 </span>
               </label>
@@ -776,7 +776,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 <button
                   type="submit"
                   disabled={isSaving || isUploading}
-                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black shadow-lg shadow-cyan-500/25 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSaving ? (
                     <>

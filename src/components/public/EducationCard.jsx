@@ -30,13 +30,13 @@ export const EducationCard = ({ education, index = 0 }) => {
       className="group relative rounded-2xl bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] hover:border-white/20 backdrop-blur-md p-6 sm:p-7 transition-all duration-300 flex flex-col justify-between"
     >
       {/* Subtle liquid glow on hover */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/[0.03] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.04] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       <div>
         {/* Top Meta Bar */}
         <div className="flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-cyan-400 group-hover:text-cyan-300 transition-colors">
+            <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-zinc-300 group-hover:text-white transition-colors">
               <GraduationCap className="w-4 h-4" />
             </div>
             <span className="text-xs font-mono tracking-wider text-zinc-400 uppercase">
@@ -45,7 +45,7 @@ export const EducationCard = ({ education, index = 0 }) => {
           </div>
 
           {end_year && parseInt(end_year, 10) >= new Date().getFullYear() && (
-            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">
               In Progress
             </span>
           )}
@@ -57,7 +57,7 @@ export const EducationCard = ({ education, index = 0 }) => {
         </h3>
 
         {/* Institution */}
-        <p className="mt-1 text-sm font-sans text-cyan-400/90 flex items-center gap-1.5">
+        <p className="mt-1 text-sm font-sans text-zinc-300 flex items-center gap-1.5">
           <span>{institution}</span>
         </p>
 
@@ -65,7 +65,7 @@ export const EducationCard = ({ education, index = 0 }) => {
         {effectiveKeyFocus && (
           <div className="mt-4 pt-4 border-t border-white/[0.06]">
             <div className="text-[10px] font-mono tracking-wider uppercase text-zinc-500 mb-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-cyan-400/70" />
+              <Sparkles className="w-3 h-3 text-zinc-400" />
               <span>Key Focus</span>
             </div>
             <p className="text-xs text-zinc-300 font-sans leading-relaxed">

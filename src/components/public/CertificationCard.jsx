@@ -45,8 +45,8 @@ export const CertificationCard = ({ certification, index = 0 }) => {
           </div>
 
           {/* Right: Verified badge */}
-          <div className="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2.5 py-1 rounded-full font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="inline-flex items-center gap-1.5 text-xs text-zinc-300 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-full font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" />
             <span>Verified</span>
           </div>
         </div>
@@ -90,7 +90,7 @@ export const CertificationCard = ({ certification, index = 0 }) => {
             href={credential_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-300 hover:text-cyan-400 transition-colors group/link"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-300 hover:text-white transition-colors group/link"
           >
             <span>Verify Credential</span>
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />

@@ -114,7 +114,7 @@ export const LetsConnect = ({ profile }) => {
                     {email}
                   </span>
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
+                <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
               </a>
 
               {/* Location Card */}
@@ -136,7 +136,7 @@ export const LetsConnect = ({ profile }) => {
                   className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
                 >
                   <span>GitHub</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
                 </a>
                 <span className="text-zinc-700">·</span>
                 <a
@@ -146,7 +146,7 @@ export const LetsConnect = ({ profile }) => {
                   className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
                 >
                   <span>LinkedIn</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
                 </a>
               </div>
             </div>
@@ -166,12 +166,12 @@ export const LetsConnect = ({ profile }) => {
                 <motion.div
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-3"
+                  className="mb-6 p-4 rounded-xl bg-white/10 border border-white/20 flex items-start gap-3"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-white shrink-0 mt-0.5" />
                   <div className="text-xs sm:text-sm font-sans">
-                    <p className="font-medium text-emerald-300">Message Delivered Successfully</p>
-                    <p className="text-emerald-400/80 mt-0.5">
+                    <p className="font-medium text-white">Message Delivered Successfully</p>
+                    <p className="text-zinc-300 mt-0.5">
                       Thank you for reaching out. I will review your message and respond promptly.
                     </p>
                   </div>
@@ -180,11 +180,11 @@ export const LetsConnect = ({ profile }) => {
 
               {/* Error Notification */}
               {status.error && (
-                <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                <div className="mb-6 p-4 rounded-xl bg-zinc-900 border border-zinc-700 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
                   <div className="text-xs sm:text-sm font-sans">
-                    <p className="font-medium text-rose-300">Submission Notice</p>
-                    <p className="text-rose-400/80 mt-0.5">{status.error}</p>
+                    <p className="font-medium text-zinc-200">Submission Notice</p>
+                    <p className="text-zinc-400 mt-0.5">{status.error}</p>
                   </div>
                 </div>
               )}
@@ -196,7 +196,7 @@ export const LetsConnect = ({ profile }) => {
                       htmlFor="sender_name" 
                       className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                     >
-                      Your Name <span className="text-rose-400">*</span>
+                      Your Name <span className="text-zinc-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -215,7 +215,7 @@ export const LetsConnect = ({ profile }) => {
                       htmlFor="sender_email" 
                       className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                     >
-                      Email Address <span className="text-rose-400">*</span>
+                      Email Address <span className="text-zinc-400">*</span>
                     </label>
                     <input
                       type="email"
@@ -253,7 +253,7 @@ export const LetsConnect = ({ profile }) => {
                     htmlFor="message" 
                     className="block text-xs font-sans font-medium text-zinc-400 uppercase tracking-wider mb-2"
                   >
-                    Message <span className="text-rose-400">*</span>
+                    Message <span className="text-zinc-400">*</span>
                   </label>
                   <textarea
                     id="message"

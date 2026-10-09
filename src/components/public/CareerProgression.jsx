@@ -211,7 +211,7 @@ export const CareerProgression = ({
                         className="relative group"
                       >
                         {/* Subtle Node on Timeline */}
-                        <div className="absolute -left-[31px] md:-left-[47px] top-6 w-2.5 h-2.5 rounded-full bg-[#000000] border border-white/30 group-hover:border-cyan-400 group-hover:shadow-[0_0_8px_rgba(34,211,238,0.8)] transition-all" />
+                        <div className="absolute -left-[31px] md:-left-[47px] top-6 w-2.5 h-2.5 rounded-full bg-[#000000] border border-white/30 group-hover:border-white group-hover:shadow-[0_0_8px_rgba(255,255,255,0.6)] transition-all" />
 
                         {/* Liquid Card */}
                         <div className="bg-white/[0.03] hover:bg-white/[0.05] border border-white/[0.08] hover:border-white/20 backdrop-blur-md p-6 sm:p-7 rounded-2xl transition-all duration-300">
@@ -233,7 +233,7 @@ export const CareerProgression = ({
                           </div>
 
                           {/* Role Title & Company */}
-                          <h3 className="text-xl font-medium text-zinc-100 group-hover:text-cyan-400 transition-colors duration-200 tracking-tight">
+                          <h3 className="text-xl font-medium text-zinc-100 group-hover:text-white transition-colors duration-200 tracking-tight">
                             {exp.role}{' '}
                             <span className="text-zinc-400 font-normal">at {exp.company}</span>
                           </h3>

@@ -136,7 +136,7 @@ export const EducationCertifications = ({
           className="max-w-2xl mb-14 md:mb-16"
         >
           <div className="flex items-center gap-2 mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-white" />
             <span className="text-xs font-mono uppercase tracking-widest text-zinc-400">
               Foundations & Verification
             </span>
@@ -157,7 +157,7 @@ export const EducationCertifications = ({
           <div className="space-y-6">
             <div className="pb-4 border-b border-white/[0.08] flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <GraduationCap className="w-4 h-4 text-cyan-400" />
+                <GraduationCap className="w-4 h-4 text-white" />
                 <h3 className="text-xs font-sans tracking-wider text-zinc-300 font-medium uppercase">
                   <span className="text-zinc-500 mr-2 font-mono">01 /</span>
                   Formal Education
@@ -183,7 +183,7 @@ export const EducationCertifications = ({
           <div className="space-y-6">
             <div className="pb-4 border-b border-white/[0.08] flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <Award className="w-4 h-4 text-amber-400" />
+                <Award className="w-4 h-4 text-white" />
                 <h3 className="text-xs font-sans tracking-wider text-zinc-300 font-medium uppercase">
                   <span className="text-zinc-500 mr-2 font-mono">02 /</span>
                   Verified Certifications
