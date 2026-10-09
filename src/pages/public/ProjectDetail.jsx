@@ -13,7 +13,6 @@ import {
   CheckCircle2
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockProjects } from '../../lib/mockData'
 import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -185,8 +184,7 @@ export const ProjectDetail = () => {
       setLoading(true)
       try {
         if (!isSupabaseConfigured) {
-          const found = mockProjects.find((p) => p.id === projectId || p.slug === projectId)
-          setProject(found || mockProjects[0])
+          setProject(null)
           setLoading(false)
           return
         }
@@ -199,15 +197,13 @@ export const ProjectDetail = () => {
           .single()
 
         if (error || !data) {
-          const fallback = mockProjects.find((p) => p.id === projectId || p.slug === projectId)
-          setProject(fallback || null)
+          setProject(null)
         } else {
           setProject(data)
         }
       } catch (err) {
         console.error('Error fetching project:', err)
-        const fallback = mockProjects.find((p) => p.id === projectId || p.slug === projectId)
-        setProject(fallback || null)
+        setProject(null)
       } finally {
         setLoading(false)
       }
@@ -425,11 +421,10 @@ export const ProjectDetail = () => {
                     key={idx}
                     onClick={(e) => handleDotClick(e, idx)}
                     aria-label={`Go to slide ${idx + 1}`}
-                    className={`transition-all rounded-full focus:outline-none ${
-                      currentIndex === idx
+                    className={`transition-all rounded-full focus:outline-none ${currentIndex === idx
                         ? 'w-6 h-1.5 bg-white'
                         : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/80'
-                    }`}
+                      }`}
                   />
                 ))}
               </div>

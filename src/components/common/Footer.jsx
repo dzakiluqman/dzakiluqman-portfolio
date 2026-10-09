@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ArrowUp, Shield } from 'lucide-react'
+import dlLogo from '../../assets/images/dl-logo.png'
 
 export const Footer = ({ profile }) => {
   const scrollToTop = () => {
@@ -11,7 +12,7 @@ export const Footer = ({ profile }) => {
   const socialLinks = profile?.social_links || {
     github: 'https://github.com/dzakiluqman',
     linkedin: 'https://linkedin.com/in/dzakiluqman',
-    twitter: 'https://twitter.com/dzakiluqman',
+    instagram: 'https://www.instagram.com/dzak.ii_/',
     email: 'dzakiluqman275@gmail.com'
   }
 
@@ -100,15 +101,15 @@ export const Footer = ({ profile }) => {
                   </a>
                 </li>
               )}
-              {socialLinks.twitter && (
+              {socialLinks.instagram && (
                 <li>
                   <a
-                    href={socialLinks.twitter}
+                    href={socialLinks.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-sm transition-colors duration-200"
                   >
-                    <span>Twitter / X</span>
+                    <span>Instagram</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </li>
@@ -154,11 +155,18 @@ export const Footer = ({ profile }) => {
           </h1>
         </div>
 
-        {/* 3. BOTTOM SECTION: Copyright Line & Back to Top */}
+        {/* 3. BOTTOM SECTION: Standardized Brand Logo, Copyright Line & Back to Top */}
         <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-zinc-600 text-center sm:text-left">
-            © 2026 Dzakii Luqman Faid. All rights reserved.
-          </p>
+          <div className="flex items-center gap-3">
+            <img 
+              src={dlLogo} 
+              alt="DL Logo" 
+              className="w-7 h-auto max-h-7 object-contain rounded-md opacity-80 hover:opacity-100 transition-opacity" 
+            />
+            <p className="text-xs text-zinc-600 text-center sm:text-left">
+              © 2026 Dzakii Luqman Faid. All rights reserved.
+            </p>
+          </div>
 
           <button
             onClick={scrollToTop}

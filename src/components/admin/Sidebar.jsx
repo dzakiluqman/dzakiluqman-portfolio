@@ -8,10 +8,10 @@ import {
   Mail, 
   LogOut, 
   ExternalLink, 
-  Terminal,
   ShieldCheck
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
+import dlLogo from '../../assets/images/dl-logo.png'
 
 export const Sidebar = ({ unreadCount = 0 }) => {
   const { user, logout, isDemoMode } = useAuth()
@@ -34,11 +34,13 @@ export const Sidebar = ({ unreadCount = 0 }) => {
     <aside className="w-64 bg-zinc-950 border-r border-zinc-800 flex flex-col shrink-0 min-h-screen">
       {/* Brand Header */}
       <div className="p-5 border-b border-zinc-800">
-        <Link to="/admin/dashboard" className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-white/20 p-0.5 shadow-md">
-            <div className="w-full h-full bg-[#000000] rounded-[10px] flex items-center justify-center">
-              <Terminal className="w-4 h-4 text-white" />
-            </div>
+        <Link to="/admin/dashboard" className="flex items-center gap-3 group">
+          <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-white/10 p-1 flex items-center justify-center shadow-md group-hover:border-white/20 transition-colors">
+            <img 
+              src={dlLogo} 
+              alt="DL Logo" 
+              className="w-full h-auto max-h-7 object-contain rounded-md" 
+            />
           </div>
           <div>
             <span className="font-bold text-sm text-white tracking-tight flex items-center gap-1.5">

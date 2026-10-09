@@ -12,7 +12,6 @@ import {
   Inbox
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockMessages } from '../../lib/mockData'
 import Sidebar from '../../components/admin/Sidebar'
 import AdminHeader from '../../components/admin/AdminHeader'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -34,7 +33,7 @@ export const AdminMessages = () => {
     setLoading(true)
     if (!isSupabaseConfigured) {
       const stored = localStorage.getItem('dzaki_demo_messages')
-      const initial = stored ? JSON.parse(stored) : mockMessages
+      const initial = stored ? JSON.parse(stored) : []
       setMessages(initial)
       if (initial.length > 0 && !selectedMessage) {
         setSelectedMessage(initial[0])

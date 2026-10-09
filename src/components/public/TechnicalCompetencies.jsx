@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockSkills } from '../../lib/mockData'
 import TechItem from './TechItem'
 
 const DOMAIN_SECTIONS = [
@@ -36,23 +35,9 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
     let isMounted = true
 
     const fetchDynamicSkills = async () => {
-      // Local fallback handler
-      const getLocalFallback = () => {
-        const stored = localStorage.getItem('dzaki_demo_skills')
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored)
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed
-          } catch (e) {
-            console.warn('Error parsing local skills:', e)
-          }
-        }
-        return propSkills && propSkills.length > 0 ? propSkills : mockSkills
-      }
-
       if (!isSupabaseConfigured) {
         if (isMounted) {
-          setSkills(getLocalFallback())
+          setSkills(propSkills || [])
           setIsLoading(false)
         }
         return
@@ -91,16 +76,15 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
             setIsLoading(false)
           }
         } else {
-          // If Supabase table is empty, use stored demo items or mock skills
           if (isMounted) {
-            setSkills(getLocalFallback())
+            setSkills(propSkills || [])
             setIsLoading(false)
           }
         }
       } catch (err) {
         console.warn('Error fetching dynamic skills from Supabase:', err)
         if (isMounted) {
-          setSkills(getLocalFallback())
+          setSkills(propSkills || [])
           setIsLoading(false)
         }
       }
@@ -134,7 +118,7 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
 
   // Organize skills into 3 clean editorial domain columns automatically by category
   const groupedSkills = useMemo(() => {
-    const list = skills && skills.length > 0 ? skills : (propSkills?.length ? propSkills : mockSkills)
+    const list = skills && skills.length > 0 ? skills : (propSkills?.length ? propSkills : [])
 
     const groups = DOMAIN_SECTIONS.map((section) => ({
       ...section,
@@ -178,7 +162,12 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
         </motion.div>
 
         {/* 3 Domain Columns Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
+        {skills.length === 0 && propSkills.length === 0 ? (
+          <div className="py-16 text-center text-zinc-500 font-sans text-sm">
+            No technical competencies records available.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-start">
           {groupedSkills.map((domain, colIdx) => (
             <motion.div
               key={domain.key}
@@ -212,6 +201,7 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
             </motion.div>
           ))}
         </div>
+      )}
       </div>
     </section>
   )

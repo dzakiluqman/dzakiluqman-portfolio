@@ -75,6 +75,7 @@ export const LetsConnect = ({ profile }) => {
   const email = profile?.social_links?.email || 'dzakiluqman275@gmail.com'
   const github = profile?.social_links?.github || 'https://github.com/dzakiluqman'
   const linkedin = profile?.social_links?.linkedin || 'https://linkedin.com/in/dzakiluqman'
+  const instagram = profile?.social_links?.instagram || 'https://www.instagram.com/dzak.ii_/'
   const location = profile?.location || 'Kota Magelang, Indonesia'
 
   return (
@@ -146,6 +147,16 @@ export const LetsConnect = ({ profile }) => {
                   className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
                 >
                   <span>LinkedIn</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
+                </a>
+                <span className="text-zinc-700">·</span>
+                <a
+                  href={instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors duration-200 font-sans"
+                >
+                  <span>Instagram</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200" />
                 </a>
               </div>

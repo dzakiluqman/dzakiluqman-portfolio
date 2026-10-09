@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  X, 
-  Save, 
-  Sparkles, 
-  Loader2, 
-  UploadCloud, 
-  Image as ImageIcon, 
-  Github, 
-  ExternalLink, 
-  Trash2, 
-  Star, 
-  ArrowLeft, 
-  ArrowRight, 
-  Plus, 
-  Check, 
+import {
+  X,
+  Save,
+  Sparkles,
+  Loader2,
+  UploadCloud,
+  Image as ImageIcon,
+  Github,
+  ExternalLink,
+  Trash2,
+  Star,
+  ArrowLeft,
+  ArrowRight,
+  Plus,
+  Check,
   AlertCircle,
   FileCode2,
   FolderKanban
@@ -296,8 +296,8 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                   )}
                 </h3>
                 <p className="text-xs text-zinc-400">
-                  {project 
-                    ? 'Update project details, tech stack, and Supabase showcase images' 
+                  {project
+                    ? 'Update project details, tech stack, and Supabase showcase images'
                     : 'Add a new portfolio project with multi-image gallery and Supabase Storage sync'}
                 </p>
               </div>
@@ -315,7 +315,7 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
 
           {/* Form Body */}
           <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
-            
+
             {/* ROW 1: Title & Slug */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -481,11 +481,10 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => !isUploading && fileInputRef.current?.click()}
-                className={`relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-200 ${
-                  isDragging
+                className={`relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-200 ${isDragging
                     ? 'border-white bg-white/[0.08] scale-[0.99]'
                     : 'border-white/15 bg-white/[0.01] hover:border-white/40 hover:bg-white/[0.03]'
-                } ${isUploading ? 'opacity-60 pointer-events-none' : ''}`}
+                  } ${isUploading ? 'opacity-60 pointer-events-none' : ''}`}
               >
                 <input
                   ref={fileInputRef}
@@ -581,11 +580,10 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                       return (
                         <div
                           key={`${imgUrl}-${index}`}
-                          className={`group relative rounded-xl overflow-hidden border transition-all duration-200 ${
-                            isPrimary
+                          className={`group relative rounded-xl overflow-hidden border transition-all duration-200 ${isPrimary
                               ? 'border-white bg-white/[0.08] shadow-lg shadow-white/5 ring-1 ring-white/30'
                               : 'border-white/10 bg-white/[0.02] hover:border-white/20'
-                          }`}
+                            }`}
                         >
                           {/* Image Thumbnail Container */}
                           <div className="relative aspect-video w-full bg-black/80 overflow-hidden">
@@ -758,8 +756,8 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
             {/* Modal Actions */}
             <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
               <span className="text-xs font-mono text-zinc-500">
-                {images.length > 0 
-                  ? `${images.length} images will be saved` 
+                {images.length > 0
+                  ? `${images.length} images will be saved`
                   : 'A default placeholder cover will be used if no images are provided'}
               </span>
 

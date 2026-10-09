@@ -4,9 +4,9 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 export const isSupabaseConfigured = Boolean(
-  supabaseUrl && 
-  supabaseAnonKey && 
-  supabaseUrl !== 'https://your-project.supabase.co' && 
+  supabaseUrl &&
+  supabaseAnonKey &&
+  supabaseUrl !== 'https://your-project.supabase.co' &&
   !supabaseUrl.includes('placeholder')
 )
 
@@ -14,10 +14,10 @@ export const isSupabaseConfigured = Boolean(
 const mockClient = {
   auth: {
     getSession: async () => ({ data: { session: null }, error: null }),
-    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
-    signInWithPassword: async () => ({ 
-      data: null, 
-      error: new Error('Supabase credentials not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.') 
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
+    signInWithPassword: async () => ({
+      data: null,
+      error: new Error('Supabase credentials not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.')
     }),
     signOut: async () => ({ error: null }),
     getUser: async () => ({ data: { user: null }, error: null })
@@ -84,8 +84,8 @@ export async function uploadProjectImage(file, bucket = 'projects') {
 
   const { error: uploadError } = await supabase.storage
     .from(bucket)
-    .upload(filePath, file, { 
-      cacheControl: '3600', 
+    .upload(filePath, file, {
+      cacheControl: '3600',
       upsert: false,
       contentType: file.type || `image/${fileExt}`
     })

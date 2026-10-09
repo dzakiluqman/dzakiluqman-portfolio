@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { Terminal, Lock, Mail, AlertCircle, Loader2, ArrowLeft, ShieldCheck, Key } from 'lucide-react'
+import { Lock, Mail, AlertCircle, Loader2, ArrowLeft, ShieldCheck, Key } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
+import dlLogo from '../../assets/images/dl-logo.png'
 
 export const Login = () => {
   const [email, setEmail] = useState('')
@@ -55,10 +56,12 @@ export const Login = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md px-4">
         {/* Header Icon */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-zinc-900 border border-white/20 p-0.5 shadow-xl shadow-white/5">
-            <div className="w-full h-full bg-[#000000] rounded-[14px] flex items-center justify-center">
-              <Terminal className="w-7 h-7 text-white" />
-            </div>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-zinc-900 border border-white/10 p-2 shadow-xl shadow-white/5">
+            <img 
+              src={dlLogo} 
+              alt="DL Logo" 
+              className="w-full h-auto max-h-10 object-contain rounded-lg" 
+            />
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Portfolio CMS Admin

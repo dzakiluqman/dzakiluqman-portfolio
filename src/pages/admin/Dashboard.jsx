@@ -19,7 +19,6 @@ import {
   ShieldCheck
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockProjects, mockExperiences, mockSkills, mockMessages } from '../../lib/mockData'
 import Sidebar from '../../components/admin/Sidebar'
 import AdminHeader from '../../components/admin/AdminHeader'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -40,10 +39,10 @@ export const Dashboard = () => {
       setLoading(true)
 
       if (!isSupabaseConfigured) {
-        const storedMessages = JSON.parse(localStorage.getItem('dzaki_demo_messages') || 'null') || mockMessages
-        const storedProjects = JSON.parse(localStorage.getItem('dzaki_demo_projects') || 'null') || mockProjects
-        const storedExp = JSON.parse(localStorage.getItem('dzaki_demo_exp') || 'null') || mockExperiences
-        const storedSkills = JSON.parse(localStorage.getItem('dzaki_demo_skills') || 'null') || mockSkills
+        const storedMessages = JSON.parse(localStorage.getItem('dzaki_demo_messages') || '[]') || []
+        const storedProjects = JSON.parse(localStorage.getItem('dzaki_demo_projects') || '[]') || []
+        const storedExp = JSON.parse(localStorage.getItem('dzaki_demo_exp') || '[]') || []
+        const storedSkills = JSON.parse(localStorage.getItem('dzaki_demo_skills') || '[]') || []
 
         setStats({
           totalProjects: storedProjects.length,

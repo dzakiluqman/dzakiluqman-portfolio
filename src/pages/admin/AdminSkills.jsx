@@ -32,7 +32,6 @@ import {
   ExternalLink
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockSkills } from '../../lib/mockData'
 import Sidebar from '../../components/admin/Sidebar'
 import AdminHeader from '../../components/admin/AdminHeader'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
@@ -117,7 +116,7 @@ export const AdminSkills = () => {
           console.error(e)
         }
       }
-      return mockSkills
+      return []
     }
 
     if (!isSupabaseConfigured) {
@@ -379,13 +378,10 @@ export const AdminSkills = () => {
     }
   }
 
-  // Reset to Default Seed Data
-  const handleResetToDefault = () => {
-    if (!window.confirm('Reset competencies to the default portfolio stack?')) return
-    setSkills(mockSkills)
-    localStorage.setItem('dzaki_demo_skills', JSON.stringify(mockSkills))
-    window.dispatchEvent(new CustomEvent('dzaki:skills_updated'))
-    showNotification('Skills reset to default portfolio stack')
+  // Refresh Skills Data
+  const handleRefreshSkills = () => {
+    loadSkills()
+    showNotification('Skills refreshed from database')
   }
 
   // Filter skills
@@ -425,12 +421,12 @@ export const AdminSkills = () => {
           action={
             <div className="flex items-center gap-3">
               <button
-                onClick={handleResetToDefault}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-all"
-                title="Reset to default skills"
+                onClick={handleRefreshSkills}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"
+                title="Refresh skills from database"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset Defaults</span>
+                <span>Refresh</span>
               </button>
               <button
                 onClick={handleOpenCreateModal}

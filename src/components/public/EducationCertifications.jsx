@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GraduationCap, Award, BookOpen, ShieldCheck } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockEducations, mockCertifications } from '../../lib/mockData'
 import EducationCard from './EducationCard'
 import CertificationCard from './CertificationCard'
 
@@ -11,39 +10,20 @@ export const EducationCertifications = ({
   certifications: propCertifications = []
 }) => {
   const [educations, setEducations] = useState(
-    propEducations?.length ? propEducations : mockEducations
+    propEducations?.length ? propEducations : []
   )
   const [certifications, setCertifications] = useState(
-    propCertifications?.length ? propCertifications : mockCertifications
+    propCertifications?.length ? propCertifications : []
   )
 
   useEffect(() => {
     let isMounted = true
 
     const fetchDynamicCredentials = async () => {
-      // Local fallback handler
-      const getLocalFallback = () => {
-        const storedEdu = localStorage.getItem('dzaki_demo_edu')
-        const storedCerts = localStorage.getItem('dzaki_demo_certs')
-
-        const parsedEdu = storedEdu ? JSON.parse(storedEdu) : null
-        const parsedCerts = storedCerts ? JSON.parse(storedCerts) : null
-
-        return {
-          edu: (Array.isArray(parsedEdu) && parsedEdu.length > 0)
-            ? parsedEdu
-            : (propEducations?.length ? propEducations : mockEducations),
-          certs: (Array.isArray(parsedCerts) && parsedCerts.length > 0)
-            ? parsedCerts
-            : (propCertifications?.length ? propCertifications : mockCertifications)
-        }
-      }
-
       if (!isSupabaseConfigured) {
         if (isMounted) {
-          const fallback = getLocalFallback()
-          setEducations(fallback.edu)
-          setCertifications(fallback.certs)
+          setEducations(propEducations || [])
+          setCertifications(propCertifications || [])
         }
         return
       }
@@ -61,24 +41,14 @@ export const EducationCertifications = ({
         ])
 
         if (isMounted) {
-          if (eduRes.data && eduRes.data.length > 0) {
-            setEducations(eduRes.data)
-          } else {
-            setEducations(getLocalFallback().edu)
-          }
-
-          if (certsRes.data && certsRes.data.length > 0) {
-            setCertifications(certsRes.data)
-          } else {
-            setCertifications(getLocalFallback().certs)
-          }
+          setEducations(eduRes.data || [])
+          setCertifications(certsRes.data || [])
         }
       } catch (err) {
         console.warn('Error fetching dynamic credentials from Supabase:', err)
         if (isMounted) {
-          const fallback = getLocalFallback()
-          setEducations(fallback.edu)
-          setCertifications(fallback.certs)
+          setEducations([])
+          setCertifications([])
         }
       }
     }
@@ -121,8 +91,8 @@ export const EducationCertifications = ({
     }
   }, [propEducations, propCertifications])
 
-  const eduList = educations && educations.length > 0 ? educations : mockEducations
-  const certList = certifications && certifications.length > 0 ? certifications : mockCertifications
+  const eduList = Array.isArray(educations) ? educations : []
+  const certList = Array.isArray(certifications) ? certifications : []
 
   return (
     <section id="education" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24">
@@ -168,15 +138,21 @@ export const EducationCertifications = ({
               </span>
             </div>
 
-            <div className="space-y-4">
-              {eduList.map((edu, idx) => (
-                <EducationCard
-                  key={edu.id || `edu-${idx}`}
-                  education={edu}
-                  index={idx}
-                />
-              ))}
-            </div>
+            {eduList.length === 0 ? (
+              <div className="p-8 rounded-xl border border-dashed border-zinc-800 text-center text-xs text-zinc-500">
+                No formal education records listed yet.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {eduList.map((edu, idx) => (
+                  <EducationCard
+                    key={edu.id || `edu-${idx}`}
+                    education={edu}
+                    index={idx}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Column 2: Industry Certifications */}
@@ -194,15 +170,21 @@ export const EducationCertifications = ({
               </span>
             </div>
 
-            <div className="space-y-4">
-              {certList.map((cert, idx) => (
-                <CertificationCard
-                  key={cert.id || `cert-${idx}`}
-                  certification={cert}
-                  index={idx}
-                />
-              ))}
-            </div>
+            {certList.length === 0 ? (
+              <div className="p-8 rounded-xl border border-dashed border-zinc-800 text-center text-xs text-zinc-500">
+                No certification credentials listed yet.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {certList.map((cert, idx) => (
+                  <CertificationCard
+                    key={cert.id || `cert-${idx}`}
+                    certification={cert}
+                    index={idx}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

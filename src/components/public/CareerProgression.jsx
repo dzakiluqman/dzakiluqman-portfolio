@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FileText, Printer, X } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockExperiences, mockEducations, mockCertifications } from '../../lib/mockData'
 import EducationCard from './EducationCard'
 import CertificationCard from './CertificationCard'
 
@@ -23,28 +22,11 @@ export const CareerProgression = ({
     let isMounted = true
 
     const fetchAllData = async () => {
-      const getLocalFallback = () => {
-        const storedExp = localStorage.getItem('dzaki_demo_exp')
-        const storedEdu = localStorage.getItem('dzaki_demo_edu')
-        const storedCerts = localStorage.getItem('dzaki_demo_certs')
-
-        const parsedExp = storedExp ? JSON.parse(storedExp) : null
-        const parsedEdu = storedEdu ? JSON.parse(storedEdu) : null
-        const parsedCerts = storedCerts ? JSON.parse(storedCerts) : null
-
-        return {
-          exp: (Array.isArray(parsedExp) && parsedExp.length > 0) ? parsedExp : (propExperiences?.length ? propExperiences : mockExperiences),
-          edu: (Array.isArray(parsedEdu) && parsedEdu.length > 0) ? parsedEdu : (propEducations?.length ? propEducations : mockEducations),
-          certs: (Array.isArray(parsedCerts) && parsedCerts.length > 0) ? parsedCerts : (propCertifications?.length ? propCertifications : mockCertifications)
-        }
-      }
-
       if (!isSupabaseConfigured) {
         if (isMounted) {
-          const fallback = getLocalFallback()
-          setExperiences(fallback.exp)
-          setEducations(fallback.edu)
-          setCertifications(fallback.certs)
+          setExperiences(propExperiences || [])
+          setEducations(propEducations || [])
+          setCertifications(propCertifications || [])
         }
         return
       }
@@ -57,18 +39,16 @@ export const CareerProgression = ({
         ])
 
         if (isMounted) {
-          const fallback = getLocalFallback()
-          setExperiences(expRes.data && expRes.data.length > 0 ? expRes.data : fallback.exp)
-          setEducations(eduRes.data && eduRes.data.length > 0 ? eduRes.data : fallback.edu)
-          setCertifications(certsRes.data && certsRes.data.length > 0 ? certsRes.data : fallback.certs)
+          setExperiences(expRes.data || [])
+          setEducations(eduRes.data || [])
+          setCertifications(certsRes.data || [])
         }
       } catch (err) {
         console.warn('Error fetching career progression data:', err)
         if (isMounted) {
-          const fallback = getLocalFallback()
-          setExperiences(fallback.exp)
-          setEducations(fallback.edu)
-          setCertifications(fallback.certs)
+          setExperiences(propExperiences || [])
+          setEducations(propEducations || [])
+          setCertifications(propCertifications || [])
         }
       }
     }
@@ -120,9 +100,9 @@ export const CareerProgression = ({
     }
   }
 
-  const expList = experiences && experiences.length > 0 ? experiences : mockExperiences
-  const eduList = educations && educations.length > 0 ? educations : mockEducations
-  const certList = certifications && certifications.length > 0 ? certifications : mockCertifications
+  const expList = Array.isArray(experiences) ? experiences : []
+  const eduList = Array.isArray(educations) ? educations : []
+  const certList = Array.isArray(certifications) ? certifications : []
 
   const tabs = [
     { id: 'experience', label: 'Experience' },
@@ -197,7 +177,12 @@ export const CareerProgression = ({
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.25 }}
               >
-                <div className="relative border-l border-white/[0.08] ml-2 md:ml-4 pl-6 md:pl-10 space-y-8 md:space-y-10">
+                {expList.length === 0 ? (
+                  <div className="py-16 text-center text-zinc-500 font-sans text-sm">
+                    No work experience records available.
+                  </div>
+                ) : (
+                  <div className="relative border-l border-white/[0.08] ml-2 md:ml-4 pl-6 md:pl-10 space-y-8 md:space-y-10">
                   {expList.map((exp, index) => {
                     const start = formatDate(exp.start_date)
                     const end = exp.is_current ? 'Present' : formatDate(exp.end_date)
@@ -261,8 +246,9 @@ export const CareerProgression = ({
                     )
                   })}
                 </div>
-              </motion.div>
-            )}
+              )}
+            </motion.div>
+          )}
 
             {/* TAB 2: ACADEMIC EDUCATION */}
             {activeTab === 'education' && (
@@ -274,13 +260,19 @@ export const CareerProgression = ({
                 transition={{ duration: 0.25 }}
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
               >
-                {eduList.map((edu, idx) => (
-                  <EducationCard
-                    key={edu.id || `edu-${idx}`}
-                    education={edu}
-                    index={idx}
-                  />
-                ))}
+                {eduList.length === 0 ? (
+                  <div className="py-16 text-center text-zinc-500 font-sans text-sm col-span-full">
+                    No education records available.
+                  </div>
+                ) : (
+                  eduList.map((edu, idx) => (
+                    <EducationCard
+                      key={edu.id || `edu-${idx}`}
+                      education={edu}
+                      index={idx}
+                    />
+                  ))
+                )}
               </motion.div>
             )}
 
@@ -294,13 +286,19 @@ export const CareerProgression = ({
                 transition={{ duration: 0.25 }}
                 className="grid grid-cols-1 md:grid-cols-3 gap-6"
               >
-                {certList.map((cert, idx) => (
-                  <CertificationCard
-                    key={cert.id || `cert-${idx}`}
-                    certification={cert}
-                    index={idx}
-                  />
-                ))}
+                {certList.length === 0 ? (
+                  <div className="py-16 text-center text-zinc-500 font-sans text-sm col-span-full">
+                    No certification records available.
+                  </div>
+                ) : (
+                  certList.map((cert, idx) => (
+                    <CertificationCard
+                      key={cert.id || `cert-${idx}`}
+                      certification={cert}
+                      index={idx}
+                    />
+                  ))
+                )}
               </motion.div>
             )}
           </AnimatePresence>

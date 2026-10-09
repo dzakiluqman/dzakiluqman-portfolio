@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { 
-  mockProfile, 
-  mockProjects, 
-  mockExperiences, 
-  mockEducations, 
-  mockSkills, 
-  mockCertifications 
-} from '../../lib/mockData'
 import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
 import Hero3D from '../../components/3d/Hero3D'
@@ -18,12 +10,23 @@ import LetsConnect from '../../components/public/LetsConnect'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 
 export const Home = () => {
-  const [profile, setProfile] = useState(mockProfile)
-  const [projects, setProjects] = useState(mockProjects)
-  const [experiences, setExperiences] = useState(mockExperiences)
-  const [educations, setEducations] = useState(mockEducations)
-  const [skills, setSkills] = useState(mockSkills)
-  const [certifications, setCertifications] = useState(mockCertifications)
+  const [profile, setProfile] = useState({
+    full_name: 'Dzakii Luqman Faid',
+    headline: 'Junior Software Developer',
+    location: 'Kota Magelang, Indonesia',
+    bio: '',
+    social_links: {
+      github: 'https://github.com/dzakiluqman',
+      linkedin: 'https://linkedin.com/in/dzakiluqman',
+      instagram: 'https://www.instagram.com/dzak.ii_/',
+      email: 'dzakiluqman275@gmail.com'
+    }
+  })
+  const [projects, setProjects] = useState([])
+  const [experiences, setExperiences] = useState([])
+  const [educations, setEducations] = useState([])
+  const [skills, setSkills] = useState([])
+  const [certifications, setCertifications] = useState([])
   
   const [loading, setLoading] = useState(true)
 
@@ -58,29 +61,29 @@ export const Home = () => {
           }))
         }
 
-        // 2. Fetch Published Projects
+        // 2. Fetch Published Projects purely from Supabase
         const { data: projectsData } = await supabase
           .from('projects')
           .select('*')
           .eq('is_published', true)
           .order('sort_order', { ascending: true })
-        if (projectsData && projectsData.length > 0) setProjects(projectsData)
+        setProjects(projectsData || [])
 
-        // 3. Fetch Experiences
+        // 3. Fetch Experiences purely from Supabase
         const { data: expData } = await supabase
           .from('experiences')
           .select('*')
           .order('start_date', { ascending: false })
-        if (expData && expData.length > 0) setExperiences(expData)
+        setExperiences(expData || [])
 
-        // 4. Fetch Educations
+        // 4. Fetch Educations purely from Supabase
         const { data: eduData } = await supabase
           .from('educations')
           .select('*')
           .order('start_year', { ascending: false })
-        if (eduData && eduData.length > 0) setEducations(eduData)
+        setEducations(eduData || [])
 
-        // 5. Fetch Skills
+        // 5. Fetch Skills purely from Supabase
         let skillsRes = await supabase
           .from('skills')
           .select('*')
@@ -91,17 +94,17 @@ export const Home = () => {
             .select('*')
             .order('sort_order', { ascending: true })
         }
-        if (skillsRes.data && skillsRes.data.length > 0) setSkills(skillsRes.data)
+        setSkills(skillsRes.data || [])
 
-        // 6. Fetch Certifications
+        // 6. Fetch Certifications purely from Supabase
         const { data: certsData } = await supabase
           .from('certifications')
           .select('*')
           .order('issue_date', { ascending: false })
-        if (certsData && certsData.length > 0) setCertifications(certsData)
+        setCertifications(certsData || [])
 
       } catch (err) {
-        console.warn('Supabase fetch encountered warning, utilizing fallback:', err)
+        console.warn('Supabase fetch error:', err)
       } finally {
         setLoading(false)
       }
@@ -109,6 +112,14 @@ export const Home = () => {
 
     loadPortfolioData()
   }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-zinc-100 flex flex-col items-center justify-center font-sans">
+        <LoadingSpinner text="Connecting to database..." />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-white selection:text-black">

@@ -3,7 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
-import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Github, Linkedin, Mail, Instagram } from 'lucide-react'
 
 // Lazy load heavy 3D avatar component to avoid blocking initial DOM paint
 const Avatar3DMale = lazy(() => import('./Avatar3DMale'))
@@ -86,6 +86,7 @@ export const Hero3D = ({ profile }) => {
   const socialLinks = {
     github: profile?.social_links?.github || 'https://github.com/dzakiluqman',
     linkedin: profile?.social_links?.linkedin || 'https://linkedin.com/in/dzakiluqman',
+    instagram: profile?.social_links?.instagram || 'https://www.instagram.com/dzak.ii_/',
     email: profile?.social_links?.email || 'dzakiluqman275@gmail.com'
   }
 
@@ -266,6 +267,18 @@ export const Hero3D = ({ profile }) => {
             title="LinkedIn Profile"
           >
             <Linkedin className="w-4 h-4" />
+          </a>
+        )}
+        {socialLinks.instagram && (
+          <a
+            href={socialLinks.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white hover:opacity-100 opacity-70 transition-all p-1 text-zinc-400"
+            aria-label="Instagram"
+            title="Instagram Profile"
+          >
+            <Instagram className="w-4 h-4" />
           </a>
         )}
         {socialLinks.email && (

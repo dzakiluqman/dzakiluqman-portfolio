@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { 
-  Plus, 
-  Search, 
-  Edit3, 
-  Trash2, 
-  Star, 
-  Eye, 
-  EyeOff, 
-  ExternalLink, 
-  Github, 
+import {
+  Plus,
+  Search,
+  Edit3,
+  Trash2,
+  Star,
+  Eye,
+  EyeOff,
+  ExternalLink,
+  Github,
   AlertCircle,
   CheckCircle2,
   FolderGit2,
@@ -19,7 +19,6 @@ import {
   X
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockProjects } from '../../lib/mockData'
 import Sidebar from '../../components/admin/Sidebar'
 import AdminHeader from '../../components/admin/AdminHeader'
 import ProjectFormModal from '../../components/admin/ProjectFormModal'
@@ -32,7 +31,7 @@ export const AdminProjects = () => {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
-  
+
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProject, setEditingProject] = useState(null)
@@ -52,11 +51,10 @@ export const AdminProjects = () => {
         try {
           setProjects(JSON.parse(stored))
         } catch {
-          setProjects(mockProjects)
+          setProjects([])
         }
       } else {
-        setProjects(mockProjects)
-        localStorage.setItem('dzaki_demo_projects', JSON.stringify(mockProjects))
+        setProjects([])
       }
       setLoading(false)
       return
@@ -122,8 +120,8 @@ export const AdminProjects = () => {
         let updatedList
         if (editingProject) {
           updatedList = projects.map((p) =>
-            p.id === editingProject.id 
-              ? { ...p, ...payload, updated_at: new Date().toISOString() } 
+            p.id === editingProject.id
+              ? { ...p, ...payload, updated_at: new Date().toISOString() }
               : p
           )
         } else {
@@ -328,11 +326,10 @@ export const AdminProjects = () => {
           {/* Floating Toast Notification */}
           {notification && (
             <div
-              className={`p-4 rounded-2xl flex items-start justify-between gap-3 text-xs border backdrop-blur-md shadow-2xl transition-all ${
-                notification.type === 'error'
+              className={`p-4 rounded-2xl flex items-start justify-between gap-3 text-xs border backdrop-blur-md shadow-2xl transition-all ${notification.type === 'error'
                   ? 'bg-zinc-900 border-zinc-700 text-zinc-300'
                   : 'bg-zinc-900 border-zinc-700 text-zinc-200'
-              }`}
+                }`}
             >
               <div className="flex items-start gap-3">
                 {notification.type === 'error' ? (
@@ -408,11 +405,10 @@ export const AdminProjects = () => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${
-                    selectedCategory === cat
+                  className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${selectedCategory === cat
                       ? 'bg-white text-black font-bold shadow-sm'
                       : 'bg-white/[0.03] text-zinc-400 hover:text-white border border-white/10'
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -511,11 +507,10 @@ export const AdminProjects = () => {
                           <td className="py-4 px-4 text-center">
                             <button
                               onClick={() => handleTogglePublished(project)}
-                              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${
-                                project.is_published
+                              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer ${project.is_published
                                   ? 'bg-white/[0.08] text-white border border-white/20'
                                   : 'bg-zinc-800/80 text-zinc-400 border border-zinc-700'
-                              }`}
+                                }`}
                               title="Toggle Visibility on Public Portfolio"
                             >
                               {project.is_published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
@@ -527,11 +522,10 @@ export const AdminProjects = () => {
                           <td className="py-4 px-4 text-center">
                             <button
                               onClick={() => handleToggleFeatured(project)}
-                              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                                project.is_featured
+                              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${project.is_featured
                                   ? 'text-white hover:bg-white/10'
                                   : 'text-zinc-600 hover:text-zinc-400 hover:bg-white/[0.04]'
-                              }`}
+                                }`}
                               title="Toggle Featured Project"
                             >
                               <Star className={`w-4 h-4 ${project.is_featured ? 'fill-white' : ''}`} />
@@ -563,7 +557,7 @@ export const AdminProjects = () => {
                                   <Github className="w-3.5 h-3.5" />
                                 </a>
                               )}
-                              
+
                               {project.demo_url && (
                                 <a
                                   href={project.demo_url}

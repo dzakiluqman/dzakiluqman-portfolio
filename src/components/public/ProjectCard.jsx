@@ -22,8 +22,8 @@ export const ProjectCard = ({ project, index = 0 }) => {
   const projectHref = `/projects/${id || slug}`
 
   // Normalize images array
-  const imageList = Array.isArray(images) 
-    ? images 
+  const imageList = Array.isArray(images)
+    ? images
     : (typeof images === 'string' && images.startsWith('[') ? (() => { try { return JSON.parse(images) } catch { return [] } })() : (typeof images === 'string' && images.startsWith('http') ? [images] : []))
 
   // Render strictly the first image from the Supabase array as the thumbnail

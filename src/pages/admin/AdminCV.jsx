@@ -17,7 +17,6 @@ import {
   ArrowUpRight
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockExperiences, mockEducations, mockSkills, mockCertifications } from '../../lib/mockData'
 import Sidebar from '../../components/admin/Sidebar'
 import AdminHeader from '../../components/admin/AdminHeader'
 import ExperienceFormModal from '../../components/admin/ExperienceFormModal'
@@ -87,10 +86,10 @@ export const AdminCV = () => {
       const storedCerts = localStorage.getItem('dzaki_demo_certs')
       const storedSkills = localStorage.getItem('dzaki_demo_skills')
 
-      setExperiences(storedExp ? JSON.parse(storedExp) : mockExperiences)
-      setEducations(storedEdu ? JSON.parse(storedEdu) : mockEducations)
-      setCertifications(storedCerts ? JSON.parse(storedCerts) : mockCertifications)
-      setSkills(storedSkills ? JSON.parse(storedSkills) : mockSkills)
+      setExperiences(storedExp ? JSON.parse(storedExp) : [])
+      setEducations(storedEdu ? JSON.parse(storedEdu) : [])
+      setCertifications(storedCerts ? JSON.parse(storedCerts) : [])
+      setSkills(storedSkills ? JSON.parse(storedSkills) : [])
       setLoading(false)
       return
     }
