@@ -28,12 +28,21 @@ CREATE TABLE IF NOT EXISTS public.projects (
   github_url TEXT,
   demo_url TEXT,
   thumbnail_url TEXT,
+  images TEXT[] DEFAULT '{}',
   is_featured BOOLEAN DEFAULT false,
   is_published BOOLEAN DEFAULT true,
   sort_order INT DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration helper: Ensure 'images' column exists on existing projects table
+DO $$ 
+BEGIN 
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'projects' AND column_name = 'images') THEN
+    ALTER TABLE public.projects ADD COLUMN images TEXT[] DEFAULT '{}';
+  END IF;
+END $$;
 
 -- 3. EXPERIENCES TABLE
 CREATE TABLE IF NOT EXISTS public.experiences (
@@ -322,3 +331,52 @@ VALUES
   '2022-11-20',
   'https://coursera.org/verify'
 ) ON CONFLICT DO NOTHING;
+
+-- ==============================================================================
+-- 8. STORAGE BUCKET FOR PROJECT IMAGES ('projects')
+-- ==============================================================================
+
+-- Create public 'projects' bucket if not already existing
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('projects', 'projects', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Public read access to all objects in 'projects' bucket
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Public Access for Projects Storage'
+  ) THEN
+    CREATE POLICY "Public Access for Projects Storage" 
+    ON storage.objects FOR SELECT 
+    USING (bucket_id = 'projects');
+  END IF;
+END $$;
+
+-- Authenticated users can insert/upload objects into 'projects' bucket
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Authenticated users can upload to projects'
+  ) THEN
+    CREATE POLICY "Authenticated users can upload to projects" 
+    ON storage.objects FOR INSERT TO authenticated 
+    WITH CHECK (bucket_id = 'projects');
+  END IF;
+END $$;
+
+-- Authenticated users can update/delete objects in 'projects' bucket
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Authenticated users can manage projects storage'
+  ) THEN
+    CREATE POLICY "Authenticated users can manage projects storage" 
+    ON storage.objects FOR ALL TO authenticated 
+    USING (bucket_id = 'projects');
+  END IF;
+END $$;
+

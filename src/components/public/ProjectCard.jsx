@@ -21,8 +21,13 @@ export const ProjectCard = ({ project, index = 0 }) => {
 
   const projectHref = `/projects/${id || slug}`
 
+  // Normalize images array
+  const imageList = Array.isArray(images) 
+    ? images 
+    : (typeof images === 'string' && images.startsWith('[') ? (() => { try { return JSON.parse(images) } catch { return [] } })() : (typeof images === 'string' && images.startsWith('http') ? [images] : []))
+
   // Render strictly the first image from the Supabase array as the thumbnail
-  const thumbnailUrl = (images && images.length > 0 ? images[0] : null) || thumbnail_url || FALLBACK_IMAGE
+  const thumbnailUrl = (imageList && imageList.length > 0 ? imageList[0] : null) || thumbnail_url || FALLBACK_IMAGE
 
   return (
     <motion.article
@@ -49,9 +54,9 @@ export const ProjectCard = ({ project, index = 0 }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
 
           {/* Multi-image indicator badge if project has more than 1 image */}
-          {images && images.length > 1 && (
+          {imageList && imageList.length > 1 && (
             <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm border border-white/10 text-[10px] text-zinc-300 font-sans pointer-events-none">
-              {images.length} photos
+              {imageList.length} photos
             </div>
           )}
         </div>

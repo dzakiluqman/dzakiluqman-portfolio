@@ -20,6 +20,153 @@ import LoadingSpinner from '../../components/common/LoadingSpinner'
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&auto=format&fit=crop&q=80'
 
+/**
+ * Parses inline text, converting **bold text** into strong elements
+ */
+const renderInlineText = (text) => {
+  if (!text) return null
+  const parts = text.split(/(\*\*[^*]+?\*\*)/g)
+  return parts.map((part, idx) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+      return (
+        <strong key={idx} className="text-zinc-100 font-semibold">
+          {part.slice(2, -2)}
+        </strong>
+      )
+    }
+    return part
+  })
+}
+
+/**
+ * FormattedDescription
+ * Parses markdown-like strings:
+ * - Splits double line breaks (\n\n) into separate paragraphs
+ * - Renders **Bold Sub-titles** as distinct block elements with:
+ *   `text-zinc-100 font-semibold text-base mt-6 mb-2 block`
+ * - Renders regular body paragraphs with:
+ *   `text-zinc-400 text-sm leading-relaxed mb-4`
+ * - Supports bullet lists (- or * or •)
+ */
+export const FormattedDescription = ({ text, className = '' }) => {
+  if (!text || typeof text !== 'string') return null
+
+  // Split raw text into major blocks by double line breaks (\n\n)
+  const rawBlocks = text.split(/\r?\n\s*\r?\n/)
+  const parsedItems = []
+
+  rawBlocks.forEach((rawBlock) => {
+    const trimmed = rawBlock.trim()
+    if (!trimmed) return
+
+    const lines = trimmed.split(/\r?\n/)
+    let currentParagraphLines = []
+    let currentListLines = []
+
+    const flushParagraph = () => {
+      if (currentParagraphLines.length > 0) {
+        parsedItems.push({
+          type: 'paragraph',
+          lines: [...currentParagraphLines]
+        })
+        currentParagraphLines = []
+      }
+    }
+
+    const flushList = () => {
+      if (currentListLines.length > 0) {
+        parsedItems.push({
+          type: 'list',
+          items: [...currentListLines]
+        })
+        currentListLines = []
+      }
+    }
+
+    lines.forEach((line) => {
+      const trimmedLine = line.trim()
+      if (!trimmedLine) return
+
+      // Standalone subtitle on a line: **Heading** or **Heading:** or ## / ### Heading
+      const isStandaloneSubtitle =
+        (trimmedLine.startsWith('**') && trimmedLine.endsWith('**') && trimmedLine.length >= 4 && !trimmedLine.slice(2, -2).includes('**')) ||
+        trimmedLine.startsWith('### ') ||
+        trimmedLine.startsWith('## ')
+
+      // Bullet list item
+      const isListItem =
+        trimmedLine.startsWith('- ') ||
+        trimmedLine.startsWith('* ') ||
+        trimmedLine.startsWith('• ')
+
+      if (isStandaloneSubtitle) {
+        flushParagraph()
+        flushList()
+        const headingText = trimmedLine.startsWith('#')
+          ? trimmedLine.replace(/^#{1,3}\s+/, '')
+          : trimmedLine.slice(2, -2)
+        parsedItems.push({
+          type: 'subtitle',
+          text: headingText
+        })
+      } else if (isListItem) {
+        flushParagraph()
+        currentListLines.push(trimmedLine.replace(/^[-*•]\s*/, ''))
+      } else {
+        flushList()
+        currentParagraphLines.push(trimmedLine)
+      }
+    })
+
+    flushParagraph()
+    flushList()
+  })
+
+  return (
+    <div className={`project-editorial-content ${className}`}>
+      {parsedItems.map((item, idx) => {
+        if (item.type === 'subtitle') {
+          return (
+            <h3
+              key={`sub-${idx}`}
+              className="text-zinc-100 font-semibold text-base mt-6 mb-2 block first:mt-0 tracking-tight"
+            >
+              {renderInlineText(item.text)}
+            </h3>
+          )
+        }
+
+        if (item.type === 'list') {
+          return (
+            <ul
+              key={`list-${idx}`}
+              className="space-y-1.5 mb-4 pl-5 list-disc text-zinc-400 text-sm leading-relaxed"
+            >
+              {item.items.map((li, lIdx) => (
+                <li key={lIdx}>{renderInlineText(li)}</li>
+              ))}
+            </ul>
+          )
+        }
+
+        return (
+          <p
+            key={`p-${idx}`}
+            className="text-zinc-400 text-sm leading-relaxed mb-4"
+          >
+            {item.lines.map((line, lIdx) => (
+              <React.Fragment key={lIdx}>
+                {renderInlineText(line)}
+                {lIdx < item.lines.length - 1 && <br />}
+              </React.Fragment>
+            ))}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
 export const ProjectDetail = () => {
   const { id, slug } = useParams()
   const projectId = id || slug
@@ -308,9 +455,9 @@ export const ProjectDetail = () => {
               </h1>
 
               {description && (
-                <p className="text-base sm:text-lg text-zinc-300 leading-relaxed font-normal">
-                  {description}
-                </p>
+                <div className="pt-2">
+                  <FormattedDescription text={description} />
+                </div>
               )}
             </div>
 
@@ -350,13 +497,13 @@ export const ProjectDetail = () => {
                 Architecture & Implementation
               </h2>
 
-              <div className="text-zinc-300 text-sm sm:text-base leading-relaxed space-y-4">
-                <p>
-                  {content || description}
-                </p>
-                <p className="text-zinc-400">
-                  Engineered with an emphasis on production resilience, performance optimization, and modular component boundaries. Data contracts and asynchronous pipelines are strictly audited.
-                </p>
+              <div className="space-y-4">
+                <FormattedDescription text={content || description} />
+                {!content && (
+                  <p className="text-zinc-400 text-sm leading-relaxed mt-4">
+                    Engineered with an emphasis on production resilience, performance optimization, and modular component boundaries. Data contracts and asynchronous pipelines are strictly audited.
+                  </p>
+                )}
               </div>
             </div>
 
