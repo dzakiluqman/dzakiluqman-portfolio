@@ -133,7 +133,7 @@ export const CareerProgression = ({
   return (
     <section id="experience" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Editorial Section Header */}
+        {/* Editorial Section Header with Right-Aligned CV Button & Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -141,45 +141,49 @@ export const CareerProgression = ({
           transition={{ duration: 0.4 }}
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
         >
+          {/* Left Side: Title & Subtitle */}
           <div className="space-y-2 max-w-2xl">
             <h2 className="text-3xl sm:text-4xl font-light text-zinc-100 tracking-tight">
-              Career <span className="font-semibold text-white">Progression</span>
+              Career <span className="font-bold text-white">Progression</span>
             </h2>
             <p className="text-zinc-400 text-sm md:text-base leading-relaxed">
               Engineering tenures, academic computer science foundations, and industry-verified credentials.
             </p>
           </div>
 
-          {/* Minimal Curriculum Vitae Trigger */}
-          <button
-            onClick={() => setShowCvModal(true)}
-            className="no-print self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 text-xs text-zinc-300 hover:text-white transition-all duration-300"
-          >
-            <FileText className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Curriculum Vitae</span>
-          </button>
+          {/* Right Side: Stacked CV Button & Right-Aligned Minimalist Text Tabs */}
+          <div className="flex flex-col items-start md:items-end gap-5">
+            {/* Top Right: Curriculum Vitae Trigger */}
+            <button
+              onClick={() => setShowCvModal(true)}
+              className="no-print self-start md:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/20 text-xs text-zinc-300 hover:text-white transition-all duration-300 cursor-pointer"
+            >
+              <FileText className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Curriculum Vitae</span>
+            </button>
+
+            {/* Clean Minimal Text Filter Links (Synchronized with Featured Projects) */}
+            <nav className="tab-buttons no-print flex items-center gap-6 overflow-x-auto pb-1 scrollbar-none" aria-label="Career progression tabs">
+              {tabs.map((tab) => {
+                const isActive = activeTab === tab.id
+
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`text-sm font-sans tracking-wide transition-colors whitespace-nowrap focus:outline-none ${
+                      isActive
+                        ? 'text-white font-medium'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                )
+              })}
+            </nav>
+          </div>
         </motion.div>
-
-        {/* Minimalist Text Tab Switcher (Matching Project Filters) */}
-        <nav className="tab-buttons no-print flex gap-8 items-center mb-10 overflow-x-auto pb-2 scrollbar-none" aria-label="Career progression tabs">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id
-
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`whitespace-nowrap transition-colors cursor-pointer focus:outline-none ${
-                  isActive
-                    ? 'text-white font-bold text-lg'
-                    : 'text-zinc-500 hover:text-zinc-300 font-medium text-lg'
-                }`}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
-        </nav>
 
         {/* Dynamic Interactive Tab Content (Screen View) */}
         <div className="print:hidden">
@@ -288,7 +292,7 @@ export const CareerProgression = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.25 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
               >
                 {certList.map((cert, idx) => (
                   <CertificationCard
