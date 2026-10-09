@@ -7,7 +7,7 @@
     color-scheme: dark;
     font-family: 'Plus Jakarta Sans', sans-serif !important;
   }
-  
+
   html,
   body,
   #root {
@@ -33,13 +33,16 @@
     width: 6px;
     height: 6px;
   }
+
   ::-webkit-scrollbar-track {
     background: #000000;
   }
+
   ::-webkit-scrollbar-thumb {
     background: #27272a;
     border-radius: 9999px;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: #3f3f46;
   }
@@ -57,6 +60,7 @@
   .hud-glass-hover {
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   .hud-glass-hover:hover {
     background: rgba(17, 26, 46, 0.85);
     border-color: rgba(0, 242, 254, 0.45);
@@ -69,6 +73,40 @@
 
   .neon-text-violet {
     text-shadow: 0 0 12px rgba(168, 85, 247, 0.6), 0 0 30px rgba(168, 85, 247, 0.2);
+  }
+
+  /* Liquid / Mercury Animated Typography */
+  .liquid-text-sheen {
+    background: linear-gradient(
+      115deg,
+      #09090b 0%,
+      #71717a 14%,
+      #ffffff 26%,
+      #18181b 38%,
+      #a1a1aa 52%,
+      #090d16 66%,
+      #f4f4f5 78%,
+      #27272a 90%,
+      #09090b 100%
+    );
+    background-size: 250% 250%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: liquidMercury 8s ease-in-out infinite;
+  }
+}
+
+@keyframes liquidMercury {
+  0% {
+    background-position: 0% 40%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+  100% {
+    background-position: 0% 40%;
   }
 }
 
@@ -84,7 +122,10 @@
   }
 
   /* Reset heights and overflow to prevent infinite paging */
-  html, body, #root, main {
+  html,
+  body,
+  #root,
+  main {
     height: auto !important;
     min-height: auto !important;
     overflow: visible !important;
@@ -94,7 +135,9 @@
   }
 
   /* Disable animations and transforms during print */
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
     transform: none !important;
@@ -108,13 +151,23 @@
   }
 
   /* Page break handling */
-  .card, .timeline-item, article, .break-inside-avoid {
+  .card,
+  .timeline-item,
+  article,
+  .break-inside-avoid {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
   /* Hide non-printable UI elements */
-  nav, .navbar, .tab-buttons, footer, .no-print, header, canvas, .canvas-container {
+  nav,
+  .navbar,
+  .tab-buttons,
+  footer,
+  .no-print,
+  header,
+  canvas,
+  .canvas-container {
     display: none !important;
   }
 
