@@ -11,9 +11,8 @@ export const Navbar = ({ profile }) => {
 
   const navLinks = [
     { name: 'Projects', href: '/#projects', id: 'projects' },
-    { name: 'Experience', href: '/#experience', id: 'experience' },
+    { name: 'Career Progression', href: '/#experience', id: 'experience' },
     { name: 'Skills', href: '/#skills', id: 'skills' },
-    { name: 'Education & Certs', href: '/#education', id: 'education' },
     { name: 'Get in touch', href: '/#contact', id: 'contact' },
   ]
 

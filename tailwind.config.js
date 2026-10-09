@@ -32,8 +32,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        mono: ['"Plus Jakarta Sans"', 'sans-serif']
       },
       boxShadow: {
         'neon-cyan': '0 0 20px -3px rgba(0, 242, 254, 0.45)',

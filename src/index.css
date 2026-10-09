@@ -5,11 +5,27 @@
 @layer base {
   :root {
     color-scheme: dark;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
   }
   
-  body {
+  html,
+  body,
+  #root {
     background-color: #000000;
     color: #f4f4f5;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
+
+  *,
+  *::before,
+  *::after,
+  button,
+  input,
+  select,
+  textarea,
+  code,
+  pre {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
   }
 
   /* Custom high-tech scrollbar */
@@ -53,5 +69,118 @@
 
   .neon-text-violet {
     text-shadow: 0 0 12px rgba(168, 85, 247, 0.6), 0 0 30px rgba(168, 85, 247, 0.2);
+  }
+}
+
+/* ==========================================================================
+   PRINT CSS & CV LOOPING BUG FIX
+   Prevents continuous 10-page loop by resetting heights, overflow,
+   animations, transforms, and absolute coordinates.
+   ========================================================================== */
+@media print {
+  @page {
+    margin: 1.2cm 1.5cm;
+    size: auto;
+  }
+
+  /* Reset heights and overflow to prevent infinite paging */
+  html, body, #root, main {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Disable animations and transforms during print */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Force all 3 tab contents (Experience, Education, Certs) to render sequentially when printing */
+  .print-all-tabs {
+    display: block !important;
+  }
+
+  /* Page break handling */
+  .card, .timeline-item, article, .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Hide non-printable UI elements */
+  nav, .navbar, .tab-buttons, footer, .no-print, header, canvas, .canvas-container {
+    display: none !important;
+  }
+
+  /* Printable Curriculum Vitae Modal Formats Cleanly */
+  .cv-modal-backdrop {
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    inset: auto !important;
+    z-index: auto !important;
+  }
+
+  .cv-modal-content {
+    position: static !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .cv-modal-body {
+    padding: 0 !important;
+    overflow: visible !important;
+    color: #1f2937 !important;
+  }
+
+  /* Convert dark text and borders to crisp print styling */
+  .cv-modal-body h1,
+  .cv-modal-body h2,
+  .cv-modal-body h3,
+  .cv-modal-body .font-medium,
+  .cv-modal-body .text-white {
+    color: #111827 !important;
+  }
+
+  .cv-modal-body p,
+  .cv-modal-body span,
+  .cv-modal-body li,
+  .cv-modal-body .text-slate-300,
+  .cv-modal-body .text-slate-400,
+  .cv-modal-body .text-zinc-300,
+  .cv-modal-body .text-zinc-400 {
+    color: #374151 !important;
+  }
+
+  .cv-modal-body .text-slate-500,
+  .cv-modal-body .text-zinc-500 {
+    color: #6b7280 !important;
+  }
+
+  .cv-modal-body .border-white\/10,
+  .cv-modal-body .border-white\/\[0\.08\],
+  .cv-modal-body .border-white\/\[0\.06\] {
+    border-color: #e5e7eb !important;
   }
 }
