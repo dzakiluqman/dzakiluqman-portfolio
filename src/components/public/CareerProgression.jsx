@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Briefcase, GraduationCap, Award, FileText, Printer, X, Sparkles } from 'lucide-react'
+import { FileText, Printer, X } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import { mockExperiences, mockEducations, mockCertifications } from '../../lib/mockData'
 import EducationCard from './EducationCard'
@@ -125,9 +125,9 @@ export const CareerProgression = ({
   const certList = certifications && certifications.length > 0 ? certifications : mockCertifications
 
   const tabs = [
-    { id: 'experience', label: 'Experience', count: expList.length, icon: Briefcase },
-    { id: 'education', label: 'Education', count: eduList.length, icon: GraduationCap },
-    { id: 'certs', label: 'Certs', count: certList.length, icon: Award }
+    { id: 'experience', label: 'Experience' },
+    { id: 'education', label: 'Education' },
+    { id: 'certs', label: 'Certs' }
   ]
 
   return (
@@ -142,12 +142,6 @@ export const CareerProgression = ({
           className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
         >
           <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2 mb-2 no-print">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-              <span className="text-xs font-mono uppercase tracking-widest text-zinc-400">
-                Career Progression
-              </span>
-            </div>
             <h2 className="text-3xl sm:text-4xl font-light text-zinc-100 tracking-tight">
               Career <span className="font-semibold text-white">Progression</span>
             </h2>
@@ -166,35 +160,26 @@ export const CareerProgression = ({
           </button>
         </motion.div>
 
-        {/* 3-Tab Pill Switcher (Liquid-Glass / OLED aesthetic) */}
-        <div className="tab-buttons no-print flex items-center justify-start mb-10 overflow-x-auto pb-2 scrollbar-none">
-          <div className="inline-flex p-1.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md gap-1">
-            {tabs.map((tab) => {
-              const Icon = tab.icon
-              const isActive = activeTab === tab.id
+        {/* Minimalist Text Tab Switcher (Matching Project Filters) */}
+        <nav className="tab-buttons no-print flex gap-8 items-center mb-10 overflow-x-auto pb-2 scrollbar-none" aria-label="Career progression tabs">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id
 
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`relative flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 focus:outline-none ${
-                    isActive
-                      ? 'text-white bg-white/[0.08] shadow-[0_0_15px_rgba(255,255,255,0.05)] border border-white/20'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03] border border-transparent'
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-400' : 'text-zinc-500'}`} />
-                  <span>{tab.label}</span>
-                  <span className={`text-[11px] font-mono px-1.5 py-0.5 rounded-full ${
-                    isActive ? 'bg-cyan-500/20 text-cyan-300' : 'bg-white/[0.04] text-zinc-500'
-                  }`}>
-                    {tab.count}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`whitespace-nowrap transition-colors cursor-pointer focus:outline-none ${
+                  isActive
+                    ? 'text-white font-bold text-lg'
+                    : 'text-zinc-500 hover:text-zinc-300 font-medium text-lg'
+                }`}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </nav>
 
         {/* Dynamic Interactive Tab Content (Screen View) */}
         <div className="print:hidden">
