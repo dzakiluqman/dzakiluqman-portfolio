@@ -7,7 +7,7 @@ export const EducationCard = ({ education, index = 0 }) => {
 
   const {
     institution = 'Academic Institution',
-    degree = 'Degree',
+    degree = '',
     field_of_study = '',
     start_year = '',
     end_year = '',
@@ -15,11 +15,24 @@ export const EducationCard = ({ education, index = 0 }) => {
     description = ''
   } = education
 
-  const yearsDisplay = start_year 
-    ? (end_year && end_year !== start_year ? `${start_year} — ${end_year}` : `${start_year}`)
-    : (end_year || 'Present')
+  const currentYear = new Date().getFullYear()
+  const parsedStart = start_year ? parseInt(start_year, 10) : null
+  const parsedEnd = end_year ? parseInt(end_year, 10) : null
 
-  const effectiveKeyFocus = key_focus || field_of_study
+  // If end_year is not set, or is in the future / >= currentYear, the program is ongoing
+  const isOngoing = !parsedEnd || parsedEnd >= currentYear
+
+  const yearsDisplay = isOngoing
+    ? `${parsedStart || currentYear} — Present`
+    : (parsedStart && parsedEnd && parsedStart !== parsedEnd ? `${parsedStart} — ${parsedEnd}` : `${parsedStart || parsedEnd}`)
+
+  // Subtitle directly underneath headline: "Degree • Institution"
+  const subtitle = degree && institution
+    ? `${degree} • ${institution}`
+    : (degree || institution)
+
+  // Primary headline (Main Title): Field of Study / Major
+  const headline = field_of_study || degree || institution
 
   return (
     <motion.div
@@ -33,7 +46,7 @@ export const EducationCard = ({ education, index = 0 }) => {
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/[0.04] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       <div>
-        {/* Top Meta Bar */}
+        {/* Top Meta Bar: Date & Status Badge */}
         <div className="flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-zinc-300 group-hover:text-white transition-colors">
@@ -44,41 +57,41 @@ export const EducationCard = ({ education, index = 0 }) => {
             </span>
           </div>
 
-          {end_year && parseInt(end_year, 10) >= new Date().getFullYear() && (
-            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">
-              In Progress
+          {isOngoing && (
+            <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 tracking-wider">
+              IN PROGRESS
             </span>
           )}
         </div>
 
-        {/* Degree & Field */}
+        {/* Primary Headline (Main Title): Field of Study / Major */}
         <h3 className="text-lg sm:text-xl font-medium text-zinc-100 group-hover:text-white transition-colors tracking-tight font-sans">
-          {degree}
+          {headline}
         </h3>
 
-        {/* Institution */}
+        {/* Subtitle: Degree • Institution */}
         <p className="mt-1 text-sm font-sans text-zinc-300 flex items-center gap-1.5">
-          <span>{institution}</span>
+          <span>{subtitle}</span>
         </p>
 
-        {/* Key Focus Tag */}
-        {effectiveKeyFocus && (
+        {/* Academic Highlights / Description (rendered directly below the institution subtitle) */}
+        {description && (
+          <p className="text-xs text-zinc-400 font-sans leading-relaxed my-3">
+            {description}
+          </p>
+        )}
+
+        {/* Key Focus Tag (displays actual specializations, without repeating the major name) */}
+        {key_focus && (
           <div className="mt-4 pt-4 border-t border-white/[0.06]">
             <div className="text-[10px] font-mono tracking-wider uppercase text-zinc-500 mb-1 flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-zinc-400" />
               <span>Key Focus</span>
             </div>
             <p className="text-xs text-zinc-300 font-sans leading-relaxed">
-              {effectiveKeyFocus}
+              {key_focus}
             </p>
           </div>
-        )}
-
-        {/* Description / Academic Highlights */}
-        {description && (
-          <p className="mt-3 text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed">
-            {description}
-          </p>
         )}
       </div>
     </motion.div>

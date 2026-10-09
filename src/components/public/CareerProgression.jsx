@@ -346,20 +346,34 @@ export const CareerProgression = ({
               Formal Education
             </h3>
             <div className="space-y-4">
-              {eduList.map((edu, i) => (
-                <div key={i} className="card break-inside-avoid text-sm">
-                  <div className="flex justify-between items-baseline">
-                    <span className="font-semibold text-black">{edu.institution}</span>
-                    <span className="text-xs text-gray-600 font-mono">
-                      {edu.start_year} — {edu.end_year || 'Present'}
-                    </span>
+              {eduList.map((edu, i) => {
+                const currentYr = new Date().getFullYear()
+                const isOngoing = !edu.end_year || parseInt(edu.end_year, 10) >= currentYr
+                const years = isOngoing 
+                  ? `${edu.start_year || currentYr} — Present` 
+                  : (edu.start_year && edu.end_year && edu.start_year !== edu.end_year ? `${edu.start_year} — ${edu.end_year}` : `${edu.start_year || edu.end_year}`)
+
+                const headline = edu.field_of_study || edu.degree || edu.institution
+                const subtitle = edu.degree && edu.institution ? `${edu.degree} • ${edu.institution}` : (edu.degree || edu.institution)
+
+                return (
+                  <div key={i} className="card break-inside-avoid text-sm">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-semibold text-black">{headline}</span>
+                      <span className="text-xs text-gray-600 font-mono">
+                        {years} {isOngoing && '(In Progress)'}
+                      </span>
+                    </div>
+                    <p className="text-gray-800 text-xs mt-0.5">{subtitle}</p>
+                    {edu.description && (
+                      <p className="text-gray-600 text-xs my-1.5 leading-relaxed">{edu.description}</p>
+                    )}
+                    {edu.key_focus && (
+                      <p className="text-gray-600 text-[11px] font-mono">Key Focus: {edu.key_focus}</p>
+                    )}
                   </div>
-                  <p className="text-gray-800 text-xs">{edu.degree} in {edu.field_of_study}</p>
-                  {(edu.key_focus || edu.description) && (
-                    <p className="text-gray-600 text-xs mt-1">{edu.key_focus || edu.description}</p>
-                  )}
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
 
@@ -486,21 +500,35 @@ export const CareerProgression = ({
                     <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
                       Education
                     </h2>
-                    <div className="space-y-3">
-                      {eduList.map((edu, i) => (
-                        <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between text-xs sm:text-sm break-inside-avoid">
-                          <div>
-                            <p className="font-medium text-white">{edu.institution}</p>
-                            <p className="text-slate-400">{edu.degree} in {edu.field_of_study}</p>
-                            {edu.key_focus && (
-                              <p className="text-xs text-slate-500 mt-0.5">Focus: {edu.key_focus}</p>
-                            )}
+                    <div className="space-y-4">
+                      {eduList.map((edu, i) => {
+                        const currentYr = new Date().getFullYear()
+                        const isOngoing = !edu.end_year || parseInt(edu.end_year, 10) >= currentYr
+                        const years = isOngoing 
+                          ? `${edu.start_year || currentYr} — Present` 
+                          : (edu.start_year && edu.end_year && edu.start_year !== edu.end_year ? `${edu.start_year} — ${edu.end_year}` : `${edu.start_year || edu.end_year}`)
+
+                        const headline = edu.field_of_study || edu.degree || edu.institution
+                        const subtitle = edu.degree && edu.institution ? `${edu.degree} • ${edu.institution}` : (edu.degree || edu.institution)
+
+                        return (
+                          <div key={i} className="flex flex-col sm:flex-row sm:items-start justify-between text-xs sm:text-sm break-inside-avoid gap-2">
+                            <div>
+                              <p className="font-medium text-white">{headline}</p>
+                              <p className="text-zinc-400">{subtitle}</p>
+                              {edu.description && (
+                                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{edu.description}</p>
+                              )}
+                              {edu.key_focus && (
+                                <p className="text-xs text-zinc-500 mt-0.5 font-mono">Key Focus: {edu.key_focus}</p>
+                              )}
+                            </div>
+                            <span className="text-xs text-zinc-500 uppercase tracking-wide shrink-0">
+                              {years} {isOngoing && '(In Progress)'}
+                            </span>
                           </div>
-                          <span className="text-xs text-slate-500 uppercase tracking-wide">
-                            {edu.start_year} — {edu.end_year || 'Present'}
-                          </span>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 )}
