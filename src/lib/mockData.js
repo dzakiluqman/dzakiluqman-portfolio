@@ -151,10 +151,22 @@ export const mockEducations = [
   {
     id: '30000000-0000-0000-0000-000000000001',
     institution: 'Bandung Institute of Technology (ITB)',
-    degree: 'Bachelor of Science',
+    degree: 'Bachelor of Science (S.Kom.)',
     field_of_study: 'Informatics / Computer Science',
     start_year: 2014,
-    end_year: 2018
+    end_year: 2018,
+    key_focus: 'Distributed Systems & Software Engineering',
+    description: 'Graduated with honors (Cum Laude). Core research on high-throughput event streaming protocols and distributed consistency models. Led ITB Open Source Community.'
+  },
+  {
+    id: '30000000-0000-0000-0000-000000000002',
+    institution: 'National University of Singapore (NUS)',
+    degree: 'Global Academic Immersion',
+    field_of_study: 'Cloud Infrastructure & High-Performance Computing',
+    start_year: 2017,
+    end_year: 2017,
+    key_focus: 'Cloud Architecture & Microservices Resilience',
+    description: 'Intensive academic immersion on cloud native paradigms, distributed consensus (Raft/Paxos), and container virtualization pipelines.'
   }
 ]
 
@@ -177,14 +189,27 @@ export const mockCertifications = [
     title: 'AWS Certified Solutions Architect – Associate',
     issuer: 'Amazon Web Services',
     issue_date: '2023-08-15',
-    credential_url: 'https://aws.amazon.com/verification'
+    credential_id: 'AWS-SAA-904218',
+    credential_url: 'https://aws.amazon.com/verification',
+    skills: 'High-Availability VPC, S3 Lifecycle, IAM, Multi-tier Architecture'
   },
   {
     id: '50000000-0000-0000-0000-000000000002',
     title: 'Meta Certified Front-End Developer',
     issuer: 'Meta / Coursera',
     issue_date: '2022-11-20',
-    credential_url: 'https://coursera.org/verify'
+    credential_id: 'META-FED-772910',
+    credential_url: 'https://coursera.org/verify',
+    skills: 'Advanced React Architecture, Client-side Optimization, WCAG Accessibility'
+  },
+  {
+    id: '50000000-0000-0000-0000-000000000003',
+    title: 'Certified Kubernetes Administrator (CKA)',
+    issuer: 'Cloud Native Computing Foundation (CNCF)',
+    issue_date: '2024-03-10',
+    credential_id: 'CKA-2403-8821',
+    credential_url: 'https://www.cncf.io/certification/cka/',
+    skills: 'Cluster Architecture, Production Ingress, Workload Troubleshooting'
   }
 ]
 

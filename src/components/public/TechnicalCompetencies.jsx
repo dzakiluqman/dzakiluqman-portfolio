@@ -158,7 +158,7 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
   }, [skills, propSkills])
 
   return (
-    <section id="skills" className="relative py-20 md:py-28 bg-[#000000]">
+    <section id="skills" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Editorial Section Header */}
         <motion.div

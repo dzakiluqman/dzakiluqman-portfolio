@@ -78,7 +78,7 @@ export const LetsConnect = ({ profile }) => {
   const location = profile?.location || 'Kota Magelang, Indonesia'
 
   return (
-    <section id="contact" className="relative py-20 md:py-28 bg-[#000000]">
+    <section id="contact" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: High-Impact Typography & Clean Direct Links */}

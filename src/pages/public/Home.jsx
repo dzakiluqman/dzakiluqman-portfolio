@@ -14,6 +14,7 @@ import Hero3D from '../../components/3d/Hero3D'
 import FeaturedProjects from '../../components/public/FeaturedProjects'
 import TechnicalCompetencies from '../../components/public/TechnicalCompetencies'
 import CareerProgression from '../../components/public/CareerProgression'
+import EducationCertifications from '../../components/public/EducationCertifications'
 import LetsConnect from '../../components/public/LetsConnect'
 import LoadingSpinner from '../../components/common/LoadingSpinner'
 
@@ -122,10 +123,7 @@ export const Home = () => {
         {/* 2. Redesigned Featured Projects Section with Ambient Mesh & Liquid Glass */}
         <FeaturedProjects projects={projects} />
 
-        {/* 3. Technical Competencies Editorial Badges */}
-        <TechnicalCompetencies skills={skills} />
-
-        {/* 4. Swiss Editorial Career Progression Timeline */}
+        {/* 3. Swiss Editorial Career Progression Timeline */}
         <CareerProgression 
           experiences={experiences} 
           educations={educations} 
@@ -133,7 +131,16 @@ export const Home = () => {
           profile={profile} 
         />
 
-        {/* 5. Swiss Editorial Let's Connect Showcase */}
+        {/* 4. Technical Competencies Editorial Badges */}
+        <TechnicalCompetencies skills={skills} />
+
+        {/* 5. Academic Foundations & Verified Certifications */}
+        <EducationCertifications 
+          educations={educations} 
+          certifications={certifications} 
+        />
+
+        {/* 6. Swiss Editorial Let's Connect Showcase */}
         <LetsConnect profile={profile} />
       </main>
 

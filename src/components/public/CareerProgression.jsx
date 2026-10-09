@@ -94,7 +94,7 @@ export const CareerProgression = ({
   const items = experiences && experiences.length > 0 ? experiences : mockExperiences
 
   return (
-    <section id="experience" className="relative py-20 md:py-28 bg-[#000000]">
+    <section id="experience" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Editorial Section Header */}
         <motion.div
@@ -300,6 +300,30 @@ export const CareerProgression = ({
                           <span className="text-xs text-slate-500 uppercase tracking-wide">
                             {edu.start_year} — {edu.end_year || 'Present'}
                           </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Certifications */}
+                {certifications && certifications.length > 0 && (
+                  <div className="space-y-4 pt-4 border-t border-white/10">
+                    <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
+                      Certifications & Credentials
+                    </h2>
+                    <div className="space-y-3">
+                      {certifications.map((cert, i) => (
+                        <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between text-xs sm:text-sm">
+                          <div>
+                            <p className="font-medium text-white">{cert.title}</p>
+                            <p className="text-slate-400">{cert.issuer} {cert.credential_id ? `· ID: ${cert.credential_id}` : ''}</p>
+                          </div>
+                          {cert.issue_date && (
+                            <span className="text-xs text-slate-500 uppercase tracking-wide">
+                              {formatDate(cert.issue_date)}
+                            </span>
+                          )}
                         </div>
                       ))}
                     </div>

@@ -68,8 +68,21 @@ CREATE TABLE IF NOT EXISTS public.educations (
   field_of_study TEXT NOT NULL,
   start_year INT NOT NULL,
   end_year INT,
+  key_focus TEXT,
+  description TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration helper for educations
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'educations' AND column_name = 'key_focus') THEN
+    ALTER TABLE public.educations ADD COLUMN key_focus TEXT;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'educations' AND column_name = 'description') THEN
+    ALTER TABLE public.educations ADD COLUMN description TEXT;
+  END IF;
+END $$;
 
 -- 5. SKILLS / COMPETENCIES TABLE
 CREATE TABLE IF NOT EXISTS public.skills (
@@ -109,9 +122,22 @@ CREATE TABLE IF NOT EXISTS public.certifications (
   title TEXT NOT NULL,
   issuer TEXT NOT NULL,
   issue_date DATE,
+  credential_id TEXT,
   credential_url TEXT,
+  skills TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration helper for certifications
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'certifications' AND column_name = 'credential_id') THEN
+    ALTER TABLE public.certifications ADD COLUMN credential_id TEXT;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'certifications' AND column_name = 'skills') THEN
+    ALTER TABLE public.certifications ADD COLUMN skills TEXT;
+  END IF;
+END $$;
 
 -- 7. MESSAGES TABLE
 CREATE TABLE IF NOT EXISTS public.messages (

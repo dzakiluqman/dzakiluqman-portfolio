@@ -11,7 +11,7 @@ export const FeaturedProjects = ({ projects = [] }) => {
     : projects.filter((p) => p.category === activeCategory)
 
   return (
-    <section id="projects" className="relative pt-16 pb-20 md:pt-20 md:pb-24 bg-[#000000]">
+    <section id="projects" className="relative pt-16 pb-20 md:pt-20 md:pb-24 bg-[#000000] scroll-mt-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <motion.div

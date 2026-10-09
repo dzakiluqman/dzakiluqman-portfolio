@@ -4,6 +4,7 @@ import {
   Briefcase, 
   GraduationCap, 
   Code, 
+  Award,
   Plus, 
   Edit3, 
   Trash2, 
@@ -16,7 +17,7 @@ import {
   ArrowUpRight
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
-import { mockExperiences, mockEducations, mockSkills } from '../../lib/mockData'
+import { mockExperiences, mockEducations, mockSkills, mockCertifications } from '../../lib/mockData'
 import Sidebar from '../../components/admin/Sidebar'
 import AdminHeader from '../../components/admin/AdminHeader'
 import ExperienceFormModal from '../../components/admin/ExperienceFormModal'
@@ -26,6 +27,7 @@ export const AdminCV = () => {
   const [activeTab, setActiveTab] = useState('experience')
   const [experiences, setExperiences] = useState([])
   const [educations, setEducations] = useState([])
+  const [certifications, setCertifications] = useState([])
   const [skills, setSkills] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -42,7 +44,21 @@ export const AdminCV = () => {
     degree: '',
     field_of_study: '',
     start_year: 2020,
-    end_year: 2024
+    end_year: 2024,
+    key_focus: '',
+    description: ''
+  })
+
+  // Certification modal
+  const [isCertModalOpen, setIsCertModalOpen] = useState(false)
+  const [editingCert, setEditingCert] = useState(null)
+  const [certFormData, setCertFormData] = useState({
+    title: '',
+    issuer: '',
+    issue_date: '',
+    credential_id: '',
+    credential_url: '',
+    skills: ''
   })
 
   // Skill modal
@@ -67,24 +83,28 @@ export const AdminCV = () => {
     if (!isSupabaseConfigured) {
       const storedExp = localStorage.getItem('dzaki_demo_exp')
       const storedEdu = localStorage.getItem('dzaki_demo_edu')
+      const storedCerts = localStorage.getItem('dzaki_demo_certs')
       const storedSkills = localStorage.getItem('dzaki_demo_skills')
 
       setExperiences(storedExp ? JSON.parse(storedExp) : mockExperiences)
       setEducations(storedEdu ? JSON.parse(storedEdu) : mockEducations)
+      setCertifications(storedCerts ? JSON.parse(storedCerts) : mockCertifications)
       setSkills(storedSkills ? JSON.parse(storedSkills) : mockSkills)
       setLoading(false)
       return
     }
 
     try {
-      const [expRes, eduRes, skillsRes] = await Promise.all([
+      const [expRes, eduRes, certsRes, skillsRes] = await Promise.all([
         supabase.from('experiences').select('*').order('start_date', { ascending: false }),
         supabase.from('educations').select('*').order('start_year', { ascending: false }),
+        supabase.from('certifications').select('*').order('issue_date', { ascending: false }),
         supabase.from('skills').select('*').order('sort_order', { ascending: true })
       ])
 
       if (expRes.data) setExperiences(expRes.data)
       if (eduRes.data) setEducations(eduRes.data)
+      if (certsRes.data) setCertifications(certsRes.data)
       if (skillsRes.data) setSkills(skillsRes.data)
     } catch (err) {
       showNotification('Error loading CV records: ' + err.message, 'error')
@@ -168,7 +188,9 @@ export const AdminCV = () => {
         degree: edu.degree || '',
         field_of_study: edu.field_of_study || '',
         start_year: edu.start_year || 2020,
-        end_year: edu.end_year || 2024
+        end_year: edu.end_year || 2024,
+        key_focus: edu.key_focus || '',
+        description: edu.description || ''
       })
     } else {
       setEduFormData({
@@ -176,7 +198,9 @@ export const AdminCV = () => {
         degree: 'Bachelor of Science',
         field_of_study: 'Computer Science',
         start_year: new Date().getFullYear() - 4,
-        end_year: new Date().getFullYear()
+        end_year: new Date().getFullYear(),
+        key_focus: '',
+        description: ''
       })
     }
     setIsEduModalOpen(true)
@@ -200,6 +224,7 @@ export const AdminCV = () => {
         }
         setEducations(updated)
         localStorage.setItem('dzaki_demo_edu', JSON.stringify(updated))
+        window.dispatchEvent(new CustomEvent('dzaki:educations_updated'))
         setIsEduModalOpen(false)
         showNotification('Education record saved')
         return
@@ -213,6 +238,7 @@ export const AdminCV = () => {
         if (error) throw error
       }
 
+      window.dispatchEvent(new CustomEvent('dzaki:educations_updated'))
       setIsEduModalOpen(false)
       showNotification('Education record updated in Supabase')
       await loadData()
@@ -228,6 +254,7 @@ export const AdminCV = () => {
       const updated = educations.filter((e) => e.id !== id)
       setEducations(updated)
       localStorage.setItem('dzaki_demo_edu', JSON.stringify(updated))
+      window.dispatchEvent(new CustomEvent('dzaki:educations_updated'))
       showNotification('Education deleted')
       return
     }
@@ -236,7 +263,91 @@ export const AdminCV = () => {
       const { error } = await supabase.from('educations').delete().eq('id', id)
       if (error) throw error
       setEducations(educations.filter((e) => e.id !== id))
+      window.dispatchEvent(new CustomEvent('dzaki:educations_updated'))
       showNotification('Education deleted')
+    } catch (err) {
+      showNotification(err.message, 'error')
+    }
+  }
+
+  // Certification handlers
+  const handleOpenCertModal = (cert = null) => {
+    setEditingCert(cert)
+    if (cert) {
+      setCertFormData({
+        title: cert.title || '',
+        issuer: cert.issuer || '',
+        issue_date: cert.issue_date || '',
+        credential_id: cert.credential_id || '',
+        credential_url: cert.credential_url || '',
+        skills: cert.skills || ''
+      })
+    } else {
+      setCertFormData({
+        title: '',
+        issuer: '',
+        issue_date: new Date().toISOString().split('T')[0],
+        credential_id: '',
+        credential_url: '',
+        skills: ''
+      })
+    }
+    setIsCertModalOpen(true)
+  }
+
+  const handleSaveCert = async (e) => {
+    e.preventDefault()
+    try {
+      if (!isSupabaseConfigured) {
+        let updated
+        if (editingCert) {
+          updated = certifications.map((c) => c.id === editingCert.id ? { ...c, ...certFormData } : c)
+        } else {
+          updated = [{ ...certFormData, id: `demo-cert-${Date.now()}` }, ...certations || certifications]
+        }
+        setCertifications(updated)
+        localStorage.setItem('dzaki_demo_certs', JSON.stringify(updated))
+        window.dispatchEvent(new CustomEvent('dzaki:certifications_updated'))
+        setIsCertModalOpen(false)
+        showNotification('Certification saved')
+        return
+      }
+
+      if (editingCert) {
+        const { error } = await supabase.from('certifications').update(certFormData).eq('id', editingCert.id)
+        if (error) throw error
+      } else {
+        const { error } = await supabase.from('certifications').insert([certFormData])
+        if (error) throw error
+      }
+
+      window.dispatchEvent(new CustomEvent('dzaki:certifications_updated'))
+      setIsCertModalOpen(false)
+      showNotification('Certification updated in Supabase')
+      await loadData()
+    } catch (err) {
+      showNotification(err.message, 'error')
+    }
+  }
+
+  const handleDeleteCert = async (id) => {
+    if (!window.confirm('Delete this certification record?')) return
+
+    if (!isSupabaseConfigured) {
+      const updated = certifications.filter((c) => c.id !== id)
+      setCertifications(updated)
+      localStorage.setItem('dzaki_demo_certs', JSON.stringify(updated))
+      window.dispatchEvent(new CustomEvent('dzaki:certifications_updated'))
+      showNotification('Certification removed')
+      return
+    }
+
+    try {
+      const { error } = await supabase.from('certifications').delete().eq('id', id)
+      if (error) throw error
+      setCertifications(certifications.filter((c) => c.id !== id))
+      window.dispatchEvent(new CustomEvent('dzaki:certifications_updated'))
+      showNotification('Certification deleted from Supabase')
     } catch (err) {
       showNotification(err.message, 'error')
     }
@@ -365,6 +476,18 @@ export const AdminCV = () => {
             >
               <GraduationCap className="w-3.5 h-3.5" />
               <span>Education ({educations.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('certifications')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+                activeTab === 'certifications'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'bg-dark-900 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <Award className="w-3.5 h-3.5" />
+              <span>Certifications ({certifications.length})</span>
             </button>
 
             <button
@@ -499,7 +622,70 @@ export const AdminCV = () => {
                 </div>
               )}
 
-              {/* TAB 3: SKILLS */}
+              {/* TAB 3: CERTIFICATIONS */}
+              {activeTab === 'certifications' && (
+                <div className="space-y-4">
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => handleOpenCertModal(null)}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Add Certification</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {certifications.map((cert) => (
+                      <div
+                        key={cert.id}
+                        className="p-5 rounded-2xl bg-dark-900 border border-slate-800 flex justify-between items-start gap-4"
+                      >
+                        <div className="space-y-1">
+                          <h4 className="font-bold text-white text-base">{cert.title}</h4>
+                          <p className="text-xs font-semibold text-amber-400">{cert.issuer}</p>
+                          {cert.credential_id && (
+                            <p className="text-[11px] font-mono text-slate-400">ID: {cert.credential_id}</p>
+                          )}
+                          {cert.issue_date && (
+                            <p className="text-[11px] font-mono text-slate-500">Issued: {cert.issue_date}</p>
+                          )}
+                          {cert.credential_url && (
+                            <a
+                              href={cert.credential_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:underline mt-1"
+                            >
+                              <span>Verify Link</span>
+                              <ArrowUpRight className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleOpenCertModal(cert)}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10"
+                            title="Edit"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCert(cert.id)}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: SKILLS */}
               {activeTab === 'skills' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-end gap-3">
@@ -630,6 +816,26 @@ export const AdminCV = () => {
                   />
                 </div>
               </div>
+              <div>
+                <label className="block text-slate-300 mb-1 font-mono">Key Focus / Specialization</label>
+                <input
+                  type="text"
+                  value={eduFormData.key_focus}
+                  onChange={(e) => setEduFormData({ ...eduFormData, key_focus: e.target.value })}
+                  placeholder="e.g. Distributed Systems & Algorithms"
+                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-slate-300 mb-1 font-mono">Academic Highlights / Description</label>
+                <textarea
+                  rows={3}
+                  value={eduFormData.description}
+                  onChange={(e) => setEduFormData({ ...eduFormData, description: e.target.value })}
+                  placeholder="Graduated with honors, notable research or activities..."
+                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white resize-none"
+                />
+              </div>
               <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
                 <button
                   type="button"
@@ -643,6 +849,102 @@ export const AdminCV = () => {
                   className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
                 >
                   Save Education
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Certification Modal */}
+      {isCertModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-dark-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 className="font-bold text-white text-base">
+                {editingCert ? 'Edit Certification' : 'Add Certification'}
+              </h3>
+              <button onClick={() => setIsCertModalOpen(false)} className="text-slate-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveCert} className="space-y-3 text-xs">
+              <div>
+                <label className="block text-slate-300 mb-1 font-mono">Certification Title</label>
+                <input
+                  type="text"
+                  required
+                  value={certFormData.title}
+                  onChange={(e) => setCertFormData({ ...certFormData, title: e.target.value })}
+                  placeholder="e.g. AWS Certified Solutions Architect – Associate"
+                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-slate-300 mb-1 font-mono">Issuer</label>
+                <input
+                  type="text"
+                  required
+                  value={certFormData.issuer}
+                  onChange={(e) => setCertFormData({ ...certFormData, issuer: e.target.value })}
+                  placeholder="e.g. Amazon Web Services, Meta"
+                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 mb-1 font-mono">Issue Date</label>
+                  <input
+                    type="date"
+                    value={certFormData.issue_date}
+                    onChange={(e) => setCertFormData({ ...certFormData, issue_date: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 mb-1 font-mono">Credential ID</label>
+                  <input
+                    type="text"
+                    value={certFormData.credential_id}
+                    onChange={(e) => setCertFormData({ ...certFormData, credential_id: e.target.value })}
+                    placeholder="e.g. AWS-SAA-904218"
+                    className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-slate-300 mb-1 font-mono">Credential Verification URL</label>
+                <input
+                  type="url"
+                  value={certFormData.credential_url}
+                  onChange={(e) => setCertFormData({ ...certFormData, credential_url: e.target.value })}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-slate-300 mb-1 font-mono">Key Competencies / Skills</label>
+                <input
+                  type="text"
+                  value={certFormData.skills}
+                  onChange={(e) => setCertFormData({ ...certFormData, skills: e.target.value })}
+                  placeholder="e.g. VPC, Serverless, IAM, Microservices"
+                  className="w-full px-3 py-2 rounded-xl bg-dark-950 border border-slate-800 text-white"
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setIsCertModalOpen(false)}
+                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+                >
+                  Save Certification
                 </button>
               </div>
             </form>
