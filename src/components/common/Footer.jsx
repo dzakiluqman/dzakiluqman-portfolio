@@ -24,13 +24,6 @@ export const Footer = ({ profile }) => {
     { label: "Let's Connect", href: '#contact' },
   ]
 
-  const techStack = [
-    { name: 'React 18 & Three.js', desc: 'Spatial 3D & WebGL Canvas' },
-    { name: 'Tailwind CSS & Framer Motion', desc: 'Liquid-Glass Design System' },
-    { name: 'Supabase & PostgreSQL', desc: 'Realtime Data Layer' },
-    { name: 'Vite & Cloudflare Edge', desc: 'Ultra-fast Compilation' },
-  ]
-
   return (
     <footer className="bg-[#000000] pt-20 pb-12 text-zinc-400 overflow-hidden relative border-t border-white/[0.05]">
       <motion.div
@@ -40,7 +33,7 @@ export const Footer = ({ profile }) => {
         transition={{ duration: 0.5 }}
         className="max-w-7xl mx-auto px-6"
       >
-        {/* 1. TOP SECTION: Organized Link Columns (Navigation, Socials, Tech Stack) */}
+        {/* 1. TOP SECTION: Organized Link Columns (Navigation, Socials, Current Status) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-10 md:gap-8 pb-16">
           {/* Column 1: Navigation */}
           <div className="md:col-span-4 space-y-4">
@@ -142,23 +135,17 @@ export const Footer = ({ profile }) => {
             </ul>
           </div>
 
-          {/* Column 3: Tech Stack */}
+          {/* Column 3: Current Status */}
           <div className="md:col-span-4 space-y-4">
-            <span className="block text-xs font-mono font-medium text-zinc-500 uppercase tracking-widest">
-              Tech Stack
-            </span>
-            <ul className="space-y-2.5">
-              {techStack.map((tech) => (
-                <li key={tech.name} className="space-y-0.5">
-                  <span className="block text-sm text-zinc-400 font-medium">
-                    {tech.name}
-                  </span>
-                  <span className="block text-xs text-zinc-600">
-                    {tech.desc}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-4">
+              Current Status
+            </h4>
+            <div className="space-y-2 text-sm text-neutral-400">
+              <p className="font-medium text-neutral-200">Available for Opportunities</p>
+              <p><span className="text-neutral-500">Location:</span> Magelang, Indonesia</p>
+              <p><span className="text-neutral-500">Timezone:</span> WIB (UTC+7)</p>
+              <p><span className="text-neutral-500">Focus:</span> Full-Stack Development</p>
+            </div>
           </div>
         </div>
 
@@ -172,10 +159,10 @@ export const Footer = ({ profile }) => {
         {/* 3. BOTTOM SECTION: Standardized Brand Logo, Copyright Line & Back to Top */}
         <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img 
-              src={dlLogo} 
-              alt="DL Logo" 
-              className="w-7 h-auto max-h-7 object-contain rounded-md opacity-80 hover:opacity-100 transition-opacity" 
+            <img
+              src={dlLogo}
+              alt="DL Logo"
+              className="w-7 h-auto max-h-7 object-contain rounded-md opacity-80 hover:opacity-100 transition-opacity"
             />
             <p className="text-xs text-zinc-600 text-center sm:text-left">
               © 2026 Dzakii Luqman Faid. All rights reserved.

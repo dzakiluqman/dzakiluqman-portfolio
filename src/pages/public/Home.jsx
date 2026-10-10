@@ -12,7 +12,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner'
 export const Home = () => {
   const [profile, setProfile] = useState({
     full_name: 'Dzakii Luqman Faid',
-    headline: 'Junior Software Developer',
+    headline: 'Junior Full-Stack Developer',
     location: 'Kota Magelang, Indonesia',
     bio: '',
     social_links: {
