@@ -67,6 +67,7 @@ export const AdminCV = () => {
   const [skillFormData, setSkillFormData] = useState({
     name: '',
     category: 'Frontend',
+    subtitle: '',
     level: 'Expert',
     icon_name: 'Code'
   })
@@ -421,8 +422,9 @@ export const AdminCV = () => {
     setEditingSkill(skill)
     if (skill) {
       setSkillFormData({
-        name: skill.name || '',
+        name: skill.name || skill.title || '',
         category: skill.category || 'Frontend',
+        subtitle: skill.subtitle || '',
         level: skill.level || 'Expert',
         icon_name: skill.icon_name || 'Code'
       })
@@ -430,6 +432,7 @@ export const AdminCV = () => {
       setSkillFormData({
         name: '',
         category: 'Frontend',
+        subtitle: '',
         level: 'Expert',
         icon_name: 'Code'
       })
@@ -440,12 +443,20 @@ export const AdminCV = () => {
   const handleSaveSkill = async (e) => {
     e.preventDefault()
     try {
+      const payload = {
+        name: (skillFormData.name || '').trim(),
+        category: skillFormData.category,
+        subtitle: (skillFormData.subtitle || '').trim(),
+        level: skillFormData.level,
+        icon_name: skillFormData.icon_name || 'Code'
+      }
+
       if (!isSupabaseConfigured) {
         let updated
         if (editingSkill) {
-          updated = skills.map((s) => s.id === editingSkill.id ? { ...s, ...skillFormData } : s)
+          updated = skills.map((s) => s.id === editingSkill.id ? { ...s, ...payload } : s)
         } else {
-          updated = [{ ...skillFormData, id: `demo-skill-${Date.now()}` }, ...skills]
+          updated = [{ ...payload, id: `demo-skill-${Date.now()}` }, ...skills]
         }
         setSkills(updated)
         localStorage.setItem('dzaki_demo_skills', JSON.stringify(updated))
@@ -455,10 +466,10 @@ export const AdminCV = () => {
       }
 
       if (editingSkill) {
-        const { error } = await supabase.from('skills').update(skillFormData).eq('id', editingSkill.id)
+        const { error } = await supabase.from('skills').update(payload).eq('id', editingSkill.id)
         if (error) throw error
       } else {
-        const { error } = await supabase.from('skills').insert([skillFormData])
+        const { error } = await supabase.from('skills').insert([payload])
         if (error) throw error
       }
 
@@ -802,7 +813,10 @@ export const AdminCV = () => {
                       >
                         <div>
                           <p className="font-bold text-sm text-white">{skill.name}</p>
-                          <p className="text-[11px] font-mono text-zinc-500">{skill.category} • {skill.level}</p>
+                          {skill.subtitle && (
+                            <p className="text-xs text-zinc-400 font-sans truncate">{skill.subtitle}</p>
+                          )}
+                          <p className="text-[11px] font-mono text-zinc-500 mt-0.5">{skill.category} • {skill.level}</p>
                         </div>
 
                         <div className="flex items-center gap-1">
@@ -1061,10 +1075,22 @@ export const AdminCV = () => {
                 <label className="block text-zinc-300 mb-1 font-mono">Skill Name</label>
                 <input
                   type="text"
+                  name="name"
                   required
                   value={skillFormData.name}
                   onChange={(e) => setSkillFormData({ ...skillFormData, name: e.target.value })}
                   placeholder="e.g. Next.js, Kubernetes"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
+                />
+              </div>
+              <div>
+                <label className="block text-zinc-300 mb-1 font-mono">Subtitle / Focus Area</label>
+                <input
+                  type="text"
+                  name="subtitle"
+                  value={skillFormData.subtitle || ''}
+                  onChange={(e) => setSkillFormData({ ...skillFormData, subtitle: e.target.value })}
+                  placeholder="e.g., High-Throughput APIs"
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white/40"
                 />
               </div>

@@ -87,11 +87,13 @@ export const AdminSkills = () => {
   const [editingSkill, setEditingSkill] = useState(null)
   const [isSaving, setIsSaving] = useState(false)
   const [formData, setFormData] = useState({
+    name: '',
     title: '',
     subtitle: '',
     category: 'frontend',
     icon_name: 'Code',
-    order_index: 1
+    order_index: 1,
+    sort_order: 1
   })
 
   // Toast Notification
@@ -129,13 +131,13 @@ export const AdminSkills = () => {
       let res = await supabase
         .from('skills')
         .select('*')
-        .order('order_index', { ascending: true })
+        .order('sort_order', { ascending: true })
 
-      if (res.error && (res.error.code === '42703' || res.error.message?.includes('order_index'))) {
+      if (res.error && (res.error.code === '42703' || res.error.message?.includes('sort_order'))) {
         res = await supabase
           .from('skills')
           .select('*')
-          .order('sort_order', { ascending: true })
+          .order('order_index', { ascending: true })
       }
 
       if (res.error) throw res.error
@@ -148,7 +150,8 @@ export const AdminSkills = () => {
           subtitle: item.subtitle || item.level || item.focus || '',
           category: (item.category || 'frontend').toLowerCase(),
           icon_name: item.icon_name || 'Code',
-          order_index: item.order_index ?? item.sort_order ?? idx + 1
+          sort_order: item.sort_order ?? item.order_index ?? idx + 1,
+          order_index: item.sort_order ?? item.order_index ?? idx + 1
         }))
         setSkills(normalized)
       } else {
@@ -172,11 +175,13 @@ export const AdminSkills = () => {
   const handleOpenCreateModal = () => {
     setEditingSkill(null)
     setFormData({
+      name: '',
       title: '',
       subtitle: '',
       category: 'frontend',
       icon_name: 'Code',
-      order_index: skills.length + 1
+      order_index: skills.length + 1,
+      sort_order: skills.length + 1
     })
     setIsModalOpen(true)
   }
@@ -184,12 +189,15 @@ export const AdminSkills = () => {
   // Open modal for Edit
   const handleOpenEditModal = (skill) => {
     setEditingSkill(skill)
+    const displayName = skill.name || skill.title || ''
     setFormData({
-      title: skill.title || skill.name || '',
+      name: displayName,
+      title: displayName,
       subtitle: skill.subtitle || '',
       category: (skill.category || 'frontend').toLowerCase(),
       icon_name: skill.icon_name || 'Code',
-      order_index: skill.order_index ?? 1
+      order_index: skill.order_index ?? skill.sort_order ?? 1,
+      sort_order: skill.sort_order ?? skill.order_index ?? 1
     })
     setIsModalOpen(true)
   }
@@ -197,22 +205,25 @@ export const AdminSkills = () => {
   // Save / Update Skill
   const handleSaveSkill = async (e) => {
     e.preventDefault()
-    if (!formData.title.trim()) {
-      showNotification('Title is required', 'error')
+    const skillName = (formData.name || formData.title || '').trim()
+    if (!skillName) {
+      showNotification('Skill name is required', 'error')
       return
     }
 
     setIsSaving(true)
 
+    const sortOrderVal = parseInt(formData.sort_order || formData.order_index, 10) || 1
+    const subtitleVal = (formData.subtitle || '').trim()
+
     const payload = {
-      title: formData.title.trim(),
-      subtitle: formData.subtitle.trim(),
+      name: skillName,
+      title: skillName,
+      subtitle: subtitleVal,
       category: formData.category.toLowerCase(),
-      icon_name: formData.icon_name,
-      order_index: parseInt(formData.order_index, 10) || 1,
-      // Backwards-compatibility fields for legacy database columns
-      name: formData.title.trim(),
-      sort_order: parseInt(formData.order_index, 10) || 1,
+      icon_name: formData.icon_name || 'Code',
+      sort_order: sortOrderVal,
+      order_index: sortOrderVal,
       level: 'Expert'
     }
 
@@ -224,7 +235,7 @@ export const AdminSkills = () => {
         } else {
           updated = [...skills, { ...payload, id: `skill-${Date.now()}` }]
         }
-        updated.sort((a, b) => a.order_index - b.order_index)
+        updated.sort((a, b) => (a.sort_order ?? a.order_index) - (b.sort_order ?? b.order_index))
         setSkills(updated)
         localStorage.setItem('dzaki_demo_skills', JSON.stringify(updated))
         window.dispatchEvent(new CustomEvent('dzaki:skills_updated'))
@@ -235,30 +246,31 @@ export const AdminSkills = () => {
 
       // Supabase live execution
       if (editingSkill) {
-        // Attempt update with primary fields
+        // Attempt update with primary database columns
         let { error } = await supabase
           .from('skills')
           .update({
-            title: payload.title,
-            subtitle: payload.subtitle,
+            name: payload.name,
             category: payload.category,
+            subtitle: payload.subtitle,
             icon_name: payload.icon_name,
-            order_index: payload.order_index
+            sort_order: payload.sort_order
           })
           .eq('id', editingSkill.id)
 
-        // If title column does not exist on older DB, fallback to legacy fields
-        if (error && (error.code === '42703' || error.message?.includes('title'))) {
-          const legacyRes = await supabase
+        // If title column is required instead of name
+        if (error && (error.code === '42703' || error.message?.includes('name'))) {
+          const altRes = await supabase
             .from('skills')
             .update({
-              name: payload.name,
+              title: payload.title,
               category: payload.category,
+              subtitle: payload.subtitle,
               icon_name: payload.icon_name,
               sort_order: payload.sort_order
             })
             .eq('id', editingSkill.id)
-          error = legacyRes.error
+          error = altRes.error
         }
 
         if (error) throw error
@@ -268,24 +280,25 @@ export const AdminSkills = () => {
         let { error } = await supabase
           .from('skills')
           .insert([{
-            title: payload.title,
-            subtitle: payload.subtitle,
+            name: payload.name,
             category: payload.category,
+            subtitle: payload.subtitle,
             icon_name: payload.icon_name,
-            order_index: payload.order_index
+            sort_order: payload.sort_order
           }])
 
-        // If title column does not exist on older DB, fallback to legacy fields
-        if (error && (error.code === '42703' || error.message?.includes('title'))) {
-          const legacyRes = await supabase
+        // If title column is required instead of name
+        if (error && (error.code === '42703' || error.message?.includes('name'))) {
+          const altRes = await supabase
             .from('skills')
             .insert([{
-              name: payload.name,
+              title: payload.title,
               category: payload.category,
+              subtitle: payload.subtitle,
               icon_name: payload.icon_name,
               sort_order: payload.sort_order
             }])
-          error = legacyRes.error
+          error = altRes.error
         }
 
         if (error) throw error
@@ -353,14 +366,14 @@ export const AdminSkills = () => {
     const currentItem = filteredSkills[index]
     const targetItem = filteredSkills[targetIndex]
 
-    const newCurrentOrder = targetItem.order_index
-    const newTargetOrder = currentItem.order_index
+    const newCurrentOrder = targetItem.sort_order ?? targetItem.order_index
+    const newTargetOrder = currentItem.sort_order ?? currentItem.order_index
 
     const updated = skills.map((s) => {
-      if (s.id === currentItem.id) return { ...s, order_index: newCurrentOrder }
-      if (s.id === targetItem.id) return { ...s, order_index: newTargetOrder }
+      if (s.id === currentItem.id) return { ...s, sort_order: newCurrentOrder, order_index: newCurrentOrder }
+      if (s.id === targetItem.id) return { ...s, sort_order: newTargetOrder, order_index: newTargetOrder }
       return s
-    }).sort((a, b) => a.order_index - b.order_index)
+    }).sort((a, b) => (a.sort_order ?? a.order_index) - (b.sort_order ?? b.order_index))
 
     setSkills(updated)
     localStorage.setItem('dzaki_demo_skills', JSON.stringify(updated))
@@ -369,8 +382,8 @@ export const AdminSkills = () => {
     if (isSupabaseConfigured) {
       try {
         await Promise.all([
-          supabase.from('skills').update({ order_index: newCurrentOrder }).eq('id', currentItem.id),
-          supabase.from('skills').update({ order_index: newTargetOrder }).eq('id', targetItem.id)
+          supabase.from('skills').update({ sort_order: newCurrentOrder }).eq('id', currentItem.id),
+          supabase.from('skills').update({ sort_order: newTargetOrder }).eq('id', targetItem.id)
         ])
       } catch (e) {
         console.warn('Reorder sync error:', e)
@@ -653,10 +666,11 @@ export const AdminSkills = () => {
                   </label>
                   <input
                     type="text"
+                    name="name"
                     required
                     placeholder="e.g. React / Next.js, Docker & Kubernetes"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    value={formData.name || formData.title || ''}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value, title: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white placeholder-slate-500 focus:outline-none focus:border-white/40 transition-colors"
                   />
                 </div>
@@ -667,9 +681,10 @@ export const AdminSkills = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. UI Architecture & SSR, Microservices & Data"
-                    value={formData.subtitle}
+                    name="subtitle"
+                    value={formData.subtitle || ''}
                     onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                    placeholder="e.g., High-Throughput APIs"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-dark-950 border border-slate-800 text-sm font-sans text-white placeholder-slate-500 focus:outline-none focus:border-white/40 transition-colors"
                   />
                 </div>
@@ -746,7 +761,7 @@ export const AdminSkills = () => {
                     </div>
                     <div className="min-w-0">
                       <div className="text-base font-medium text-slate-100 tracking-tight font-sans truncate">
-                        {formData.title || 'Untitled Skill'}
+                        {formData.name || formData.title || 'Untitled Skill'}
                       </div>
                       <div className="text-xs text-slate-400 font-sans tracking-tight truncate mt-0.5">
                         {formData.subtitle || 'Focus area description'}

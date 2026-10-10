@@ -44,19 +44,11 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
       }
 
       try {
-        // Dynamic fetching from Supabase ordering by order_index
-        let res = await supabase
+        // Dynamic fetching from Supabase ordering by sort_order
+        const res = await supabase
           .from('skills')
           .select('*')
-          .order('order_index', { ascending: true })
-
-        // Fallback for legacy schemas with sort_order
-        if (res.error && (res.error.code === '42703' || res.error.message?.includes('order_index'))) {
-          res = await supabase
-            .from('skills')
-            .select('*')
-            .order('sort_order', { ascending: true })
-        }
+          .order('sort_order', { ascending: true })
 
         if (res.error) throw res.error
 
@@ -69,7 +61,8 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
             subtitle: item.subtitle || item.level || item.focus || '',
             category: item.category || 'frontend',
             icon_name: item.icon_name || 'Code',
-            order_index: item.order_index ?? item.sort_order ?? idx + 1
+            sort_order: item.sort_order ?? item.order_index ?? idx + 1,
+            order_index: item.sort_order ?? item.order_index ?? idx + 1
           }))
           if (isMounted) {
             setSkills(normalized)
@@ -124,7 +117,7 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
       ...section,
       items: list
         .filter((s) => section.matches(s.category))
-        .sort((a, b) => (a.order_index ?? a.sort_order ?? 0) - (b.order_index ?? b.sort_order ?? 0))
+        .sort((a, b) => (a.sort_order ?? a.order_index ?? 0) - (b.sort_order ?? b.order_index ?? 0))
     }))
 
     // Catch any skill with unusual/custom category and assign gracefully
@@ -134,7 +127,7 @@ export const TechnicalCompetencies = ({ skills: propSkills = [] }) => {
     if (unassigned.length > 0) {
       groups[1].items = [
         ...groups[1].items,
-        ...unassigned.sort((a, b) => (a.order_index ?? a.sort_order ?? 0) - (b.order_index ?? b.sort_order ?? 0))
+        ...unassigned.sort((a, b) => (a.sort_order ?? a.order_index ?? 0) - (b.sort_order ?? b.order_index ?? 0))
       ]
     }
 

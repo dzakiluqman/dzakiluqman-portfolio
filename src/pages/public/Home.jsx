@@ -85,17 +85,11 @@ export const Home = () => {
         setEducations(eduData || [])
 
         // 5. Fetch Skills purely from Supabase
-        let skillsRes = await supabase
+        const { data: skillsData } = await supabase
           .from('skills')
           .select('*')
-          .order('order_index', { ascending: true })
-        if (skillsRes.error && (skillsRes.error.code === '42703' || skillsRes.error.message?.includes('order_index'))) {
-          skillsRes = await supabase
-            .from('skills')
-            .select('*')
-            .order('sort_order', { ascending: true })
-        }
-        setSkills(skillsRes.data || [])
+          .order('sort_order', { ascending: true })
+        setSkills(skillsData || [])
 
         // 6. Fetch Certifications purely from Supabase
         const { data: certsData } = await supabase
