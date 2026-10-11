@@ -4,14 +4,13 @@ import React from 'react'
  * ATS-Friendly Resume / Curriculum Vitae Component
  * 
  * Complies with strict Applicant Tracking System (ATS) guidelines:
- * - Single-column layout for clean, unambiguous sequential text parsing.
- * - Standard web typography (Plus Jakarta Sans / Inter / Arial).
- * - High contrast: pure black/dark zinc on pure white background.
- * - Semantic HTML hierarchy (h1, h2, h3, p, ul, li).
- * - Standard section headers: EXPERIENCE, EDUCATION, CERTIFICATIONS.
- * - Explicit contact information: Name, Role, Location, Gmail, Portfolio link.
- * - No rasterized text, canvas, or complex SVG overlays that break OCR/parsing.
- * - Print-optimized: A4 margins, page-break-inside avoid on individual records.
+ * - Single-column layout with Job Overview paragraph format (no heavy bullet lists).
+ * - Styled with Montserrat font family.
+ * - High contrast: pure black on pure white background.
+ * - Semantic HTML hierarchy (h1, h2, p, a).
+ * - Standard section headers: ABOUT ME, EXPERIENCE, EDUCATION, CERTIFICATIONS.
+ * - Mandatory Header at the very top: Name, Role, Location, Gmail, Portfolio link.
+ * - Print-optimized: A4 margins, page-break-inside avoid on individual items.
  */
 export const ResumePDF = ({
   profile = {},
@@ -19,7 +18,7 @@ export const ResumePDF = ({
   educations = [],
   certifications = []
 }) => {
-  // Format dates cleanly (e.g., "Jan 2023")
+  // Format dates cleanly (e.g., "Dec 2023 – May 2024")
   const formatDate = (dateStr) => {
     if (!dateStr) return ''
     try {
@@ -44,32 +43,90 @@ export const ResumePDF = ({
     return `${edu.start_year || edu.end_year || ''}`
   }
 
+  // Default experiences conforming to Job Overview format
+  const defaultExperiences = [
+    {
+      role: 'Backend Developer',
+      company: 'PT Teknoreka Inovasi Nusantara',
+      employment_type: 'Internship',
+      start_date: '2023-12-01',
+      end_date: '2024-05-31',
+      location: 'Special Region of Yogyakarta',
+      description: 'Developed and maintained robust backend services and relational MySQL database architectures for a Digital Library web application built with Laravel. Focused on engineering clean RESTful APIs for book management, search filters, and user authentication while optimizing query performance and collaborating closely with front-end teams for seamless UI integration.'
+    },
+    {
+      role: 'Level Designer & 3D Artist',
+      company: 'PT Bodha Dharmaja Aryadhana',
+      employment_type: 'Internship',
+      start_date: '2022-09-01',
+      end_date: '2023-08-31',
+      location: 'South Jakarta, Indonesia',
+      description: 'Designed and assembled interactive 3D game environments and spatial level blockouts in Unreal Engine 5. Responsible for real-time environment asset integration, dynamic lighting setups tailored for hardware performance, and directing cinematic video trailers using Unreal Engine Sequencer.'
+    }
+  ]
+
+  const defaultEducations = [
+    {
+      institution: 'Universitas Muhammadiyah Magelang',
+      degree: 'Bachelor of Computer Science',
+      field_of_study: 'Informatics Engineering',
+      start_year: 2020,
+      end_year: 2024,
+      key_focus: 'Software Engineering & Relational Database Systems',
+      description: 'Focused on algorithms, data structures, full-stack software development lifecycles, and database optimization.'
+    }
+  ]
+
+  const defaultCertifications = [
+    {
+      title: 'Junior Web Developer',
+      issuer: 'Badan Nasional Sertifikasi Profesi (BNSP)',
+      issue_date: '2024-06-15',
+      credential_id: 'BNSP-JWD-2024'
+    },
+    {
+      title: 'Meta Front-End Developer Specialization',
+      issuer: 'Coursera / Meta',
+      issue_date: '2023-11-20',
+      credential_id: 'META-FED-2023'
+    }
+  ]
+
   // Fallback demo data from localStorage if prop arrays are empty
   const getExperiences = () => {
     if (experiences && experiences.length > 0) return experiences
     try {
       const stored = localStorage.getItem('dzaki_demo_exp')
-      if (stored) return JSON.parse(stored)
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        if (parsed.length > 0) return parsed
+      }
     } catch {}
-    return []
+    return defaultExperiences
   }
 
   const getEducations = () => {
     if (educations && educations.length > 0) return educations
     try {
       const stored = localStorage.getItem('dzaki_demo_edu')
-      if (stored) return JSON.parse(stored)
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        if (parsed.length > 0) return parsed
+      }
     } catch {}
-    return []
+    return defaultEducations
   }
 
   const getCertifications = () => {
     if (certifications && certifications.length > 0) return certifications
     try {
       const stored = localStorage.getItem('dzaki_demo_certs')
-      if (stored) return JSON.parse(stored)
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        if (parsed.length > 0) return parsed
+      }
     } catch {}
-    return []
+    return defaultCertifications
   }
 
   const expList = getExperiences()
@@ -79,223 +136,180 @@ export const ResumePDF = ({
   // Dynamic Contact Data
   const fullName = profile?.full_name ? profile.full_name.toUpperCase() : 'DZAKII LUQMAN FAID'
   const role = profile?.headline || 'Junior Full-Stack Developer'
-  const location = profile?.location || 'Kota Magelang, Indonesia'
+  const location = profile?.location || 'Magelang, Indonesia'
   const email = profile?.social_links?.email || profile?.email || 'dzakiluqman275@gmail.com'
   const portfolioUrl = 'https://portfolio.dzakiluqman.my.id'
   const portfolioDisplay = 'portfolio.dzakiluqman.my.id'
   const aboutMeText = profile?.bio?.trim() || 'An enthusiastic, fast-learning Junior Full-Stack Developer passionate about building modern, interactive web applications and mobile ecosystems using React, Next.js, TypeScript, and cloud services. Experienced in engineering RESTful APIs, optimizing relational databases, and integrating computer vision and IoT hardware telemetry. Dedicated to writing clean, maintainable code and delivering performant, user-centric software solutions.'
 
   return (
-    <div 
-      id="printable-cv"
-      className="bg-white text-black p-8 rounded-lg space-y-6 ats-resume-container w-full max-w-[210mm] mx-auto print:p-0 font-sans leading-normal selection:bg-zinc-200 selection:text-black"
-      style={{
-        fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-      }}
-    >
-      {/* 1. MANDATORY HEADER (MUST BE AT THE VERY TOP OF PAGE 1) */}
-      <div className="text-center border-b border-neutral-300 pb-4">
-        <h1 className="text-3xl font-bold uppercase tracking-tight text-black">
-          {fullName}
-        </h1>
-        <p className="text-base font-semibold text-neutral-800 mt-1">
-          {role}
-        </p>
-        <p className="text-xs text-neutral-600 mt-2 flex items-center justify-center gap-2 flex-wrap">
-          <span>{location}</span>
-          <span>•</span>
-          <a 
-            href={`mailto:${email}`} 
-            className="text-neutral-800 hover:underline"
-          >
-            {email}
-          </a>
-          <span>•</span>
-          <a 
-            href={portfolioUrl} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-neutral-800 hover:underline font-medium"
-          >
-            {portfolioDisplay}
-          </a>
-        </p>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+        #printable-cv, #printable-cv * {
+          font-family: 'Montserrat', sans-serif !important;
+        }
+      `}</style>
+
+      <div 
+        id="printable-cv"
+        className="bg-white text-black p-8 rounded-lg space-y-6 text-sm leading-normal ats-resume-container w-full max-w-[210mm] mx-auto print:p-0 selection:bg-zinc-200 selection:text-black"
+        style={{
+          fontFamily: "'Montserrat', sans-serif"
+        }}
+      >
+        {/* 1. MANDATORY HEADER */}
+        <div className="text-center border-b border-neutral-300 pb-4">
+          <h1 className="text-2xl font-bold uppercase tracking-tight text-black">
+            {fullName}
+          </h1>
+          <p className="text-sm font-semibold text-neutral-800 mt-1">
+            {role}
+          </p>
+          <p className="text-xs text-neutral-600 mt-2 flex items-center justify-center gap-2 flex-wrap">
+            <span>{location}</span>
+            <span>•</span>
+            <a 
+              href={`mailto:${email}`} 
+              className="text-neutral-800 hover:underline"
+            >
+              {email}
+            </a>
+            <span>•</span>
+            <a 
+              href={portfolioUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-neutral-800 hover:underline font-medium"
+            >
+              {portfolioDisplay}
+            </a>
+          </p>
+        </div>
+
+        {/* 2. ABOUT ME */}
+        <section className="break-inside-avoid-page">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
+            ABOUT ME
+          </h2>
+          <p className="text-xs leading-relaxed text-neutral-800 text-justify">
+            {aboutMeText}
+          </p>
+        </section>
+
+        {/* 3. EXPERIENCE (JOB OVERVIEW FORMAT - NO BULLET POINTS) */}
+        {expList && expList.length > 0 && (
+          <section className="break-inside-avoid-page">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
+              EXPERIENCE
+            </h2>
+            
+            <div className="space-y-4">
+              {expList.map((exp, idx) => {
+                const start = formatDate(exp.start_date)
+                const end = exp.is_current ? 'Present' : formatDate(exp.end_date)
+                const dateRange = start ? `${start} – ${end}` : (end || '')
+
+                // Concise Job Overview paragraph: use description or join achievements without bullets
+                const overviewText = exp.description || (Array.isArray(exp.achievements) ? exp.achievements.join(' ') : exp.achievements)
+
+                return (
+                  <div key={exp.id || idx} className="break-inside-avoid">
+                    <div className="flex justify-between font-semibold text-xs text-black">
+                      <span>
+                        {exp.role} at {exp.company} {exp.employment_type ? `(${exp.employment_type})` : ''}
+                      </span>
+                      {dateRange && <span>{dateRange}</span>}
+                    </div>
+                    {exp.location && (
+                      <p className="text-xs text-neutral-600 italic mb-1">{exp.location}</p>
+                    )}
+                    {overviewText && (
+                      <p className="text-xs text-neutral-800 leading-relaxed">
+                        {overviewText}
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* 4. EDUCATION */}
+        {eduList && eduList.length > 0 && (
+          <section className="break-inside-avoid-page">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
+              EDUCATION
+            </h2>
+            <div className="space-y-3">
+              {eduList.map((edu, idx) => {
+                const years = formatEducationYears(edu)
+                const degreeTitle = edu.field_of_study 
+                  ? (edu.degree ? `${edu.degree} in ${edu.field_of_study}` : edu.field_of_study)
+                  : (edu.degree || 'Degree')
+
+                return (
+                  <div key={edu.id || idx} className="break-inside-avoid">
+                    <div className="flex justify-between font-semibold text-xs text-black">
+                      <span>{degreeTitle} at {edu.institution}</span>
+                      {years && <span>{years}</span>}
+                    </div>
+                    {edu.key_focus && (
+                      <p className="text-xs text-neutral-600 italic mb-0.5">Focus: {edu.key_focus}</p>
+                    )}
+                    {edu.description && (
+                      <p className="text-xs text-neutral-800 leading-relaxed">
+                        {edu.description}
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* 5. CERTIFICATIONS */}
+        {certList && certList.length > 0 && (
+          <section className="break-inside-avoid-page">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
+              CERTIFICATIONS
+            </h2>
+            <div className="space-y-2.5">
+              {certList.map((cert, idx) => {
+                const issueDate = formatDate(cert.issue_date)
+
+                return (
+                  <div key={cert.id || idx} className="break-inside-avoid">
+                    <div className="flex justify-between font-semibold text-xs text-black">
+                      <span>
+                        {cert.title} — {cert.issuer}
+                        {cert.credential_id && (
+                          <span className="text-neutral-500 font-normal ml-1">({cert.credential_id})</span>
+                        )}
+                      </span>
+                      {issueDate && <span>{issueDate}</span>}
+                    </div>
+                    {cert.credential_url && (
+                      <a
+                        href={cert.credential_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] text-neutral-600 hover:text-black underline inline-block"
+                      >
+                        Verify Credential
+                      </a>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
       </div>
-
-      {/* 2. ABOUT ME */}
-      <section className="break-inside-avoid-page">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
-          ABOUT ME
-        </h2>
-        <p className="text-xs leading-relaxed text-neutral-800 text-justify">
-          {aboutMeText}
-        </p>
-      </section>
-
-      {/* 3. EXPERIENCE */}
-      {expList && expList.length > 0 && (
-        <section className="break-inside-avoid-page">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
-            EXPERIENCE
-          </h2>
-          <div className="space-y-4">
-            {expList.map((exp, idx) => {
-              const start = formatDate(exp.start_date)
-              const end = exp.is_current ? 'Present' : formatDate(exp.end_date)
-              const dateRange = start ? `${start} – ${end}` : end
-
-              // Normalize achievements
-              let achievements = []
-              if (Array.isArray(exp.achievements)) {
-                achievements = exp.achievements.filter(Boolean)
-              } else if (typeof exp.achievements === 'string' && exp.achievements.trim()) {
-                achievements = exp.achievements
-                  .split('\n')
-                  .map(a => a.replace(/^[•\-\*]\s*/, '').trim())
-                  .filter(Boolean)
-              }
-
-              return (
-                <div key={exp.id || idx} className="ats-item break-inside-avoid text-xs sm:text-sm">
-                  {/* Job Title & Date */}
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-0.5">
-                    <div className="font-bold text-zinc-950">
-                      <span>{exp.role}</span>
-                      <span className="font-normal text-zinc-700"> at </span>
-                      <span className="font-semibold text-zinc-900">{exp.company}</span>
-                      {exp.location && (
-                        <span className="text-zinc-600 font-normal"> — {exp.location}</span>
-                      )}
-                      {exp.employment_type && (
-                        <span className="text-zinc-500 font-normal text-[11px] ml-1.5">({exp.employment_type})</span>
-                      )}
-                    </div>
-                    {dateRange && (
-                      <span className="text-xs font-semibold text-zinc-700 shrink-0 sm:text-right">
-                        {dateRange}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Summary / Description */}
-                  {exp.description && (
-                    <p className="mt-1 text-zinc-800 leading-relaxed text-xs sm:text-[13px]">
-                      {exp.description}
-                    </p>
-                  )}
-
-                  {/* Achievements Bullet Points */}
-                  {achievements.length > 0 && (
-                    <ul className="mt-1.5 space-y-1 text-zinc-800 list-disc pl-5 text-xs sm:text-[13px]">
-                      {achievements.map((item, aIdx) => (
-                        <li key={aIdx} className="leading-relaxed">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* 4. EDUCATION */}
-      {eduList && eduList.length > 0 && (
-        <section className="break-inside-avoid-page">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
-            EDUCATION
-          </h2>
-          <div className="space-y-3.5">
-            {eduList.map((edu, idx) => {
-              const years = formatEducationYears(edu)
-              const degreeTitle = edu.field_of_study 
-                ? (edu.degree ? `${edu.degree} in ${edu.field_of_study}` : edu.field_of_study)
-                : (edu.degree || 'Degree')
-
-              return (
-                <div key={edu.id || idx} className="ats-item break-inside-avoid text-xs sm:text-sm">
-                  {/* Degree, Institution & Years */}
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-0.5">
-                    <div>
-                      <span className="font-bold text-zinc-950">{degreeTitle}</span>
-                      <span className="font-normal text-zinc-700">, </span>
-                      <span className="font-semibold text-zinc-900">{edu.institution}</span>
-                    </div>
-                    {years && (
-                      <span className="text-xs font-semibold text-zinc-700 shrink-0 sm:text-right">
-                        {years}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Key Focus */}
-                  {edu.key_focus && (
-                    <p className="text-zinc-700 text-xs mt-0.5 font-medium">
-                      <span className="font-semibold text-zinc-800">Focus:</span> {edu.key_focus}
-                    </p>
-                  )}
-
-                  {/* Description */}
-                  {edu.description && (
-                    <p className="mt-1 text-zinc-800 text-xs sm:text-[13px] leading-relaxed">
-                      {edu.description}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* 5. CERTIFICATIONS */}
-      {certList && certList.length > 0 && (
-        <section className="mb-6 break-inside-avoid-page">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
-            CERTIFICATIONS
-          </h2>
-          <div className="space-y-3">
-            {certList.map((cert, idx) => {
-              const issueDate = formatDate(cert.issue_date)
-
-              return (
-                <div key={cert.id || idx} className="ats-item break-inside-avoid text-xs sm:text-sm">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-0.5">
-                    <div>
-                      <span className="font-bold text-zinc-950">{cert.title}</span>
-                      <span className="font-normal text-zinc-700"> — </span>
-                      <span className="font-semibold text-zinc-900">{cert.issuer}</span>
-                      {cert.credential_id && (
-                        <span className="text-zinc-600 font-normal text-xs ml-1.5">
-                          (ID: {cert.credential_id})
-                        </span>
-                      )}
-                    </div>
-                    {issueDate && (
-                      <span className="text-xs font-semibold text-zinc-700 shrink-0 sm:text-right">
-                        {issueDate}
-                      </span>
-                    )}
-                  </div>
-                  {cert.credential_url && (
-                    <a
-                      href={cert.credential_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[11px] text-zinc-600 hover:text-black underline mt-0.5 inline-block"
-                    >
-                      Verify Credential
-                    </a>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-    </div>
+    </>
   )
 }
 
