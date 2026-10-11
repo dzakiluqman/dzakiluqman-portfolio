@@ -96,6 +96,17 @@
     -webkit-text-fill-color: transparent;
     animation: liquidMercury 8s ease-in-out infinite;
   }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thumb-neutral-700::-webkit-scrollbar-thumb {
+    background-color: #404040;
+    border-radius: 9999px;
+  }
+  .scrollbar-thumb-neutral-700::-webkit-scrollbar-track {
+    background-color: #18181b;
+  }
 }
 
 @keyframes liquidMercury {
@@ -117,11 +128,11 @@
    ========================================================================== */
 @media print {
   @page {
-    margin: 1.2cm 1.5cm;
-    size: auto;
+    size: A4;
+    margin: 12mm 15mm;
   }
 
-  /* Reset heights and overflow to prevent infinite paging */
+  /* Reset root containers to plain white document */
   html,
   body,
   #root,
@@ -131,10 +142,12 @@
     overflow: visible !important;
     position: static !important;
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #111827 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  /* Disable animations and transforms during print */
+  /* Disable animations and transitions during print */
   *,
   *::before,
   *::after {
@@ -145,21 +158,7 @@
     text-shadow: none !important;
   }
 
-  /* Force all 3 tab contents (Experience, Education, Certs) to render sequentially when printing */
-  .print-all-tabs {
-    display: block !important;
-  }
-
-  /* Page break handling */
-  .card,
-  .timeline-item,
-  article,
-  .break-inside-avoid {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* Hide non-printable UI elements */
+  /* Hide all non-CV UI elements and non-CV sections */
   nav,
   .navbar,
   .tab-buttons,
@@ -167,15 +166,24 @@
   .no-print,
   header,
   canvas,
-  .canvas-container {
+  .canvas-container,
+  main > *:not(#experience) {
     display: none !important;
   }
 
-  /* Printable Curriculum Vitae Modal Formats Cleanly */
+  /* Ensure #experience wrapper is clean and unpadded for print */
+  #experience {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Modal unrolling for clean native print */
   .cv-modal-backdrop {
     position: static !important;
     background: #ffffff !important;
     padding: 0 !important;
+    margin: 0 !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     width: 100% !important;
@@ -183,6 +191,7 @@
     overflow: visible !important;
     inset: auto !important;
     z-index: auto !important;
+    display: block !important;
   }
 
   .cv-modal-content {
@@ -203,37 +212,48 @@
 
   .cv-modal-body {
     padding: 0 !important;
+    margin: 0 !important;
     overflow: visible !important;
-    color: #1f2937 !important;
+    background: #ffffff !important;
+    display: block !important;
   }
 
-  /* Convert dark text and borders to crisp print styling */
-  .cv-modal-body h1,
-  .cv-modal-body h2,
-  .cv-modal-body h3,
-  .cv-modal-body .font-medium,
-  .cv-modal-body .text-white {
+  .cv-modal-body > div {
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ATS Resume Print Container & Items */
+  #printable-cv,
+  #ats-cv-document,
+  .ats-resume-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Prevent awkward page cuts in middle of items */
+  .ats-item,
+  .break-inside-avoid,
+  .break-inside-avoid-page {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Crisp text styling */
+  h1, h2, h3, p, span, li, a {
     color: #111827 !important;
   }
 
-  .cv-modal-body p,
-  .cv-modal-body span,
-  .cv-modal-body li,
-  .cv-modal-body .text-slate-300,
-  .cv-modal-body .text-slate-400,
-  .cv-modal-body .text-zinc-300,
-  .cv-modal-body .text-zinc-400 {
-    color: #374151 !important;
-  }
-
-  .cv-modal-body .text-slate-500,
-  .cv-modal-body .text-zinc-500 {
-    color: #6b7280 !important;
-  }
-
-  .cv-modal-body .border-white\/10,
-  .cv-modal-body .border-white\/\[0\.08\],
-  .cv-modal-body .border-white\/\[0\.06\] {
-    border-color: #e5e7eb !important;
+  a {
+    text-decoration: underline !important;
   }
 }

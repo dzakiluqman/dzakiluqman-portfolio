@@ -4,6 +4,7 @@ import { FileText, Printer, X } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import EducationCard from './EducationCard'
 import CertificationCard from './CertificationCard'
+import ResumePDF from '../ResumePDF'
 
 export const CareerProgression = ({ 
   experiences: propExperiences = [], 
@@ -24,9 +25,18 @@ export const CareerProgression = ({
     const fetchAllData = async () => {
       if (!isSupabaseConfigured) {
         if (isMounted) {
-          setExperiences(propExperiences || [])
-          setEducations(propEducations || [])
-          setCertifications(propCertifications || [])
+          try {
+            const storedExp = localStorage.getItem('dzaki_demo_exp')
+            const storedEdu = localStorage.getItem('dzaki_demo_edu')
+            const storedCerts = localStorage.getItem('dzaki_demo_certs')
+            setExperiences(propExperiences?.length ? propExperiences : (storedExp ? JSON.parse(storedExp) : []))
+            setEducations(propEducations?.length ? propEducations : (storedEdu ? JSON.parse(storedEdu) : []))
+            setCertifications(propCertifications?.length ? propCertifications : (storedCerts ? JSON.parse(storedCerts) : []))
+          } catch {
+            setExperiences(propExperiences || [])
+            setEducations(propEducations || [])
+            setCertifications(propCertifications || [])
+          }
         }
         return
       }
@@ -111,8 +121,8 @@ export const CareerProgression = ({
   ]
 
   return (
-    <section id="experience" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="experience" className="relative py-20 md:py-28 bg-[#000000] scroll-mt-24 print:py-0 print:bg-white">
+      <div className="max-w-7xl mx-auto px-6 print:hidden">
         {/* Editorial Section Header with Right-Aligned CV Button & Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -304,256 +314,65 @@ export const CareerProgression = ({
           </AnimatePresence>
         </div>
 
-        {/* PRINT ALL TABS SEQUENTIALLY (Ensures print mode renders all 3 domains cleanly) */}
-        <div className="print-all-tabs hidden print:block space-y-12">
-          {/* Print Section 1: Experience */}
-          <div className="space-y-4 break-inside-avoid">
-            <h3 className="text-lg font-bold text-black border-b border-gray-300 pb-2">
-              Work Experience
-            </h3>
-            <div className="space-y-6">
-              {expList.map((exp, i) => (
-                <div key={i} className="timeline-item break-inside-avoid text-sm">
-                  <div className="flex justify-between items-baseline">
-                    <span className="font-semibold text-black">{exp.role} — {exp.company}</span>
-                    <span className="text-xs text-gray-600 font-mono">
-                      {formatDate(exp.start_date)} — {exp.is_current ? 'Present' : formatDate(exp.end_date)}
-                    </span>
-                  </div>
-                  {exp.description && (
-                    <p className="mt-1 text-gray-700 text-xs leading-relaxed">{exp.description}</p>
-                  )}
-                  {exp.achievements && exp.achievements.length > 0 && (
-                    <ul className="mt-1.5 space-y-1 text-xs text-gray-700">
-                      {exp.achievements.map((ach, idx) => (
-                        <li key={idx} className="flex items-start gap-1.5">
-                          <span>•</span>
-                          <span>{ach}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Print Section 2: Education */}
-          <div className="space-y-4 break-inside-avoid">
-            <h3 className="text-lg font-bold text-black border-b border-gray-300 pb-2">
-              Formal Education
-            </h3>
-            <div className="space-y-4">
-              {eduList.map((edu, i) => {
-                const currentYr = new Date().getFullYear()
-                const isOngoing = !edu.end_year || parseInt(edu.end_year, 10) >= currentYr
-                const years = isOngoing 
-                  ? `${edu.start_year || currentYr} — Present` 
-                  : (edu.start_year && edu.end_year && edu.start_year !== edu.end_year ? `${edu.start_year} — ${edu.end_year}` : `${edu.start_year || edu.end_year}`)
-
-                const headline = edu.field_of_study || edu.degree || edu.institution
-                const subtitle = edu.degree && edu.institution ? `${edu.degree} • ${edu.institution}` : (edu.degree || edu.institution)
-
-                return (
-                  <div key={i} className="card break-inside-avoid text-sm">
-                    <div className="flex justify-between items-baseline">
-                      <span className="font-semibold text-black">{headline}</span>
-                      <span className="text-xs text-gray-600 font-mono">
-                        {years} {isOngoing && '(In Progress)'}
-                      </span>
-                    </div>
-                    <p className="text-gray-800 text-xs mt-0.5">{subtitle}</p>
-                    {edu.description && (
-                      <p className="text-gray-600 text-xs my-1.5 leading-relaxed">{edu.description}</p>
-                    )}
-                    {edu.key_focus && (
-                      <p className="text-gray-600 text-[11px] font-mono">Key Focus: {edu.key_focus}</p>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* Print Section 3: Certifications */}
-          <div className="space-y-4 break-inside-avoid">
-            <h3 className="text-lg font-bold text-black border-b border-gray-300 pb-2">
-              Certifications & Credentials
-            </h3>
-            <div className="space-y-3">
-              {certList.map((cert, i) => (
-                <div key={i} className="card break-inside-avoid text-sm">
-                  <div className="flex justify-between items-baseline">
-                    <span className="font-semibold text-black">{cert.title}</span>
-                    <span className="text-xs text-gray-600 font-mono">
-                      {formatDate(cert.issue_date)}
-                    </span>
-                  </div>
-                  <p className="text-gray-700 text-xs">
-                    {cert.issuer} {cert.credential_id ? `· ID: ${cert.credential_id}` : ''}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
+
+      {/* Standalone ATS Resume for print when modal is not active */}
+      {!showCvModal && (
+        <div className="hidden print:block w-full">
+          <ResumePDF 
+            profile={profile}
+            experiences={expList}
+            educations={eduList}
+            certifications={certList}
+          />
+        </div>
+      )}
 
       {/* Swiss Editorial Curriculum Vitae Modal (Printable & Export-Safe) */}
       <AnimatePresence>
         {showCvModal && (
-          <div className="cv-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="cv-modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 overflow-y-auto backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.2 }}
-              className="cv-modal-content relative w-full max-w-4xl max-h-[90vh] bg-[#000000] border border-white/[0.08] rounded-2xl shadow-2xl overflow-hidden flex flex-col my-8"
+              className="cv-modal-content relative w-full max-w-4xl max-h-[85vh] overflow-y-auto bg-neutral-900 border border-neutral-800 rounded-xl p-6 scrollbar-thin scrollbar-thumb-neutral-700 my-auto shadow-2xl flex flex-col"
             >
               {/* Modal Top Bar (Hidden during print) */}
-              <div className="no-print p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-white/[0.01]">
-                <div className="flex items-center gap-2 text-xs text-slate-300">
-                  <FileText className="w-4 h-4 text-slate-400" />
-                  <span className="font-medium">Curriculum Vitae</span>
+              <div className="no-print pb-4 mb-4 border-b border-neutral-800 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-neutral-300">
+                  <FileText className="w-4 h-4 text-neutral-400" />
+                  <span className="font-semibold text-white">Curriculum Vitae</span>
+                  <span className="text-neutral-500 font-mono text-[11px] hidden sm:inline">(ATS-Friendly)</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => window.print()}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-neutral-950 hover:bg-neutral-200 transition-colors shadow-sm active:scale-95 cursor-pointer"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>Print CV</span>
                   </button>
                   <button
                     onClick={() => setShowCvModal(false)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-white transition-colors"
+                    className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
-              {/* Document Body */}
-              <div className="cv-modal-body p-6 sm:p-10 space-y-8 overflow-y-auto text-slate-300">
-                {/* Profile Header */}
-                <div className="border-b border-white/10 pb-6 break-inside-avoid">
-                  <h1 className="text-2xl sm:text-3xl font-light text-white tracking-tight">
-                    {profile?.full_name || 'Dzakii Luqman Faid'}
-                  </h1>
-                  <p className="text-sm font-medium text-slate-300 mt-1">
-                    {profile?.headline || 'Lead Software Developer & Systems Architect'}
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    {profile?.location || 'Kota Magelang, Indonesia'} · {profile?.social_links?.email || 'dzakiluqman275@gmail.com'}
-                  </p>
+              {/* Document Body: Authentic White A4 ATS Paper Sheet */}
+              <div className="cv-modal-body flex justify-center">
+                <div className="w-full max-w-[210mm] shadow-2xl rounded-lg overflow-hidden bg-white">
+                  <ResumePDF 
+                    profile={profile}
+                    experiences={expList}
+                    educations={eduList}
+                    certifications={certList}
+                  />
                 </div>
-
-                {/* Professional Summary */}
-                {profile?.bio && (
-                  <div className="space-y-2 break-inside-avoid">
-                    <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
-                      Summary
-                    </h2>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                      {profile.bio}
-                    </p>
-                  </div>
-                )}
-
-                {/* Experience Records */}
-                <div className="space-y-4 break-inside-avoid">
-                  <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
-                    Experience
-                  </h2>
-                  <div className="space-y-6">
-                    {expList.map((exp, i) => (
-                      <div key={i} className="text-xs sm:text-sm space-y-1.5 break-inside-avoid">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                          <span className="font-medium text-white">{exp.role} — {exp.company}</span>
-                          <span className="text-xs text-slate-500 uppercase tracking-wide">
-                            {formatDate(exp.start_date)} — {exp.is_current ? 'Present' : formatDate(exp.end_date)}
-                          </span>
-                        </div>
-                        {exp.description && (
-                          <p className="text-slate-400 leading-relaxed">{exp.description}</p>
-                        )}
-                        {exp.achievements && exp.achievements.length > 0 && (
-                          <ul className="space-y-1 pt-1 text-slate-400">
-                            {exp.achievements.map((ach, idx) => (
-                              <li key={idx} className="flex items-start gap-2">
-                                <span className="text-slate-600">—</span>
-                                <span>{ach}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Education */}
-                {eduList && eduList.length > 0 && (
-                  <div className="space-y-4 pt-4 border-t border-white/10 break-inside-avoid">
-                    <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
-                      Education
-                    </h2>
-                    <div className="space-y-4">
-                      {eduList.map((edu, i) => {
-                        const currentYr = new Date().getFullYear()
-                        const isOngoing = !edu.end_year || parseInt(edu.end_year, 10) >= currentYr
-                        const years = isOngoing 
-                          ? `${edu.start_year || currentYr} — Present` 
-                          : (edu.start_year && edu.end_year && edu.start_year !== edu.end_year ? `${edu.start_year} — ${edu.end_year}` : `${edu.start_year || edu.end_year}`)
-
-                        const headline = edu.field_of_study || edu.degree || edu.institution
-                        const subtitle = edu.degree && edu.institution ? `${edu.degree} • ${edu.institution}` : (edu.degree || edu.institution)
-
-                        return (
-                          <div key={i} className="flex flex-col sm:flex-row sm:items-start justify-between text-xs sm:text-sm break-inside-avoid gap-2">
-                            <div>
-                              <p className="font-medium text-white">{headline}</p>
-                              <p className="text-zinc-400">{subtitle}</p>
-                              {edu.description && (
-                                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{edu.description}</p>
-                              )}
-                              {edu.key_focus && (
-                                <p className="text-xs text-zinc-500 mt-0.5 font-mono">Key Focus: {edu.key_focus}</p>
-                              )}
-                            </div>
-                            <span className="text-xs text-zinc-500 uppercase tracking-wide shrink-0">
-                              {years} {isOngoing && '(In Progress)'}
-                            </span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Certifications */}
-                {certList && certList.length > 0 && (
-                  <div className="space-y-4 pt-4 border-t border-white/10 break-inside-avoid">
-                    <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
-                      Certifications & Credentials
-                    </h2>
-                    <div className="space-y-3">
-                      {certList.map((cert, i) => (
-                        <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between text-xs sm:text-sm break-inside-avoid">
-                          <div>
-                            <p className="font-medium text-white">{cert.title}</p>
-                            <p className="text-slate-400">{cert.issuer} {cert.credential_id ? `· ID: ${cert.credential_id}` : ''}</p>
-                          </div>
-                          {cert.issue_date && (
-                            <span className="text-xs text-slate-500 uppercase tracking-wide">
-                              {formatDate(cert.issue_date)}
-                            </span>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </motion.div>
           </div>
