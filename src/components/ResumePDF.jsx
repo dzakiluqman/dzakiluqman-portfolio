@@ -150,11 +150,36 @@ export const ResumePDF = ({
         #printable-cv, #printable-cv * {
           font-family: 'Montserrat', sans-serif !important;
         }
+
+        @media print {
+          /* 1. Set page margin to 0 to eliminate browser default header & footer slots */
+          @page {
+            size: A4;
+            margin: 0;
+          }
+
+          /* 2. Reset html and body elements */
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* 3. Apply custom margin via padding inside the printable CV container */
+          #printable-cv {
+            padding: 16mm 18mm !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+            min-h-screen: 100vh;
+          }
+        }
       `}</style>
 
       <div 
         id="printable-cv"
-        className="bg-white text-black p-8 rounded-lg space-y-6 text-sm leading-normal ats-resume-container w-full max-w-[210mm] mx-auto print:p-0 selection:bg-zinc-200 selection:text-black"
+        className="bg-white text-black p-8 rounded-lg space-y-6 text-sm leading-normal ats-resume-container w-full max-w-[210mm] mx-auto selection:bg-zinc-200 selection:text-black"
         style={{
           fontFamily: "'Montserrat', sans-serif"
         }}

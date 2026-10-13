@@ -134,14 +134,22 @@
    animations, transforms, and absolute coordinates.
    ========================================================================== */
 @media print {
+  /* 1. Set page margin to 0 to eliminate browser default header & footer slots */
   @page {
     size: A4;
-    margin: 12mm 15mm;
+    margin: 0;
   }
 
-  /* Reset root containers to plain white document */
+  /* 2. Reset html and body elements */
   html,
-  body,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   #root,
   main {
     height: auto !important;
@@ -233,13 +241,20 @@
     margin: 0 !important;
   }
 
+  /* 3. Apply custom margin via padding inside the printable CV container */
+  #printable-cv {
+    padding: 16mm 18mm !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 100vh;
+    min-h-screen: 100vh;
+  }
+
   /* ATS Resume Print Container & Items */
-  #printable-cv,
   #ats-cv-document,
   .ats-resume-container {
     width: 100% !important;
     max-width: 100% !important;
-    padding: 0 !important;
     margin: 0 !important;
     background: #ffffff !important;
     color: #111827 !important;
