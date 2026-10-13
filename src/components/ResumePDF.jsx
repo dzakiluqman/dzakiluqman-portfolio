@@ -135,12 +135,17 @@ export const ResumePDF = ({
 
   // Dynamic Contact Data
   const fullName = profile?.full_name ? profile.full_name.toUpperCase() : 'DZAKII LUQMAN FAID'
-  const role = profile?.headline || 'Junior Full-Stack Developer'
+  const role = (!profile?.headline || profile?.headline === 'Junior Full-Stack Developer' || profile?.headline === 'Junior Software Developer')
+    ? 'Full-Stack Developer'
+    : profile.headline
   const location = profile?.location || 'Magelang, Indonesia'
   const email = profile?.social_links?.email || profile?.email || 'dzakiluqman275@gmail.com'
   const portfolioUrl = 'https://portfolio.dzakiluqman.my.id'
   const portfolioDisplay = 'portfolio.dzakiluqman.my.id'
-  const aboutMeText = profile?.bio?.trim() || 'An enthusiastic, fast-learning Junior Full-Stack Developer passionate about building modern, interactive web applications and mobile ecosystems using React, Next.js, TypeScript, and cloud services. Experienced in engineering RESTful APIs, optimizing relational databases, and integrating computer vision and IoT hardware telemetry. Dedicated to writing clean, maintainable code and delivering performant, user-centric software solutions.'
+  const fallbackBio = 'An enthusiastic, fast-learning Full-Stack Developer passionate about building modern, interactive web applications and mobile ecosystems using React, Next.js, TypeScript, and cloud services. Experienced in engineering RESTful APIs, optimizing relational databases, and integrating computer vision and IoT hardware telemetry. Dedicated to writing clean, maintainable code and delivering performant, user-centric software solutions.'
+  const aboutMeText = profile?.bio?.trim()
+    ? profile.bio.trim().replace(/Junior Full-Stack Developer/gi, 'Full-Stack Developer')
+    : fallbackBio
 
   return (
     <>

@@ -12,7 +12,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner'
 export const Home = () => {
   const [profile, setProfile] = useState({
     full_name: 'Dzakii Luqman Faid',
-    headline: 'Junior Full-Stack Developer',
+    headline: 'Full-Stack Developer',
     location: 'Kota Magelang, Indonesia',
     bio: '',
     social_links: {
@@ -52,7 +52,7 @@ export const Home = () => {
             ...prev,
             ...profileData,
             full_name: profileData.full_name || prev.full_name,
-            headline: profileData.headline || prev.headline,
+            headline: (profileData.headline && profileData.headline !== 'Junior Full-Stack Developer') ? profileData.headline : 'Full-Stack Developer',
             location: profileData.location || prev.location,
             bio: profileData.bio || prev.bio,
             social_links: {

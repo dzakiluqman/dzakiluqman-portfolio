@@ -81,10 +81,13 @@ function ParticleField({ count = 280 }) {
 export const Hero3D = ({ profile }) => {
   const containerRef = useRef(null)
   const name = profile?.full_name || 'Dzakii Luqman Faid'
-  const headline = (profile?.headline && profile.headline !== 'Junior Software Developer')
+  const headline = (profile?.headline && profile.headline !== 'Junior Software Developer' && profile.headline !== 'Junior Full-Stack Developer')
     ? profile.headline
-    : 'Junior Full-Stack Developer'
-  const bio = profile?.bio || 'An enthusiastic, fast-learning Junior Full-Stack Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.'
+    : 'Full-Stack Developer'
+  const fallbackBio = 'An enthusiastic, fast-learning Full-Stack Developer passionate about building modern, interactive web applications with React, Tailwind CSS, and cloud backends.'
+  const bio = profile?.bio
+    ? profile.bio.replace(/Junior Full-Stack Developer/gi, 'Full-Stack Developer')
+    : fallbackBio
   const location = profile?.location || 'Kota Magelang, Indonesia'
   const socialLinks = {
     github: profile?.social_links?.github || 'https://github.com/dzakiluqman',
