@@ -12,8 +12,6 @@ import {
   Disc3, 
   ListMusic, 
   X, 
-  Sparkles,
-  Radio,
   Minimize2
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
@@ -26,37 +24,6 @@ function formatTime(seconds) {
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
   return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`
-}
-
-/**
- * Animated Waveform Equalizer Component
- * Displays 4 dynamic oscillating bars when playing, or resting state when paused
- */
-const WaveformEqualizer = ({ isPlaying, className = '' }) => {
-  return (
-    <div className={`flex items-end gap-[3px] h-4.5 px-0.5 ${className}`} aria-label="Audio Equalizer">
-      <motion.span
-        className="w-1 bg-white rounded-full origin-bottom"
-        animate={isPlaying ? { height: ['20%', '95%', '30%', '75%', '20%'] } : { height: '25%' }}
-        transition={{ repeat: Infinity, duration: 0.85, ease: 'easeInOut' }}
-      />
-      <motion.span
-        className="w-1 bg-white/90 rounded-full origin-bottom"
-        animate={isPlaying ? { height: ['60%', '25%', '100%', '40%', '60%'] } : { height: '40%' }}
-        transition={{ repeat: Infinity, duration: 0.72, ease: 'easeInOut', delay: 0.1 }}
-      />
-      <motion.span
-        className="w-1 bg-white/80 rounded-full origin-bottom"
-        animate={isPlaying ? { height: ['35%', '80%', '45%', '100%', '35%'] } : { height: '60%' }}
-        transition={{ repeat: Infinity, duration: 0.95, ease: 'easeInOut', delay: 0.2 }}
-      />
-      <motion.span
-        className="w-1 bg-white/70 rounded-full origin-bottom"
-        animate={isPlaying ? { height: ['80%', '30%', '85%', '20%', '80%'] } : { height: '30%' }}
-        transition={{ repeat: Infinity, duration: 0.8, ease: 'easeInOut', delay: 0.15 }}
-      />
-    </div>
-  )
 }
 
 export const AudioPlayer = () => {
@@ -91,6 +58,9 @@ export const AudioPlayer = () => {
     const checkScroll = () => {
       const scrolled = window.scrollY > 100
       setIsScrolledPast(scrolled)
+      if (!scrolled) {
+        setIsPlaylistOpen(false)
+      }
     }
 
     checkScroll()
@@ -273,9 +243,13 @@ export const AudioPlayer = () => {
   }, [tracks.length])
 
   const handleSelectTrack = (index) => {
-    setCurrentTrackIndex(index)
-    setIsPlaying(true)
-    setIsBarVisible(true)
+    if (index === currentTrackIndex) {
+      togglePlayPause()
+    } else {
+      setCurrentTrackIndex(index)
+      setIsPlaying(true)
+      setIsBarVisible(true)
+    }
   }
 
   const handleSeek = (e) => {
@@ -354,7 +328,7 @@ export const AudioPlayer = () => {
       {/* Clean "Tracks" header without metadata/subtitles, hide-controls removed   */}
       {/* ========================================================================= */}
       <AnimatePresence>
-        {isPlaylistOpen && (
+        {isScrolledPast && isPlaylistOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -417,16 +391,16 @@ export const AudioPlayer = () => {
                         `}
                       >
                         <div className="flex items-center gap-3 min-w-0 pr-2">
-                          {/* Play/Equalizer Indicator Icon */}
+                          {/* Dynamic Play / Pause State Icon */}
                           <div className={`
                             w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300
                             ${isCurrentPlaying
                               ? 'bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.6)]'
-                              : 'bg-white/5 border-white/10 text-white group-hover:bg-white/20 group-hover:border-white/30'
+                              : 'bg-white/5 border-white/10 text-white group-hover:bg-white/20 group-hover:border-white/30 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.25)]'
                             }
                           `}>
                             {isCurrentPlaying ? (
-                              <WaveformEqualizer isPlaying={true} className="text-black" />
+                              <Pause className="w-3.5 h-3.5 fill-current" />
                             ) : (
                               <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
                             )}
@@ -454,14 +428,6 @@ export const AudioPlayer = () => {
                   })}
                 </div>
               )}
-
-              {/* Bottom Quick Status (Hide Controls button removed) */}
-              <div className="mt-3.5 pt-2.5 border-t border-white/10 flex items-center justify-between">
-                <div className="text-[11px] text-zinc-400 flex items-center gap-1.5">
-                  <Radio className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>{tracks.length} {tracks.length === 1 ? 'Track' : 'Tracks'}</span>
-                </div>
-              </div>
             </div>
           </motion.div>
         )}
@@ -469,18 +435,19 @@ export const AudioPlayer = () => {
 
       {/* ========================================================================= */}
       {/* COMPONENT C: FLOATING BOTTOM AUDIO PLAYER BAR (Bottom Center)             */}
-      {/* Strictly horizontally centered, compact height, sleek proportions        */}
+      {/* Strictly horizontally centered wrapper with flex alignment                */}
       {/* ========================================================================= */}
       <AnimatePresence>
-        {isBarVisible && currentTrack && tracks.length > 0 && (
+        {isScrolledPast && isBarVisible && currentTrack && tracks.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[94vw] sm:w-[85vw] md:w-[600px] max-w-xl select-none"
+            className="fixed bottom-6 inset-x-0 z-40 flex justify-center items-center pointer-events-none select-none px-4"
           >
-            <div className="backdrop-blur-xl bg-neutral-950/85 border border-white/15 shadow-[0_10px_35px_0_rgba(0,0,0,0.65)] rounded-full px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300">
+            <div className="pointer-events-auto w-full sm:w-[85vw] md:w-[600px] max-w-xl">
+              <div className="backdrop-blur-xl bg-neutral-950/85 border border-white/15 shadow-[0_10px_35px_0_rgba(0,0,0,0.65)] rounded-full px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300">
               <div className="flex items-center justify-between gap-2 sm:gap-3.5">
                 
                 {/* 1. Track Info & Spinning Vinyl Disc */}
@@ -652,6 +619,7 @@ export const AudioPlayer = () => {
                   {playbackError}
                 </div>
               )}
+              </div>
             </div>
           </motion.div>
         )}
