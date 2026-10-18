@@ -309,7 +309,7 @@ export const AudioPlayer = () => {
 
       {/* ========================================================================= */}
       {/* COMPONENT A: FLOATING TRIGGER BUTTON (Bottom Right)                       */}
-      {/* Scroll-triggered: Hidden when window.scrollY <= 100, fades in past 100px */}
+      {/* Restored clean music icon, stripped active indicators, refined hover tip  */}
       {/* ========================================================================= */}
       <AnimatePresence>
         {isScrolledPast && (
@@ -321,54 +321,26 @@ export const AudioPlayer = () => {
             className="fixed bottom-6 right-6 z-40 select-none"
           >
             <div className="relative group">
-              {/* Outer Glow Halo when playing */}
-              {isPlaying && (
-                <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-white/20 via-white/40 to-white/20 blur-md opacity-75 animate-pulse-slow" />
-              )}
-
-              {/* Main Circular Button */}
+              {/* Main Circular Button with Centered Clean Music Icon */}
               <button
                 id="audio-player-trigger-btn"
                 onClick={() => {
                   setIsPlaylistOpen((prev) => !prev)
                   if (!isBarVisible && isPlaying) setIsBarVisible(true)
                 }}
-                title={isPlaying && currentTrack ? `Playing: ${currentTrack.title}` : tracks.length > 0 ? 'Open Audio Player' : 'No music tracks available'}
+                title={currentTrack ? `Playing: ${currentTrack.title}` : 'Tracks'}
                 aria-label="Toggle Audio Player"
-                className={`
-                  relative w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center
-                  backdrop-blur-xl bg-neutral-950/75 border border-white/15 
-                  shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]
-                  hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:border-white/40 hover:bg-white/15
-                  active:scale-95 transition-all duration-300
-                  ${isPlaylistOpen ? 'ring-2 ring-white/40 bg-white/10' : ''}
-                `}
+                className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full flex items-center justify-center backdrop-blur-xl bg-neutral-950/80 border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:border-white/40 hover:bg-white/15 active:scale-95 transition-all duration-300"
               >
-                {isPlaying ? (
-                  <WaveformEqualizer isPlaying={isPlaying} />
-                ) : (
-                  <Music className="w-5 h-5 text-white/90 group-hover:text-white transition-colors" />
-                )}
-
-                {/* Live Supabase Pulse Indicator Dot */}
-                {isLiveFromSupabase && tracks.length > 0 && (
-                  <span 
-                    className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-neutral-950 shadow-[0_0_8px_rgba(52,211,153,0.8)]" 
-                    title="Live connected to Supabase tracks"
-                  />
-                )}
+                <Music className="w-5 h-5 text-white/90 group-hover:text-white transition-colors" />
               </button>
 
               {/* Floating Tooltip Pill (Desktop Hover) */}
               <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:block whitespace-nowrap">
-                <div className="backdrop-blur-xl bg-neutral-950/85 border border-white/10 text-white text-xs px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2">
+                <div className="backdrop-blur-xl bg-neutral-950/90 border border-white/15 text-white text-xs px-3.5 py-1.5 rounded-full shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] flex items-center gap-2">
                   <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-emerald-400 animate-ping' : 'bg-white/40'}`} />
                   <span className="font-medium">
-                    {isPlaying && currentTrack 
-                      ? `Playing: ${currentTrack.title}` 
-                      : tracks.length > 0 
-                        ? 'Ambient Soundtrack' 
-                        : 'No music tracks available'}
+                    Playing: {currentTrack?.title || 'No Track Selected'}
                   </span>
                 </div>
               </div>
@@ -379,7 +351,7 @@ export const AudioPlayer = () => {
 
       {/* ========================================================================= */}
       {/* COMPONENT B: FLOATING PLAYLIST POPUP (Bottom Right, Above Trigger)        */}
-      {/* Liquid Glass Card displaying tracks fetched from Supabase                 */}
+      {/* Clean "Tracks" header without metadata/subtitles, hide-controls removed   */}
       {/* ========================================================================= */}
       <AnimatePresence>
         {isPlaylistOpen && (
@@ -392,26 +364,15 @@ export const AudioPlayer = () => {
           >
             <div className="backdrop-blur-xl bg-neutral-950/85 border border-white/10 shadow-[0_12px_40px_0_rgba(0,0,0,0.65)] rounded-2xl overflow-hidden p-4 sm:p-5">
               
-              {/* Header */}
-              <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white">
-                    <ListMusic className="w-4 h-4" />
+              {/* Header: Clean "Tracks" Title & Close Button */}
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white">
+                    <ListMusic className="w-3.5 h-3.5" />
                   </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white tracking-wide flex items-center gap-2">
-                      Soundtrack
-                      {isLiveFromSupabase && (
-                        <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          Supabase
-                        </span>
-                      )}
-                    </h3>
-                    <p className="text-[11px] text-zinc-400">
-                      Atmospheric code & design beats
-                    </p>
-                  </div>
+                  <h3 className="text-sm font-semibold text-white tracking-wide">
+                    Tracks
+                  </h3>
                 </div>
 
                 {/* Close Button with Glowing Hover State */}
@@ -421,7 +382,7 @@ export const AudioPlayer = () => {
                   className="p-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/15 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all duration-300"
                   aria-label="Close Playlist"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
 
@@ -494,22 +455,12 @@ export const AudioPlayer = () => {
                 </div>
               )}
 
-              {/* Bottom Quick Controls & Player Bar Launcher */}
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+              {/* Bottom Quick Status (Hide Controls button removed) */}
+              <div className="mt-3.5 pt-2.5 border-t border-white/10 flex items-center justify-between">
                 <div className="text-[11px] text-zinc-400 flex items-center gap-1.5">
                   <Radio className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>{tracks.length} {tracks.length === 1 ? 'Track' : 'Tracks'} Available</span>
+                  <span>{tracks.length} {tracks.length === 1 ? 'Track' : 'Tracks'}</span>
                 </div>
-
-                {tracks.length > 0 && (
-                  <button
-                    onClick={() => setIsBarVisible((prev) => !prev)}
-                    className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/15 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.25)] transition-all duration-300 flex items-center gap-1.5"
-                  >
-                    <Disc3 className={`w-3.5 h-3.5 ${isPlaying ? 'animate-spin-slow' : ''}`} />
-                    {isBarVisible ? 'Hide Controls' : 'Show Controls'}
-                  </button>
-                )}
               </div>
             </div>
           </motion.div>
@@ -518,7 +469,7 @@ export const AudioPlayer = () => {
 
       {/* ========================================================================= */}
       {/* COMPONENT C: FLOATING BOTTOM AUDIO PLAYER BAR (Bottom Center)             */}
-      {/* Pill-shaped liquid glass bar positioned fixed bottom-6 left-1/2           */}
+      {/* Strictly horizontally centered, compact height, sleek proportions        */}
       {/* ========================================================================= */}
       <AnimatePresence>
         {isBarVisible && currentTrack && tracks.length > 0 && (
@@ -527,54 +478,54 @@ export const AudioPlayer = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[95vw] sm:w-[90vw] md:w-[700px] max-w-2xl select-none"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[94vw] sm:w-[85vw] md:w-[600px] max-w-xl select-none"
           >
-            <div className="backdrop-blur-xl bg-neutral-950/80 border border-white/15 shadow-[0_12px_45px_0_rgba(0,0,0,0.7)] rounded-full px-3.5 sm:px-6 py-2.5 sm:py-3 transition-all duration-300">
-              <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="backdrop-blur-xl bg-neutral-950/85 border border-white/15 shadow-[0_10px_35px_0_rgba(0,0,0,0.65)] rounded-full px-3 sm:px-4 py-2 sm:py-2.5 transition-all duration-300">
+              <div className="flex items-center justify-between gap-2 sm:gap-3.5">
                 
                 {/* 1. Track Info & Spinning Vinyl Disc */}
-                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 max-w-[130px] sm:max-w-[200px]">
-                  <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-950 border border-white/20 p-1 flex items-center justify-center shrink-0 shadow-md">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 max-w-[110px] sm:max-w-[150px]">
+                  <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-950 border border-white/20 p-1 flex items-center justify-center shrink-0 shadow-sm">
                     <Disc3 className={`w-full h-full text-zinc-300 ${isPlaying ? 'animate-spin' : ''}`} style={{ animationDuration: '4s' }} />
-                    <span className="absolute w-2 h-2 rounded-full bg-white/80" />
+                    <span className="absolute w-1.5 h-1.5 rounded-full bg-white/80" />
                   </div>
 
                   <div className="min-w-0">
-                    <p className="text-xs sm:text-sm font-semibold text-white truncate tracking-tight">
+                    <p className="text-xs sm:text-[13px] font-semibold text-white truncate tracking-tight">
                       {currentTrack.title}
                     </p>
-                    <p className="text-[10px] sm:text-xs text-zinc-400 truncate">
+                    <p className="text-[10px] sm:text-[11px] text-zinc-400 truncate">
                       {currentTrack.artist || 'Dzaki Luqman'}
                     </p>
                   </div>
                 </div>
 
                 {/* 2. Playback Control Group & Dynamic Progress */}
-                <div className="flex-1 flex flex-col items-center max-w-xs sm:max-w-sm px-1 sm:px-2">
+                <div className="flex-1 flex flex-col items-center max-w-[220px] sm:max-w-[280px] px-1">
                   
                   {/* Control Buttons Group */}
-                  <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
                     {/* Previous Button */}
                     <button
                       id="audio-prev-btn"
                       onClick={handlePrev}
-                      className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
+                      className="p-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
                       aria-label="Previous Track"
                     >
-                      <SkipBack className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <SkipBack className="w-3.5 h-3.5" />
                     </button>
 
                     {/* Play / Pause Toggle Button */}
                     <button
                       id="audio-play-pause-btn"
                       onClick={togglePlayPause}
-                      className="p-2 sm:p-2.5 rounded-full bg-white text-black border border-white hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] transition-all duration-300 active:scale-95"
+                      className="p-1.5 sm:p-2 rounded-full bg-white text-black border border-white hover:bg-zinc-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.5)] transition-all duration-300 active:scale-95"
                       aria-label={isPlaying ? 'Pause' : 'Play'}
                     >
                       {isPlaying ? (
-                        <Pause className="w-4 h-4 fill-current" />
+                        <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                       ) : (
-                        <Play className="w-4 h-4 fill-current ml-0.5" />
+                        <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current ml-0.5" />
                       )}
                     </button>
 
@@ -582,16 +533,16 @@ export const AudioPlayer = () => {
                     <button
                       id="audio-next-btn"
                       onClick={handleNext}
-                      className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
+                      className="p-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
                       aria-label="Next Track"
                     >
-                      <SkipForward className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <SkipForward className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
                   {/* Progress Bar & Timers */}
-                  <div className="w-full flex items-center gap-2">
-                    <span className="text-[10px] font-mono text-zinc-400 w-8 sm:w-9 text-right shrink-0">
+                  <div className="w-full flex items-center gap-1.5 sm:gap-2">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-zinc-400 w-7 sm:w-8 text-right shrink-0">
                       {formatTime(currentTime)}
                     </span>
 
@@ -599,26 +550,26 @@ export const AudioPlayer = () => {
                     <div
                       ref={progressBarRef}
                       onClick={handleSeek}
-                      className="relative flex-1 h-1.5 sm:h-2 bg-white/10 rounded-full cursor-pointer overflow-hidden group/bar hover:h-2.5 transition-all duration-200"
+                      className="relative flex-1 h-1 sm:h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden group/bar hover:h-2 transition-all duration-200"
                     >
                       {/* Active Fill */}
                       <div
-                        className="h-full bg-gradient-to-r from-zinc-200 via-white to-zinc-100 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.7)] transition-all duration-100 relative"
+                        className="h-full bg-gradient-to-r from-zinc-200 via-white to-zinc-100 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.7)] transition-all duration-100 relative"
                         style={{ width: `${progressPercentage}%` }}
                       >
                         {/* Glow head */}
-                        <span className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)]" />
+                        <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,1)]" />
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono text-zinc-400 w-8 sm:w-9 text-left shrink-0">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-zinc-400 w-7 sm:w-8 text-left shrink-0">
                       {formatTime(duration)}
                     </span>
                   </div>
                 </div>
 
                 {/* 3. Volume Control & Auxiliary Actions */}
-                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                   {/* Volume Toggle / Popover */}
                   <div 
                     className="relative"
@@ -628,15 +579,15 @@ export const AudioPlayer = () => {
                     <button
                       id="audio-volume-toggle-btn"
                       onClick={toggleMute}
-                      className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
+                      className="p-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
                       aria-label="Volume Control"
                     >
                       {isMuted || volume === 0 ? (
-                        <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />
+                        <VolumeX className="w-3.5 h-3.5 text-zinc-400" />
                       ) : volume < 0.5 ? (
-                        <Volume1 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Volume1 className="w-3.5 h-3.5" />
                       ) : (
-                        <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Volume2 className="w-3.5 h-3.5" />
                       )}
                     </button>
 
@@ -648,7 +599,7 @@ export const AudioPlayer = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 p-2.5 rounded-2xl backdrop-blur-xl bg-neutral-950/90 border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] flex flex-col items-center gap-2 z-50"
+                          className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 p-2 rounded-2xl backdrop-blur-xl bg-neutral-950/90 border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] flex flex-col items-center gap-1.5 z-50"
                         >
                           <input
                             type="range"
@@ -657,9 +608,9 @@ export const AudioPlayer = () => {
                             step="0.01"
                             value={isMuted ? 0 : volume}
                             onChange={handleVolumeChange}
-                            className="w-20 sm:w-24 accent-white cursor-pointer"
+                            className="w-18 sm:w-20 accent-white cursor-pointer"
                           />
-                          <span className="text-[10px] font-mono text-zinc-300">
+                          <span className="text-[9px] font-mono text-zinc-300">
                             {isMuted ? 'Muted' : `${Math.round(volume * 100)}%`}
                           </span>
                         </motion.div>
@@ -671,33 +622,33 @@ export const AudioPlayer = () => {
                   <button
                     id="audio-bar-playlist-btn"
                     onClick={() => setIsPlaylistOpen((prev) => !prev)}
-                    className={`p-1.5 sm:p-2 rounded-full border transition-all duration-300 active:scale-95 ${
+                    className={`p-1.5 rounded-full border transition-all duration-300 active:scale-95 ${
                       isPlaylistOpen 
-                        ? 'bg-white/20 border-white/40 text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]' 
-                        : 'bg-white/5 border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.25)]'
+                        ? 'bg-white/20 border-white/40 text-white shadow-[0_0_12px_rgba(255,255,255,0.3)]' 
+                        : 'bg-white/5 border-white/10 text-zinc-300 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]'
                     }`}
                     title="Toggle Playlist"
                     aria-label="Toggle Playlist"
                   >
-                    <ListMusic className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <ListMusic className="w-3.5 h-3.5" />
                   </button>
 
                   {/* Minimize Bar Button */}
                   <button
                     id="audio-bar-minimize-btn"
                     onClick={() => setIsBarVisible(false)}
-                    className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
+                    className="p-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/20 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all duration-300 active:scale-95"
                     title="Minimize Player"
                     aria-label="Minimize Player"
                   >
-                    <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <Minimize2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
 
               {/* Playback Error Warning (if any) */}
               {playbackError && (
-                <div className="mt-2 text-center text-[10px] text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-full py-0.5 px-3">
+                <div className="mt-1.5 text-center text-[10px] text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-full py-0.5 px-3">
                   {playbackError}
                 </div>
               )}
