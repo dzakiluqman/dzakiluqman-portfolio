@@ -16,7 +16,8 @@ import {
   Radio,
   Activity,
   Terminal,
-  ShieldCheck
+  ShieldCheck,
+  Disc3
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import Sidebar from '../../components/admin/Sidebar'
@@ -29,7 +30,9 @@ export const Dashboard = () => {
     publishedProjects: 0,
     totalExperiences: 0,
     totalSkills: 0,
-    unreadMessages: 0
+    unreadMessages: 0,
+    totalTracks: 0,
+    activeTracks: 0
   })
   const [recentMessages, setRecentMessages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -43,13 +46,16 @@ export const Dashboard = () => {
         const storedProjects = JSON.parse(localStorage.getItem('dzaki_demo_projects') || '[]') || []
         const storedExp = JSON.parse(localStorage.getItem('dzaki_demo_exp') || '[]') || []
         const storedSkills = JSON.parse(localStorage.getItem('dzaki_demo_skills') || '[]') || []
+        const storedTracks = JSON.parse(localStorage.getItem('dzaki_demo_tracks') || '[]') || []
 
         setStats({
           totalProjects: storedProjects.length,
           publishedProjects: storedProjects.filter((p) => p.is_published).length,
           totalExperiences: storedExp.length,
           totalSkills: storedSkills.length,
-          unreadMessages: storedMessages.filter((m) => !m.is_read).length
+          unreadMessages: storedMessages.filter((m) => !m.is_read).length,
+          totalTracks: storedTracks.length,
+          activeTracks: storedTracks.filter((t) => t.is_active).length
         })
         setRecentMessages(storedMessages.slice(0, 4))
         setLoading(false)
@@ -57,24 +63,28 @@ export const Dashboard = () => {
       }
 
       try {
-        const [projectsRes, expRes, skillsRes, messagesRes] = await Promise.all([
+        const [projectsRes, expRes, skillsRes, messagesRes, tracksRes] = await Promise.all([
           supabase.from('projects').select('id, is_published'),
           supabase.from('experiences').select('id'),
           supabase.from('skills').select('id'),
-          supabase.from('messages').select('*').order('created_at', { ascending: false }).limit(5)
+          supabase.from('messages').select('*').order('created_at', { ascending: false }).limit(5),
+          supabase.from('tracks').select('id, is_active')
         ])
 
         const projects = projectsRes.data || []
         const experiences = expRes.data || []
         const skills = skillsRes.data || []
         const messages = messagesRes.data || []
+        const tracks = tracksRes.data || []
 
         setStats({
           totalProjects: projects.length,
           publishedProjects: projects.filter((p) => p.is_published).length,
           totalExperiences: experiences.length,
           totalSkills: skills.length,
-          unreadMessages: messages.filter((m) => !m.is_read).length
+          unreadMessages: messages.filter((m) => !m.is_read).length,
+          totalTracks: tracks.length,
+          activeTracks: tracks.filter((t) => t.is_active).length
         })
         setRecentMessages(messages)
       } catch (err) {
@@ -132,7 +142,7 @@ export const Dashboard = () => {
               </div>
 
               {/* Sci-Fi Metric Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
                 {/* Total Projects */}
                 <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-zinc-600 transition-all group">
                   <div className="flex items-center justify-between">
@@ -192,6 +202,27 @@ export const Dashboard = () => {
                     className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white"
                   >
                     <span>Manage skills stack</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                {/* Soundtrack Tracks */}
+                <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-zinc-600 transition-all group">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase text-zinc-400">Soundtrack</span>
+                    <div className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
+                      <Disc3 className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-baseline gap-2">
+                    <span className="text-3xl font-extrabold text-white">{stats.totalTracks}</span>
+                    <span className="text-xs text-zinc-400 font-mono">({stats.activeTracks} Live)</span>
+                  </div>
+                  <Link
+                    to="/admin/tracks"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white"
+                  >
+                    <span>Manage tracks</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

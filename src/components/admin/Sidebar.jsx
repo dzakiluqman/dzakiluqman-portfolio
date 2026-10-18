@@ -8,7 +8,8 @@ import {
   Mail, 
   LogOut, 
   ExternalLink, 
-  ShieldCheck
+  ShieldCheck,
+  Disc3
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import dlLogo from '../../assets/images/dl-logo.png'
@@ -27,6 +28,7 @@ export const Sidebar = ({ unreadCount = 0 }) => {
     { name: 'Projects', path: '/admin/projects', icon: FolderGit2 },
     { name: 'Skills & Stack', path: '/admin/skills', icon: Code },
     { name: 'CV & Experience', path: '/admin/cv', icon: FileText },
+    { name: 'Soundtrack', path: '/admin/tracks', icon: Disc3 },
     { name: 'Messages', path: '/admin/messages', icon: Mail, badge: unreadCount > 0 ? unreadCount : null },
   ]
 

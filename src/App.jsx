@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import Preloader from './components/Preloader'
+import AudioPlayer from './components/common/AudioPlayer'
 
 // Public Pages
 import Home from './pages/public/Home'
@@ -15,6 +16,18 @@ import AdminProjects from './pages/admin/AdminProjects'
 import AdminSkills from './pages/admin/AdminSkills'
 import AdminCV from './pages/admin/AdminCV'
 import AdminMessages from './pages/admin/AdminMessages'
+import AdminTracks from './pages/admin/AdminTracks'
+
+/**
+ * PublicAudioPlayer renders the floating liquid glass audio player
+ * on all public portfolio pages, maintaining continuous audio across route navigation
+ */
+function PublicAudioPlayer() {
+  const location = useLocation()
+  const isAdmin = location.pathname.startsWith('/admin')
+  if (isAdmin) return null
+  return <AudioPlayer />
+}
 
 export function App() {
   return (
@@ -27,6 +40,7 @@ export function App() {
       >
         <Suspense fallback={null}>
           <Preloader />
+          <PublicAudioPlayer />
           <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -44,6 +58,7 @@ export function App() {
             <Route path="skills" element={<AdminSkills />} />
             <Route path="cv" element={<AdminCV />} />
             <Route path="messages" element={<AdminMessages />} />
+            <Route path="tracks" element={<AdminTracks />} />
           </Route>
 
           {/* Fallback Redirect */}

@@ -406,3 +406,101 @@ BEGIN
   END IF;
 END $$;
 
+-- ==============================================================================
+-- 9. TRACKS TABLE (FOR SCROLL-TRIGGERED FLOATING AUDIO PLAYER)
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS public.tracks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  artist TEXT NOT NULL DEFAULT 'Dzaki Luqman',
+  audio_url TEXT NOT NULL,
+  duration TEXT DEFAULT '03:00',
+  order_index INT DEFAULT 0,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Index for fast ordering and filtering
+CREATE INDEX IF NOT EXISTS idx_tracks_active_order ON public.tracks (is_active, order_index);
+
+-- Enable Row Level Security
+ALTER TABLE public.tracks ENABLE ROW LEVEL SECURITY;
+
+-- Public read access to active tracks
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'public' AND tablename = 'tracks' AND policyname = 'Public read access for active tracks'
+  ) THEN
+    CREATE POLICY "Public read access for active tracks" 
+    ON public.tracks FOR SELECT 
+    USING (is_active = true);
+  END IF;
+END $$;
+
+-- Authenticated users (admin) can perform all operations
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'public' AND tablename = 'tracks' AND policyname = 'Authenticated admin full access to tracks'
+  ) THEN
+    CREATE POLICY "Authenticated admin full access to tracks" 
+    ON public.tracks FOR ALL TO authenticated 
+    USING (true);
+  END IF;
+END $$;
+
+-- ==============================================================================
+-- 10. STORAGE BUCKET FOR AUDIO TRACKS ('audio-tracks')
+-- ==============================================================================
+
+-- Create public 'audio-tracks' bucket if not already existing
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('audio-tracks', 'audio-tracks', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Public read access to all audio objects in 'audio-tracks' bucket
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Public Access for Audio Tracks'
+  ) THEN
+    CREATE POLICY "Public Access for Audio Tracks" 
+    ON storage.objects FOR SELECT 
+    USING (bucket_id = 'audio-tracks');
+  END IF;
+END $$;
+
+-- Authenticated users can upload audio objects into 'audio-tracks' bucket
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Authenticated users can upload audio tracks'
+  ) THEN
+    CREATE POLICY "Authenticated users can upload audio tracks" 
+    ON storage.objects FOR INSERT TO authenticated 
+    WITH CHECK (bucket_id = 'audio-tracks');
+  END IF;
+END $$;
+
+-- Authenticated users can update/delete audio objects in 'audio-tracks' bucket
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies 
+    WHERE schemaname = 'storage' AND tablename = 'objects' AND policyname = 'Authenticated users can manage audio tracks storage'
+  ) THEN
+    CREATE POLICY "Authenticated users can manage audio tracks storage" 
+    ON storage.objects FOR ALL TO authenticated 
+    USING (bucket_id = 'audio-tracks');
+  END IF;
+END $$;
+
+
+
