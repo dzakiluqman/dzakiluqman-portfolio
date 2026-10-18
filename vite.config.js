@@ -5,12 +5,14 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
+    // Disable modulepreload to avoid eager loading of non-critical chunks
+    modulePreload: false,
     rollupOptions: {
       output: {
         manualChunks: {
-          'three-core': ['three'],
-          'r3f-drei': ['@react-three/fiber', '@react-three/drei'],
-          'vendor': ['framer-motion', 'lucide-react'],
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'framer-motion': ['framer-motion'],
+          'supabase': ['@supabase/supabase-js'],
         },
       },
     },

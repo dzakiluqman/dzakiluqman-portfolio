@@ -1,10 +1,9 @@
 import React from 'react'
-import * as Icons from 'lucide-react'
+import { Code } from 'lucide-react'
 
-// Helper to safely render dynamic Lucide icon by string name
+// Helper to safely render dynamic icon
 const DynamicIcon = ({ name, className = 'w-5 h-5' }) => {
-  const IconComponent = Icons[name] || Icons.Code
-  return <IconComponent className={className} />
+  return <Code className={className} />
 }
 
 export const SkillBadge = ({ skill }) => {

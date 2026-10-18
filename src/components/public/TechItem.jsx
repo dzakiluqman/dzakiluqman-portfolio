@@ -1,6 +1,5 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import * as Icons from 'lucide-react'
 import {
   Code,
   FileCode,
@@ -18,7 +17,12 @@ import {
   Workflow,
   Shield,
   Layout,
-  HardDrive
+  HardDrive,
+  Zap,
+  Folder,
+  Lock,
+  Network,
+  Braces
 } from 'lucide-react'
 
 // Direct fallback map for reliable rendering without runtime lookup failures
@@ -41,7 +45,12 @@ const ICON_MAP = {
   Workflow,
   Shield,
   Layout,
-  HardDrive
+  HardDrive,
+  Zap,
+  Folder,
+  Lock,
+  Network,
+  Braces
 }
 
 // Curated Swiss editorial domain focus descriptors
@@ -96,7 +105,6 @@ const getFocusDescription = (skill) => {
 export const TechItem = ({ skill, index = 0 }) => {
   const IconComponent =
     (skill.icon_name && ICON_MAP[skill.icon_name]) ||
-    (skill.icon_name && Icons[skill.icon_name]) ||
     Code
 
   const title = skill.title || skill.name || 'Technical Competency'

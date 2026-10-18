@@ -300,7 +300,4 @@ export const Avatar3DMale = ({ scale = 1.0, position = [0, -1.58, 0] }) => {
   )
 }
 
-useGLTF.preload('/models/newmodel.glb')
-useGLTF.preload('/newmodel.glb')
-
 export default Avatar3DMale

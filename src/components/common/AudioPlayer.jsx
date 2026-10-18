@@ -53,13 +53,20 @@ export const AudioPlayer = () => {
 
   const currentTrack = tracks.length > 0 ? (tracks[currentTrackIndex] || tracks[0]) : null
 
-  // 1. SCROLL LISTENER (window.scrollY > 100)
+  // 1. SCROLL LISTENER (window.scrollY > 100) with rAF throttle & passive listener
   useEffect(() => {
+    let ticking = false
     const checkScroll = () => {
-      const scrolled = window.scrollY > 100
-      setIsScrolledPast(scrolled)
-      if (!scrolled) {
-        setIsPlaylistOpen(false)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 100
+          setIsScrolledPast(scrolled)
+          if (!scrolled) {
+            setIsPlaylistOpen(false)
+          }
+          ticking = false
+        })
+        ticking = true
       }
     }
 
@@ -68,7 +75,7 @@ export const AudioPlayer = () => {
     return () => window.removeEventListener('scroll', checkScroll)
   }, [])
 
-  // 2. SUPABASE INTEGRATION (Fetch ONLY real dynamic records from tracks table)
+  // 2. SUPABASE INTEGRATION (Deferred fetch of tracks table)
   useEffect(() => {
     let isMounted = true
 
@@ -112,10 +119,24 @@ export const AudioPlayer = () => {
       }
     }
 
-    loadTracks()
-
-    return () => {
-      isMounted = false
+    // Defer non-critical audio data load to idle callback or timeout
+    let timerId
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const idleId = window.requestIdleCallback(() => {
+        loadTracks()
+      }, { timeout: 2000 })
+      return () => {
+        isMounted = false
+        if (window.cancelIdleCallback) window.cancelIdleCallback(idleId)
+      }
+    } else {
+      timerId = setTimeout(() => {
+        loadTracks()
+      }, 500)
+      return () => {
+        isMounted = false
+        clearTimeout(timerId)
+      }
     }
   }, [])
 
@@ -182,33 +203,33 @@ export const AudioPlayer = () => {
     }
   }, [volume, isMuted])
 
-  // Sync track source when currentTrack changes
+  // Sync track source when currentTrack changes (only load if actively playing)
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
-    const previousPlayingState = isPlaying
-    audio.src = currentTrack.audio_url
-    audio.load()
-
-    if (previousPlayingState) {
+    if (isPlaying) {
+      audio.src = currentTrack.audio_url
       audio.play().catch((err) => {
         console.log('[AudioPlayer] Playback autoplay interaction note:', err)
         setIsPlaying(false)
       })
     }
-  }, [currentTrackIndex, tracks])
+  }, [currentTrackIndex, tracks, isPlaying])
 
   // 4. AUDIO CONTROLS
   const togglePlayPause = useCallback(() => {
     const audio = audioRef.current
-    if (!audio) return
+    if (!audio || !currentTrack) return
 
     if (isPlaying) {
       audio.pause()
       setIsPlaying(false)
     } else {
       setIsLoadingAudio(true)
+      if (!audio.src || !audio.src.includes(currentTrack.audio_url)) {
+        audio.src = currentTrack.audio_url
+      }
       audio.play()
         .then(() => {
           setIsPlaying(true)
@@ -223,7 +244,7 @@ export const AudioPlayer = () => {
           setIsLoadingAudio(false)
         })
     }
-  }, [isPlaying])
+  }, [isPlaying, currentTrack])
 
   const handleNext = useCallback(() => {
     setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
@@ -279,7 +300,7 @@ export const AudioPlayer = () => {
   return (
     <>
       {/* Hidden HTML5 Audio Element */}
-      <audio ref={audioRef} preload="metadata" />
+      <audio ref={audioRef} preload="none" />
 
       {/* ========================================================================= */}
       {/* COMPONENT A: FLOATING TRIGGER BUTTON (Bottom Right)                       */}

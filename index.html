@@ -3,14 +3,19 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/dl-logo.png" />
+  <link rel="icon" type="image/webp" href="/dl-logo.webp" />
+  <link rel="alternate icon" type="image/png" href="/dl-logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio | Dzakii Luqman Faid</title>
-  <meta name="description" content="Portfolio and CV of Dzakii Luqman Faid - Junior Fullstack Software Engineer." />
-  <!-- Fonts -->
+  <meta name="description" content="Portfolio and CV of Dzakii Luqman Faid - Fullstack Software Engineer." />
+  
+  <!-- Critical Resource Hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+  <link rel="preload" as="image" href="/dl-logo.webp" type="image/webp" fetchpriority="high">
+
+  <!-- Typography with font-display: swap to prevent render blocking -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 </head>
 

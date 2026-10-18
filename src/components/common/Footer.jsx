@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ArrowUp, Shield } from 'lucide-react'
-import dlLogo from '../../assets/images/dl-logo.png'
+import dlLogo from '../../assets/images/dl-logo.webp'
 
 export const Footer = ({ profile }) => {
   const scrollToTop = () => {
@@ -162,6 +162,10 @@ export const Footer = ({ profile }) => {
             <img
               src={dlLogo}
               alt="DL Logo"
+              width="28"
+              height="28"
+              loading="lazy"
+              decoding="async"
               className="w-7 h-auto max-h-7 object-contain rounded-md opacity-80 hover:opacity-100 transition-opacity"
             />
             <p className="text-xs text-zinc-600 text-center sm:text-left">

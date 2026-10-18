@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import Navbar from '../../components/common/Navbar'
 import Footer from '../../components/common/Footer'
 import Hero3D from '../../components/3d/Hero3D'
-import FeaturedProjects from '../../components/public/FeaturedProjects'
-import TechnicalCompetencies from '../../components/public/TechnicalCompetencies'
-import CareerProgression from '../../components/public/CareerProgression'
-import LetsConnect from '../../components/public/LetsConnect'
-import LoadingSpinner from '../../components/common/LoadingSpinner'
+
+// Code-split below-the-fold sections using dynamic imports
+const FeaturedProjects = lazy(() => import('../../components/public/FeaturedProjects'))
+const CareerProgression = lazy(() => import('../../components/public/CareerProgression'))
+const TechnicalCompetencies = lazy(() => import('../../components/public/TechnicalCompetencies'))
+const LetsConnect = lazy(() => import('../../components/public/LetsConnect'))
 
 export const Home = () => {
   const [profile, setProfile] = useState({
@@ -28,26 +29,23 @@ export const Home = () => {
   const [educations, setEducations] = useState([])
   const [skills, setSkills] = useState([])
   const [certifications, setCertifications] = useState([])
-  
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadPortfolioData() {
-      if (!isSupabaseConfigured) {
-        setLoading(false)
-        return
-      }
+    let isMounted = true
 
+    if (!isSupabaseConfigured) {
+      return
+    }
+
+    // 1. Fetch Profile for hero section
+    async function loadHeroProfile() {
       try {
-        setLoading(true)
-
-        // 1. Fetch Profile Dynamically
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
           .limit(1)
           .maybeSingle()
-        if (profileData) {
+        if (profileData && isMounted) {
           setProfile(prev => ({
             ...prev,
             ...profileData,
@@ -61,60 +59,102 @@ export const Home = () => {
             }
           }))
         }
-
-        // 2. Fetch Published Projects purely from Supabase
-        const { data: projectsData } = await supabase
-          .from('projects')
-          .select('*')
-          .eq('is_published', true)
-          .order('sort_order', { ascending: true })
-        setProjects(projectsData || [])
-
-        // 3. Fetch Experiences purely from Supabase
-        const { data: expData } = await supabase
-          .from('experiences')
-          .select('*')
-          .order('start_date', { ascending: false })
-        setExperiences(expData || [])
-
-        // 4. Fetch Educations purely from Supabase
-        const { data: eduData } = await supabase
-          .from('educations')
-          .select('*')
-          .order('start_year', { ascending: false })
-        setEducations(eduData || [])
-
-        // 5. Fetch Skills purely from Supabase
-        const { data: skillsData } = await supabase
-          .from('skills')
-          .select('*')
-          .order('sort_order', { ascending: true })
-        setSkills(skillsData || [])
-
-        // 6. Fetch Certifications purely from Supabase
-        const { data: certsData } = await supabase
-          .from('certifications')
-          .select('*')
-          .order('issue_date', { ascending: false })
-        setCertifications(certsData || [])
-
       } catch (err) {
-        console.warn('Supabase fetch error:', err)
-      } finally {
-        setLoading(false)
+        console.warn('Profile fetch error:', err)
       }
     }
 
-    loadPortfolioData()
+    // 2. Defer non-hero sections (projects, experiences, educations, skills, certs) until after initial page paint
+    async function loadNonHeroData() {
+      try {
+        const [
+          projectsRes,
+          expRes,
+          eduRes,
+          skillsRes,
+          certsRes
+        ] = await Promise.all([
+          supabase.from('projects').select('*').eq('is_published', true).order('sort_order', { ascending: true }),
+          supabase.from('experiences').select('*').order('start_date', { ascending: false }),
+          supabase.from('educations').select('*').order('start_year', { ascending: false }),
+          supabase.from('skills').select('*').order('sort_order', { ascending: true }),
+          supabase.from('certifications').select('*').order('issue_date', { ascending: false })
+        ])
+
+        if (!isMounted) return
+        if (projectsRes.data) setProjects(projectsRes.data)
+        if (expRes.data) setExperiences(expRes.data)
+        if (eduRes.data) setEducations(eduRes.data)
+        if (skillsRes.data) setSkills(skillsRes.data)
+        if (certsRes.data) setCertifications(certsRes.data)
+      } catch (err) {
+        console.warn('Non-hero data fetch error:', err)
+      }
+    }
+
+    loadHeroProfile()
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black text-zinc-100 flex flex-col items-center justify-center font-sans">
-        <LoadingSpinner text="Connecting to database..." />
-      </div>
-    )
-  }
+  const [shouldRenderSections, setShouldRenderSections] = useState(false)
+
+  useEffect(() => {
+    let isMounted = true
+
+    // Fetch Non-hero data
+    async function loadNonHeroData() {
+      if (!isSupabaseConfigured) return
+      try {
+        const [
+          projectsRes,
+          expRes,
+          eduRes,
+          skillsRes,
+          certsRes
+        ] = await Promise.all([
+          supabase.from('projects').select('*').eq('is_published', true).order('sort_order', { ascending: true }),
+          supabase.from('experiences').select('*').order('start_date', { ascending: false }),
+          supabase.from('educations').select('*').order('start_year', { ascending: false }),
+          supabase.from('skills').select('*').order('sort_order', { ascending: true }),
+          supabase.from('certifications').select('*').order('issue_date', { ascending: false })
+        ])
+
+        if (!isMounted) return
+        if (projectsRes.data) setProjects(projectsRes.data)
+        if (expRes.data) setExperiences(expRes.data)
+        if (eduRes.data) setEducations(eduRes.data)
+        if (skillsRes.data) setSkills(skillsRes.data)
+        if (certsRes.data) setCertifications(certsRes.data)
+      } catch (err) {
+        console.warn('Non-hero data fetch error:', err)
+      }
+    }
+
+    const triggerDeferred = () => {
+      setShouldRenderSections(true)
+      loadNonHeroData()
+      window.removeEventListener('scroll', triggerDeferred)
+      window.removeEventListener('pointerdown', triggerDeferred)
+    }
+
+    window.addEventListener('scroll', triggerDeferred, { passive: true, once: true })
+    window.addEventListener('pointerdown', triggerDeferred, { passive: true, once: true })
+
+    const timer = setTimeout(() => {
+      setShouldRenderSections(true)
+      loadNonHeroData()
+    }, 3500)
+
+    return () => {
+      isMounted = false
+      window.removeEventListener('scroll', triggerDeferred)
+      window.removeEventListener('pointerdown', triggerDeferred)
+      clearTimeout(timer)
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 flex flex-col selection:bg-white selection:text-black">
@@ -125,22 +165,26 @@ export const Home = () => {
         {/* 1. 3D Interactive Hero Canvas with 3D Male Avatar */}
         <Hero3D profile={profile} />
 
-        {/* 2. Redesigned Featured Projects Section with Ambient Mesh & Liquid Glass */}
-        <FeaturedProjects projects={projects} />
+        {shouldRenderSections && (
+          <Suspense fallback={null}>
+            {/* 2. Redesigned Featured Projects Section with Ambient Mesh & Liquid Glass */}
+            <FeaturedProjects projects={projects} />
 
-        {/* 3. Swiss Editorial Career Progression (3-Tab Switcher: Experience, Education, Certs) */}
-        <CareerProgression 
-          experiences={experiences} 
-          educations={educations} 
-          certifications={certifications} 
-          profile={profile} 
-        />
+            {/* 3. Swiss Editorial Career Progression (3-Tab Switcher: Experience, Education, Certs) */}
+            <CareerProgression 
+              experiences={experiences} 
+              educations={educations} 
+              certifications={certifications} 
+              profile={profile} 
+            />
 
-        {/* 4. Technical Competencies Editorial Badges */}
-        <TechnicalCompetencies skills={skills} />
+            {/* 4. Technical Competencies Editorial Badges */}
+            <TechnicalCompetencies skills={skills} />
 
-        {/* 5. Swiss Editorial Let's Connect Showcase */}
-        <LetsConnect profile={profile} />
+            {/* 5. Swiss Editorial Let's Connect Showcase */}
+            <LetsConnect profile={profile} />
+          </Suspense>
+        )}
       </main>
 
       <Footer profile={profile} />

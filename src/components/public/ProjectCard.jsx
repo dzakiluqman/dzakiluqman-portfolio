@@ -48,8 +48,11 @@ export const ProjectCard = ({ project, index = 0 }) => {
           <img
             src={thumbnailUrl}
             alt={title}
+            width="640"
+            height="360"
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
             loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
 

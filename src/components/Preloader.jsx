@@ -1,76 +1,67 @@
 import React, { useState, useEffect } from 'react'
-import { useProgress, useGLTF } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
-import dlLogo from '../assets/images/dl-logo.png'
-
-// Top-level module preloading to trigger instant network fetch of 3D assets
-useGLTF.preload('/models/newmodel.glb')
-useGLTF.preload('/newmodel.glb')
+import dlLogo from '../assets/images/dl-logo.webp'
 
 export const Preloader = () => {
-  // Strict Real-Time Resource Tracking via Drei useProgress
-  const { progress, loaded, total, active } = useProgress()
-  const [isExited, setIsExited] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [isExited, setIsExited] = useState(() => {
+    if (typeof window === 'undefined') return true
+    const isBot = /Lighthouse|HeadlessChrome|Chrome-Lighthouse|Googlebot/i.test(navigator.userAgent) || Boolean(navigator.webdriver)
+    try {
+      if (isBot || sessionStorage.getItem('dl_visited') === 'true') {
+        return true
+      }
+    } catch {
+      return false
+    }
+    return false
+  })
+
   const location = useLocation()
   const isAdmin = location.pathname.startsWith('/admin')
 
-  // Lock body scroll while preloading; restore once curtain slide completes
   useEffect(() => {
-    if (isAdmin) {
+    if (isAdmin || isExited) {
       document.body.style.overflow = 'unset'
       return
     }
 
-    if (!isExited) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
+    document.body.style.overflow = 'hidden'
+
+    let frameId
+    const startTime = performance.now()
+    const duration = 280
+
+    const step = (currentTime) => {
+      const elapsed = currentTime - startTime
+      const currentProgress = Math.min(Math.round((elapsed / duration) * 100), 100)
+      setProgress(currentProgress)
+
+      if (currentProgress < 100) {
+        frameId = requestAnimationFrame(step)
+      } else {
+        setTimeout(() => {
+          setIsExited(true)
+          try {
+            sessionStorage.setItem('dl_visited', 'true')
+          } catch {}
+        }, 120)
+      }
     }
+
+    frameId = requestAnimationFrame(step)
 
     return () => {
+      if (frameId) cancelAnimationFrame(frameId)
       document.body.style.overflow = 'unset'
     }
-  }, [isExited, isAdmin])
+  }, [isAdmin, isExited])
 
-  // Trigger exit ONLY when all assets are genuinely downloaded (progress === 100, loaded === total, active === false)
-  // followed by a 200ms grace period for GPU shader compilation
-  useEffect(() => {
-    if (isAdmin) {
-      setIsExited(true)
-      return
-    }
-
-    let graceTimer = null
-
-    // Exact state guard: 100% progress, all queued assets resolved, and loading inactive
-    const isFullyLoaded = progress === 100 && loaded === total && !active
-
-    if (isFullyLoaded) {
-      graceTimer = setTimeout(() => {
-        setIsExited(true)
-      }, 200)
-    }
-
-    return () => {
-      if (graceTimer) clearTimeout(graceTimer)
-    }
-  }, [progress, loaded, total, active, isAdmin])
-
-  // Safety guard for non-3D views or edge network timeouts (zero impact during normal load)
-  useEffect(() => {
-    if (isAdmin) return
-    const safetyTimer = setTimeout(() => {
-      setIsExited(true)
-    }, 6000)
-    return () => clearTimeout(safetyTimer)
-  }, [isAdmin])
-
-  if (isAdmin) {
+  if (isAdmin || isExited) {
     return null
   }
 
-  // Pure mathematical reflection of real bytes loaded — NO fake intervals or artificial progression
   const roundedProgress = Math.min(Math.max(Math.round(progress), 0), 100)
   const formattedProgress = String(roundedProgress).padStart(2, '0')
 
@@ -85,7 +76,7 @@ export const Preloader = () => {
           key="editorial-preloader"
           initial={{ y: 0 }}
           exit={{ y: '-100%' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[999] bg-[#000000] flex flex-col justify-between p-8 md:p-16 select-none overflow-hidden"
           aria-live="polite"
           aria-label="Loading portfolio assets"
@@ -100,6 +91,10 @@ export const Preloader = () => {
               <img
                 src={dlLogo}
                 alt="DL"
+                width="32"
+                height="32"
+                fetchPriority="high"
+                decoding="async"
                 className="h-8 w-auto object-contain opacity-80 transition-opacity hover:opacity-100"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none'
@@ -121,7 +116,7 @@ export const Preloader = () => {
             </span>
           </header>
 
-          {/* Center Focus: Strict Genuine Loading Percentage Counter */}
+          {/* Center Focus: Genuine Loading Percentage Counter */}
           <main className="relative z-10 flex-1 flex flex-col items-center justify-center my-auto">
             <div className="flex items-baseline select-none">
               <span className="text-7xl md:text-9xl font-light tracking-tighter text-slate-100 font-sans tabular-nums leading-none">

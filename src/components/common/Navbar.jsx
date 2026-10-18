@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import dlLogo from '../../assets/images/dl-logo.png'
+import dlLogo from '../../assets/images/dl-logo.webp'
 
 export const Navbar = ({ profile }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -16,27 +16,36 @@ export const Navbar = ({ profile }) => {
     { name: 'Get in touch', href: '/#contact', id: 'contact' },
   ]
 
-  // Track window scroll for background backdrop blur & active scroll-spy
+  // Track window scroll for background backdrop blur & active scroll-spy with rAF throttle
   useEffect(() => {
+    let ticking = false
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20)
 
-      // Calculate which section is active based on viewport position
-      const scrollPosition = window.scrollY + 140
-      const sectionElements = navLinks
-        .map(link => ({ id: link.id, element: document.getElementById(link.id) }))
-        .filter(item => item.element !== null)
+          // Calculate which section is active based on viewport position
+          const scrollPosition = window.scrollY + 140
+          const sectionElements = navLinks
+            .map(link => ({ id: link.id, element: document.getElementById(link.id) }))
+            .filter(item => item.element !== null)
 
-      for (let i = sectionElements.length - 1; i >= 0; i--) {
-        const { id, element } = sectionElements[i]
-        if (element.offsetTop <= scrollPosition) {
-          setActiveSection(id)
-          return
-        }
-      }
+          for (let i = sectionElements.length - 1; i >= 0; i--) {
+            const { id, element } = sectionElements[i]
+            if (element.offsetTop <= scrollPosition) {
+              setActiveSection(id)
+              ticking = false
+              return
+            }
+          }
 
-      if (window.scrollY < 200) {
-        setActiveSection('')
+          if (window.scrollY < 200) {
+            setActiveSection('')
+          }
+          ticking = false
+        })
+        ticking = true
       }
     }
 
@@ -91,6 +100,10 @@ export const Navbar = ({ profile }) => {
             <img 
               src={dlLogo} 
               alt="DL Logo" 
+              width="40"
+              height="40"
+              fetchPriority="high"
+              decoding="async"
               className="w-10 h-10 object-contain rounded-lg shadow-sm group-hover:opacity-90" 
             />
           </a>

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FileText, Printer, X } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 import EducationCard from './EducationCard'
 import CertificationCard from './CertificationCard'
-import ResumePDF from '../ResumePDF'
+
+// Lazy-load ResumePDF to defer heavy PDF styling and layout until modal open
+const ResumePDF = lazy(() => import('../ResumePDF'))
 
 export const CareerProgression = ({ 
   experiences: propExperiences = [], 
@@ -18,28 +20,25 @@ export const CareerProgression = ({
   const [certifications, setCertifications] = useState(propCertifications?.length ? propCertifications : [])
   const [showCvModal, setShowCvModal] = useState(false)
 
-  // Dynamic data loading and realtime updates
+  // Keep state synchronized with prop updates from Home
+  useEffect(() => {
+    if (propExperiences?.length) setExperiences(propExperiences)
+  }, [propExperiences])
+
+  useEffect(() => {
+    if (propEducations?.length) setEducations(propEducations)
+  }, [propEducations])
+
+  useEffect(() => {
+    if (propCertifications?.length) setCertifications(propCertifications)
+  }, [propCertifications])
+
+  // Realtime updates if Supabase is configured
   useEffect(() => {
     let isMounted = true
 
     const fetchAllData = async () => {
-      if (!isSupabaseConfigured) {
-        if (isMounted) {
-          try {
-            const storedExp = localStorage.getItem('dzaki_demo_exp')
-            const storedEdu = localStorage.getItem('dzaki_demo_edu')
-            const storedCerts = localStorage.getItem('dzaki_demo_certs')
-            setExperiences(propExperiences?.length ? propExperiences : (storedExp ? JSON.parse(storedExp) : []))
-            setEducations(propEducations?.length ? propEducations : (storedEdu ? JSON.parse(storedEdu) : []))
-            setCertifications(propCertifications?.length ? propCertifications : (storedCerts ? JSON.parse(storedCerts) : []))
-          } catch {
-            setExperiences(propExperiences || [])
-            setEducations(propEducations || [])
-            setCertifications(propCertifications || [])
-          }
-        }
-        return
-      }
+      if (!isSupabaseConfigured) return
 
       try {
         const [expRes, eduRes, certsRes] = await Promise.all([
@@ -49,21 +48,14 @@ export const CareerProgression = ({
         ])
 
         if (isMounted) {
-          setExperiences(expRes.data || [])
-          setEducations(eduRes.data || [])
-          setCertifications(certsRes.data || [])
+          if (expRes.data?.length) setExperiences(expRes.data)
+          if (eduRes.data?.length) setEducations(eduRes.data)
+          if (certsRes.data?.length) setCertifications(certsRes.data)
         }
       } catch (err) {
         console.warn('Error fetching career progression data:', err)
-        if (isMounted) {
-          setExperiences(propExperiences || [])
-          setEducations(propEducations || [])
-          setCertifications(propCertifications || [])
-        }
       }
     }
-
-    fetchAllData()
 
     // Realtime subscriptions
     let channels = []
@@ -319,12 +311,14 @@ export const CareerProgression = ({
       {/* Standalone ATS Resume for print when modal is not active */}
       {!showCvModal && (
         <div className="hidden print:block w-full">
-          <ResumePDF 
-            profile={profile}
-            experiences={expList}
-            educations={eduList}
-            certifications={certList}
-          />
+          <Suspense fallback={null}>
+            <ResumePDF 
+              profile={profile}
+              experiences={expList}
+              educations={eduList}
+              certifications={certList}
+            />
+          </Suspense>
         </div>
       )}
 
@@ -366,12 +360,14 @@ export const CareerProgression = ({
               {/* Document Body: Authentic White A4 ATS Paper Sheet */}
               <div className="cv-modal-body flex justify-center">
                 <div className="w-full max-w-[210mm] shadow-2xl rounded-lg overflow-hidden bg-white">
-                  <ResumePDF 
-                    profile={profile}
-                    experiences={expList}
-                    educations={eduList}
-                    certifications={certList}
-                  />
+                  <Suspense fallback={<div className="p-12 text-center text-neutral-600 font-sans text-sm">Rendering CV document...</div>}>
+                    <ResumePDF 
+                      profile={profile}
+                      experiences={expList}
+                      educations={eduList}
+                      certifications={certList}
+                    />
+                  </Suspense>
                 </div>
               </div>
             </motion.div>
