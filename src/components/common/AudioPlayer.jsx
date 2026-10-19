@@ -35,6 +35,7 @@ export const AudioPlayer = () => {
   // Audio playback state
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
+  const [pausedAt, setPausedAt] = useState(0)
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(0.75)
   const [isMuted, setIsMuted] = useState(false)
@@ -50,6 +51,8 @@ export const AudioPlayer = () => {
   // References
   const audioRef = useRef(null)
   const progressBarRef = useRef(null)
+  const pausedTimeRef = useRef(0)
+  const handleNextRef = useRef(null)
 
   const currentTrack = tracks.length > 0 ? (tracks[currentTrackIndex] || tracks[0]) : null
 
@@ -161,7 +164,9 @@ export const AudioPlayer = () => {
     }
 
     const handleEnded = () => {
-      handleNext()
+      if (handleNextRef.current) {
+        handleNextRef.current()
+      }
     }
 
     const handleWaiting = () => {
@@ -194,7 +199,7 @@ export const AudioPlayer = () => {
       audio.removeEventListener('canplay', handleCanPlay)
       audio.removeEventListener('error', handleError)
     }
-  }, [currentTrackIndex, tracks])
+  }, [])
 
   // Sync volume with audio element
   useEffect(() => {
@@ -203,33 +208,42 @@ export const AudioPlayer = () => {
     }
   }, [volume, isMuted])
 
-  // Sync track source when currentTrack changes (only load if actively playing)
-  useEffect(() => {
-    const audio = audioRef.current
-    if (!audio || !currentTrack) return
-
-    if (isPlaying) {
-      audio.src = currentTrack.audio_url
-      audio.play().catch((err) => {
-        console.log('[AudioPlayer] Playback autoplay interaction note:', err)
-        setIsPlaying(false)
-      })
-    }
-  }, [currentTrackIndex, tracks, isPlaying])
-
   // 4. AUDIO CONTROLS
-  const togglePlayPause = useCallback(() => {
+  const handlePlayPause = useCallback(() => {
     const audio = audioRef.current
     if (!audio || !currentTrack) return
 
     if (isPlaying) {
+      // 1. Persist currentTime on Pause
+      const current = audio.currentTime || 0
+      pausedTimeRef.current = current
+      setPausedAt(current)
+      setCurrentTime(current)
       audio.pause()
       setIsPlaying(false)
     } else {
       setIsLoadingAudio(true)
-      if (!audio.src || !audio.src.includes(currentTrack.audio_url)) {
-        audio.src = currentTrack.audio_url
+
+      // Do NOT reset audioRef.current.src or reload the media element when toggling play/pause on the same active track
+      const currentSrc = audio.src || ''
+      const trackUrl = currentTrack.audio_url || ''
+      const isSameTrack = currentSrc && (
+        currentSrc === trackUrl ||
+        currentSrc.endsWith(trackUrl) ||
+        currentSrc.includes(encodeURI(trackUrl)) ||
+        decodeURIComponent(currentSrc).includes(trackUrl)
+      )
+
+      if (!isSameTrack) {
+        audio.src = trackUrl
       }
+
+      // 2. Resume from Saved Timestamp
+      const resumeTime = pausedTimeRef.current || pausedAt || currentTime || 0
+      if (typeof resumeTime === 'number' && resumeTime > 0) {
+        audio.currentTime = resumeTime
+      }
+
       audio.play()
         .then(() => {
           setIsPlaying(true)
@@ -237,41 +251,84 @@ export const AudioPlayer = () => {
           setPlaybackError(null)
         })
         .catch((err) => {
-          console.warn('[AudioPlayer] Interaction error:', err)
+          console.warn('[AudioPlayer] Playback error:', err)
           setIsPlaying(false)
         })
         .finally(() => {
           setIsLoadingAudio(false)
         })
     }
-  }, [isPlaying, currentTrack])
+  }, [isPlaying, currentTrack, pausedAt, currentTime])
 
-  const handleNext = useCallback(() => {
-    setCurrentTrackIndex((prev) => (prev + 1) % tracks.length)
+  const togglePlayPause = handlePlayPause
+
+  // When switching tracks or loading a new track:
+  const handleSelectTrack = useCallback((trackOrIndex, maybeIndex) => {
+    let index = typeof trackOrIndex === 'number' ? trackOrIndex : maybeIndex
+    let track = typeof trackOrIndex === 'object' && trackOrIndex !== null ? trackOrIndex : tracks[index]
+
+    if (index === undefined || index === null) {
+      index = tracks.findIndex((t) => t.id === track?.id || t.audio_url === track?.audio_url)
+    }
+    if (index < 0 || !track) return
+
+    if (currentTrackIndex === index) {
+      handlePlayPause()
+      return
+    }
+
+    setCurrentTrackIndex(index)
+    setPausedAt(0)
+    pausedTimeRef.current = 0
+    setCurrentTime(0)
     setIsPlaying(true)
     setIsBarVisible(true)
-  }, [tracks.length])
+    setPlaybackError(null)
+
+    // Load and play new track from 0:00
+    const audio = audioRef.current
+    if (audio) {
+      setIsLoadingAudio(true)
+      audio.src = track.audio_url
+      audio.currentTime = 0
+      audio.play()
+        .then(() => {
+          setIsPlaying(true)
+        })
+        .catch((err) => {
+          console.warn('[AudioPlayer] Playback error:', err)
+          setIsPlaying(false)
+        })
+        .finally(() => {
+          setIsLoadingAudio(false)
+        })
+    }
+  }, [currentTrackIndex, tracks, handlePlayPause])
+
+  const handleNext = useCallback(() => {
+    if (!tracks || tracks.length === 0) return
+    const nextIndex = (currentTrackIndex + 1) % tracks.length
+    handleSelectTrack(tracks[nextIndex], nextIndex)
+  }, [tracks, currentTrackIndex, handleSelectTrack])
 
   const handlePrev = useCallback(() => {
     const audio = audioRef.current
     if (audio && audio.currentTime > 3) {
       audio.currentTime = 0
+      setPausedAt(0)
+      pausedTimeRef.current = 0
+      setCurrentTime(0)
     } else {
-      setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
-      setIsPlaying(true)
-      setIsBarVisible(true)
+      if (!tracks || tracks.length === 0) return
+      const prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length
+      handleSelectTrack(tracks[prevIndex], prevIndex)
     }
-  }, [tracks.length])
+  }, [tracks, currentTrackIndex, handleSelectTrack])
 
-  const handleSelectTrack = (index) => {
-    if (index === currentTrackIndex) {
-      togglePlayPause()
-    } else {
-      setCurrentTrackIndex(index)
-      setIsPlaying(true)
-      setIsBarVisible(true)
-    }
-  }
+  // Keep handleNextRef synchronized for handleEnded
+  useEffect(() => {
+    handleNextRef.current = handleNext
+  }, [handleNext])
 
   const handleSeek = (e) => {
     if (!progressBarRef.current || !audioRef.current || !duration) return
@@ -281,6 +338,8 @@ export const AudioPlayer = () => {
     const targetTime = percentage * duration
     audioRef.current.currentTime = targetTime
     setCurrentTime(targetTime)
+    setPausedAt(targetTime)
+    pausedTimeRef.current = targetTime
   }
 
   const toggleMute = () => {
@@ -401,7 +460,7 @@ export const AudioPlayer = () => {
                     return (
                       <div
                         key={track.id || idx}
-                        onClick={() => handleSelectTrack(idx)}
+                        onClick={() => handleSelectTrack(track, idx)}
                         className={`
                           group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer
                           border transition-all duration-300
