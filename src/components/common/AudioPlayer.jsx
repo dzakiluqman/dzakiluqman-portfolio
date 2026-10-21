@@ -372,7 +372,7 @@ export const AudioPlayer = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 z-40 select-none"
+            className="fixed bottom-6 right-4 md:right-6 z-40 select-none"
           >
             <div className="relative group">
               {/* Main Circular Button with Centered Clean Music Icon */}
@@ -405,110 +405,98 @@ export const AudioPlayer = () => {
 
       {/* ========================================================================= */}
       {/* COMPONENT B: FLOATING PLAYLIST POPUP (Bottom Right, Above Trigger)        */}
-      {/* Clean "Tracks" header without metadata/subtitles, hide-controls removed   */}
+      {/* Anchored fixed bottom-20 right-4 md:right-6 on ALL viewports              */}
       {/* ========================================================================= */}
       <AnimatePresence>
-        {isScrolledPast && isPlaylistOpen && (
+        {isPlaylistOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 15 }}
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 15 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-            className="fixed bottom-22 sm:bottom-24 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-96 max-w-sm select-none"
+            className="fixed bottom-20 right-4 md:right-6 z-50 w-[calc(100vw-2rem)] max-w-sm backdrop-blur-xl bg-neutral-950/80 border border-white/10 rounded-2xl p-4 shadow-2xl transition-all duration-300 select-none"
           >
-            <div className="backdrop-blur-xl bg-neutral-950/85 border border-white/10 shadow-[0_12px_40px_0_rgba(0,0,0,0.65)] rounded-2xl overflow-hidden p-4 sm:p-5">
-              
-              {/* Header: Clean "Tracks" Title & Close Button */}
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white">
-                    <ListMusic className="w-3.5 h-3.5" />
-                  </div>
-                  <h3 className="text-sm font-semibold text-white tracking-wide">
-                    Tracks
-                  </h3>
-                </div>
+            {/* Header: Title & Close Button (Always rendered on all devices) */}
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+              <h3 className="text-sm font-bold text-white tracking-wide">Tracks</h3>
+              <button
+                id="close-playlist-popup-btn"
+                onClick={() => setIsPlaylistOpen(false)}
+                className="p-1 rounded-full text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
+                aria-label="Close Playlist"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-                {/* Close Button with Glowing Hover State */}
-                <button
-                  id="close-playlist-popup-btn"
-                  onClick={() => setIsPlaylistOpen(false)}
-                  className="p-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/15 hover:border-white/30 hover:shadow-[0_0_12px_rgba(255,255,255,0.25)] transition-all duration-300"
-                  aria-label="Close Playlist"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
+            {/* Scrollable List of Tracks or Empty State */}
+            {tracks.length === 0 ? (
+              <div className="py-8 px-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-2.5 text-zinc-500 shadow-inner">
+                  <Music className="w-5 h-5 opacity-60" />
+                </div>
+                <p className="text-xs font-semibold text-zinc-200">No music tracks available</p>
+                <p className="text-[11px] text-zinc-500 mt-1 max-w-[220px] mx-auto">
+                  Upload music tracks in Admin CMS to start streaming.
+                </p>
               </div>
+            ) : (
+              <div className="space-y-1.5 max-h-64 sm:max-h-72 overflow-y-auto pr-1 scrollbar-thin">
+                {tracks.map((track, idx) => {
+                  const isCurrent = idx === currentTrackIndex
+                  const isCurrentPlaying = isCurrent && isPlaying
 
-              {/* Scrollable List of Tracks or Empty State */}
-              {tracks.length === 0 ? (
-                <div className="py-10 px-4 text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-3 text-zinc-500 shadow-inner">
-                    <Music className="w-6 h-6 opacity-60" />
-                  </div>
-                  <p className="text-xs font-semibold text-zinc-200">No music tracks available</p>
-                  <p className="text-[11px] text-zinc-500 mt-1 max-w-[220px] mx-auto">
-                    Upload music tracks in Admin CMS to start streaming.
-                  </p>
-                </div>
-              ) : (
-                <div className="mt-3.5 space-y-1.5 max-h-72 overflow-y-auto pr-1 scrollbar-thin">
-                  {tracks.map((track, idx) => {
-                    const isCurrent = idx === currentTrackIndex
-                    const isCurrentPlaying = isCurrent && isPlaying
-
-                    return (
-                      <div
-                        key={track.id || idx}
-                        onClick={() => handleSelectTrack(track, idx)}
-                        className={`
-                          group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer
-                          border transition-all duration-300
-                          ${isCurrent 
-                            ? 'bg-white/15 border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.15)]' 
-                            : 'bg-white/[0.03] border-white/5 hover:border-white/20 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.18)]'
+                  return (
+                    <div
+                      key={track.id || idx}
+                      onClick={() => handleSelectTrack(track, idx)}
+                      className={`
+                        group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer
+                        border transition-all duration-300
+                        ${isCurrent 
+                          ? 'bg-white/15 border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.15)]' 
+                          : 'bg-white/[0.03] border-white/5 hover:border-white/20 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.18)]'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center gap-3 min-w-0 pr-2">
+                        {/* Dynamic Play / Pause State Icon */}
+                        <div className={`
+                          w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300
+                          ${isCurrentPlaying
+                            ? 'bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.6)]'
+                            : 'bg-white/5 border-white/10 text-white group-hover:bg-white/20 group-hover:border-white/30 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.25)]'
                           }
-                        `}
-                      >
-                        <div className="flex items-center gap-3 min-w-0 pr-2">
-                          {/* Dynamic Play / Pause State Icon */}
-                          <div className={`
-                            w-8 h-8 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300
-                            ${isCurrentPlaying
-                              ? 'bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.6)]'
-                              : 'bg-white/5 border-white/10 text-white group-hover:bg-white/20 group-hover:border-white/30 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.25)]'
-                            }
-                          `}>
-                            {isCurrentPlaying ? (
-                              <Pause className="w-3.5 h-3.5 fill-current" />
-                            ) : (
-                              <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-                            )}
-                          </div>
-
-                          {/* Title & Artist */}
-                          <div className="min-w-0">
-                            <p className={`text-xs font-medium truncate ${isCurrent ? 'text-white' : 'text-zinc-200 group-hover:text-white'}`}>
-                              {track.title}
-                            </p>
-                            <p className="text-[10px] text-zinc-400 truncate">
-                              {track.artist || 'Dzaki Luqman'}
-                            </p>
-                          </div>
+                        `}>
+                          {isCurrentPlaying ? (
+                            <Pause className="w-3.5 h-3.5 fill-current" />
+                          ) : (
+                            <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                          )}
                         </div>
 
-                        {/* Duration String */}
-                        <div className="shrink-0 text-right">
-                          <span className="text-[11px] font-mono text-zinc-400 group-hover:text-zinc-200">
-                            {track.duration || '03:00'}
-                          </span>
+                        {/* Title & Artist */}
+                        <div className="min-w-0">
+                          <p className={`text-xs font-medium truncate ${isCurrent ? 'text-white' : 'text-zinc-200 group-hover:text-white'}`}>
+                            {track.title}
+                          </p>
+                          <p className="text-[10px] text-zinc-400 truncate">
+                            {track.artist || 'Dzaki Luqman'}
+                          </p>
                         </div>
                       </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+
+                      {/* Duration String */}
+                      <div className="shrink-0 text-right">
+                        <span className="text-[11px] font-mono text-zinc-400 group-hover:text-zinc-200">
+                          {track.duration || '03:00'}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
