@@ -75,6 +75,15 @@ export const Hero3D = ({ profile }) => {
   const isTablet = viewportSize.width >= 768 && viewportSize.width < 1024
   const isCompactHeight = viewportSize.height < 800
 
+  const nameParts = useMemo(() => {
+    const raw = (profile?.full_name || 'Dzakii Luqman Faid').trim().toUpperCase().split(/\s+/)
+    return {
+      line1: raw[0] || 'DZAKII',
+      line2: raw[1] || 'LUQMAN',
+      line3: raw.slice(2).join(' ') || 'FAID'
+    }
+  }, [profile?.full_name])
+
   // Precision head-level portrait camera framing: frames head down to collar & upper chest dead-center
   const cameraConfig = useMemo(() => {
     if (isMobile) {
@@ -108,24 +117,42 @@ export const Hero3D = ({ profile }) => {
       className="relative w-full h-[100dvh] lg:h-screen lg:max-h-screen overflow-hidden flex flex-col justify-between items-center select-none bg-[#000000]"
     >
       {/* ============================================================== */}
-      {/* LAYER 1 (z-0 isolate): Background Glows & Giant Name Stack     */}
+      {/* MOBILE HERO TITLE STACK (Visible < md)                         */}
       {/* ============================================================== */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center z-0 isolate pointer-events-none select-none overflow-hidden pb-14 sm:pb-18 lg:pb-24">
-        {/* Ambient lighting glows (Pure Monochrome) */}
+      <div className="flex flex-col items-center justify-center text-center md:hidden pt-20 pb-2 z-20 px-4 w-full max-w-full shrink-0 pointer-events-none select-none">
+        <h1 className="text-5xl sm:text-6xl font-black uppercase tracking-tight leading-[0.82] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+          <span className="block">{nameParts.line1}</span>
+          <span className="block">{nameParts.line2}</span>
+          <span className="block">{nameParts.line3}</span>
+        </h1>
+        <p className="text-[10px] sm:text-xs font-bold tracking-[0.25em] text-neutral-400 uppercase mt-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+          {headline.toUpperCase()}
+        </p>
+      </div>
+
+      {/* ============================================================== */}
+      {/* AMBIENT LIGHTING GLOWS (Pure Monochrome, both mobile & desktop) */}
+      {/* ============================================================== */}
+      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 isolate">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-b from-white/[0.06] via-zinc-500/[0.03] to-transparent rounded-full blur-[140px]" />
         <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[500px] bg-white/[0.02] rounded-full blur-[130px]" />
+      </div>
 
-        {/* ONLY Giant Display Name Stack strictly BEHIND the 3D Canvas */}
+      {/* ============================================================== */}
+      {/* DESKTOP LAYER 1 (z-0 isolate, hidden md:flex): Giant Text Stack*/}
+      {/* ============================================================== */}
+      <div className="hidden md:flex absolute inset-0 flex-col items-center justify-center z-0 isolate pointer-events-none select-none overflow-hidden pb-14 sm:pb-18 lg:pb-24">
+        {/* Giant Display Name Stack strictly BEHIND the 3D Canvas on Desktop */}
         <div
-          className="flex flex-col items-center justify-center text-center leading-none transition-transform duration-700 ease-out"
+          className="w-full max-w-full px-4 overflow-hidden flex flex-col items-center justify-center text-center leading-none transition-transform duration-700 ease-out"
         >
           {/* Line 1: DZAKII */}
-          <span className="text-5xl sm:text-7xl md:text-8xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight text-white/90 leading-[0.84] drop-shadow-[0_15px_45px_rgba(0,0,0,0.85)]">
+          <span className="text-5xl md:text-7xl lg:text-8xl xl:text-[9rem] font-black uppercase tracking-tight md:tracking-wider text-center text-white/90 leading-none drop-shadow-[0_15px_45px_rgba(0,0,0,0.85)] select-none whitespace-nowrap">
             DZAKII
           </span>
 
           {/* Line 2: LUQMAN FAID */}
-          <span className="text-5xl sm:text-7xl md:text-8xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight text-white/90 leading-[0.84] drop-shadow-[0_15px_45px_rgba(0,0,0,0.85)] mt-1 sm:mt-2">
+          <span className="text-5xl md:text-7xl lg:text-8xl xl:text-[9rem] font-black uppercase tracking-tight md:tracking-wider text-center text-white/90 leading-none drop-shadow-[0_15px_45px_rgba(0,0,0,0.85)] mt-1 sm:mt-2 select-none whitespace-nowrap">
             LUQMAN FAID
           </span>
 
@@ -141,7 +168,7 @@ export const Hero3D = ({ profile }) => {
       {/* ============================================================== */}
       {/* LAYER 2 (z-10): 3D Model Canvas (Naturally Occludes the Name)  */}
       {/* ============================================================== */}
-      <div className="relative z-10 w-full h-full pointer-events-none">
+      <div className="relative z-10 w-full h-[60vh] sm:h-[65vh] -mt-6 sm:-mt-8 md:mt-0 md:h-full md:absolute md:inset-0 pointer-events-none min-h-0">
         {shouldRender3D && (
           <Suspense fallback={null}>
             <HeroCanvas
@@ -159,17 +186,15 @@ export const Hero3D = ({ profile }) => {
       <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#000000] via-[#000000]/60 to-transparent z-[15] pointer-events-none" />
 
       {/* ============================================================== */}
-      {/* LAYER 3 (z-20): Foreground Subtitle & Floating UI Elements     */}
+      {/* DESKTOP LAYER 3 (z-20, hidden md:flex): Foreground Subtitle    */}
       {/* ============================================================== */}
-
-      {/* Subtitle: Positioned in foreground directly underneath line 2 (LUQMAN FAID) */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 select-none pb-14 sm:pb-18 lg:pb-24">
+      <div className="hidden md:flex absolute inset-0 flex-col items-center justify-center pointer-events-none z-20 select-none pb-14 sm:pb-18 lg:pb-24">
         {/* Invisible mirror of Line 1 & Line 2 for pixel-perfect relative placement */}
-        <div className="invisible pointer-events-none flex flex-col items-center leading-none" aria-hidden="true">
-          <span className="text-5xl sm:text-7xl md:text-8xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight leading-[0.84]">
+        <div className="invisible pointer-events-none w-full max-w-full px-4 overflow-hidden flex flex-col items-center text-center leading-none" aria-hidden="true">
+          <span className="text-5xl md:text-7xl lg:text-8xl xl:text-[9rem] font-black uppercase tracking-tight md:tracking-wider leading-none whitespace-nowrap">
             DZAKII
           </span>
-          <span className="text-5xl sm:text-7xl md:text-8xl lg:text-[9.5rem] xl:text-[10.5rem] font-black uppercase tracking-tight leading-[0.84] mt-1 sm:mt-2">
+          <span className="text-5xl md:text-7xl lg:text-8xl xl:text-[9rem] font-black uppercase tracking-tight md:tracking-wider leading-none mt-1 sm:mt-2 whitespace-nowrap">
             LUQMAN FAID
           </span>
         </div>
@@ -178,7 +203,7 @@ export const Hero3D = ({ profile }) => {
         <div
           className="mt-2 sm:mt-3 pointer-events-none text-center px-4 transition-transform duration-700 ease-out"
         >
-          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-mono uppercase tracking-[0.28em] text-zinc-300 font-bold drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+          <span className="text-xs sm:text-sm md:text-base lg:text-lg font-mono uppercase tracking-[0.2em] sm:tracking-[0.28em] text-zinc-300 font-bold drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
             {headline.toUpperCase()}
           </span>
         </div>
