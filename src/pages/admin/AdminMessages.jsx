@@ -138,27 +138,31 @@ export const AdminMessages = () => {
   const unreadCount = messages.filter((m) => !m.is_read).length
 
   return (
-    <div className="min-h-screen bg-dark-950 flex flex-col md:flex-row text-slate-100">
+    <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col lg:flex-row p-3 sm:p-4 lg:p-5 gap-4 font-sans selection:bg-[#8b5cf6]/30 selection:text-white">
       <Sidebar unreadCount={unreadCount} />
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 space-y-4">
         <AdminHeader
           title="Inbound Messages"
           subtitle={`Review inquiries submitted by portfolio visitors (${unreadCount} unread)`}
         />
 
-        <main className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
+        <main className="flex-1 space-y-4 overflow-y-auto">
           {notification && (
             <div
-              className="p-4 rounded-xl flex items-center gap-2 text-xs font-medium bg-zinc-900 border border-zinc-700 text-zinc-200"
+              className="p-4 rounded-2xl flex items-center gap-2.5 text-xs font-medium bg-[#121218] border border-[#8b5cf6]/40 text-white shadow-xl shadow-[#8b5cf6]/10"
             >
-              {notification.type === 'error' ? <AlertCircle className="w-4 h-4 text-zinc-400" /> : <CheckCircle className="w-4 h-4 text-white" />}
+              {notification.type === 'error' ? (
+                <AlertCircle className="w-4 h-4 text-rose-400" />
+              ) : (
+                <CheckCircle className="w-4 h-4 text-[#8b5cf6]" />
+              )}
               <span>{notification.message}</span>
             </div>
           )}
 
-          {/* Filter Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-zinc-950 border border-zinc-800 p-4 rounded-2xl">
+          {/* Filter Bar Bento Card */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#121218] border border-white/5 p-4 rounded-2xl shadow-xl">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
@@ -166,37 +170,37 @@ export const AdminMessages = () => {
                 placeholder="Search messages by name, email, or content..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#000000] border border-zinc-800 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white/40"
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30"
               />
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
                   filter === 'all'
-                    ? 'bg-white text-black font-semibold shadow-sm'
-                    : 'bg-[#000000] text-zinc-400 hover:text-white border border-zinc-800'
+                    ? 'bg-[#8b5cf6] text-white font-semibold shadow-md shadow-[#8b5cf6]/20'
+                    : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
                 }`}
               >
                 All ({messages.length})
               </button>
               <button
                 onClick={() => setFilter('unread')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
                   filter === 'unread'
-                    ? 'bg-white text-black font-semibold shadow-sm'
-                    : 'bg-[#000000] text-zinc-400 hover:text-white border border-zinc-800'
+                    ? 'bg-[#8b5cf6] text-white font-semibold shadow-md shadow-[#8b5cf6]/20'
+                    : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
                 }`}
               >
                 Unread ({unreadCount})
               </button>
               <button
                 onClick={() => setFilter('read')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all ${
                   filter === 'read'
-                    ? 'bg-white text-black font-semibold shadow-sm'
-                    : 'bg-[#000000] text-zinc-400 hover:text-white border border-zinc-800'
+                    ? 'bg-[#8b5cf6] text-white font-semibold shadow-md shadow-[#8b5cf6]/20'
+                    : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
                 }`}
               >
                 Read ({messages.length - unreadCount})
@@ -204,17 +208,17 @@ export const AdminMessages = () => {
             </div>
           </div>
 
-          {/* Master-Detail Messages View */}
+          {/* Master-Detail Messages View Bento Grid */}
           {loading ? (
             <LoadingSpinner text="Loading message inbox..." />
           ) : filteredMessages.length === 0 ? (
-            <div className="text-center py-16 bg-zinc-950 rounded-2xl border border-zinc-800 space-y-3">
+            <div className="text-center py-16 bg-[#121218] rounded-3xl border border-white/5 space-y-3 shadow-xl">
               <Inbox className="w-10 h-10 text-zinc-600 mx-auto" />
               <h3 className="text-base font-semibold text-white">No messages found</h3>
               <p className="text-xs text-zinc-400">All caught up! Inbound inquiries will appear here.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
               {/* Message List (Left) */}
               <div className="lg:col-span-5 space-y-3 max-h-[650px] overflow-y-auto pr-1">
                 {filteredMessages.map((msg) => {
@@ -226,19 +230,24 @@ export const AdminMessages = () => {
                         setSelectedMessage(msg)
                         if (!msg.is_read) handleToggleRead(msg)
                       }}
-                      className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                      className={`p-4 rounded-2xl border cursor-pointer transition-all ${
                         isSelected
-                          ? 'bg-white/[0.08] border-white/40 shadow-sm'
+                          ? 'bg-[#1a1a24] border-[#8b5cf6]/60 shadow-lg shadow-[#8b5cf6]/10'
                           : msg.is_read
-                          ? 'bg-zinc-950 border-zinc-800/80 hover:border-zinc-700'
-                          : 'bg-zinc-900 border-zinc-700 hover:border-zinc-500'
+                          ? 'bg-[#121218] border-white/5 hover:border-white/15'
+                          : 'bg-[#151520] border-white/10 hover:border-[#8b5cf6]/30'
                       }`}
                     >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className={`text-xs font-bold ${!msg.is_read ? 'text-white' : 'text-zinc-400'}`}>
-                          {msg.sender_name}
-                        </span>
-                        <span className="text-[10px] font-mono text-zinc-500">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#8b5cf6] to-[#06b6d4] text-[10px] font-bold text-white flex items-center justify-center shrink-0">
+                            {msg.sender_name?.[0]?.toUpperCase() || 'M'}
+                          </div>
+                          <span className={`text-xs font-bold truncate ${!msg.is_read ? 'text-white' : 'text-zinc-400'}`}>
+                            {msg.sender_name}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono text-zinc-500 shrink-0">
                           {new Date(msg.created_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -249,8 +258,8 @@ export const AdminMessages = () => {
                 })}
               </div>
 
-              {/* Message Details (Right) */}
-              <div className="lg:col-span-7 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-6">
+              {/* Message Details (Right Bento Card) */}
+              <div className="lg:col-span-7 bg-[#121218] border border-white/5 rounded-3xl p-6 space-y-6 shadow-2xl">
                 {selectedMessage ? (
                   <>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-zinc-800 gap-4">

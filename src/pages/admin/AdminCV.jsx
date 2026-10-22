@@ -503,33 +503,37 @@ export const AdminCV = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black flex flex-col md:flex-row text-zinc-100">
+    <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col lg:flex-row p-3 sm:p-4 lg:p-5 gap-4 font-sans selection:bg-[#8b5cf6]/30 selection:text-white">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 space-y-4">
         <AdminHeader
           title="Curriculum Vitae Management"
           subtitle="Manage work experiences, academic education, and technical competencies"
         />
 
-        <main className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
+        <main className="flex-1 space-y-4 overflow-y-auto">
           {notification && (
             <div
-              className="p-4 rounded-xl flex items-center gap-2 text-xs font-medium bg-zinc-900 border border-zinc-700 text-zinc-200"
+              className={`p-4 rounded-2xl flex items-center gap-2.5 text-xs font-medium border shadow-xl ${
+                notification.type === 'error'
+                  ? 'bg-rose-950/80 border-rose-800 text-rose-200'
+                  : 'bg-[#121218] border-[#8b5cf6]/40 text-white'
+              }`}
             >
-              {notification.type === 'error' ? <AlertCircle className="w-4 h-4 text-zinc-400" /> : <CheckCircle2 className="w-4 h-4 text-white" />}
+              {notification.type === 'error' ? <AlertCircle className="w-4 h-4 text-rose-400" /> : <CheckCircle2 className="w-4 h-4 text-[#8b5cf6]" />}
               <span>{notification.message}</span>
             </div>
           )}
 
-          {/* Tab Selector */}
-          <div className="flex items-center gap-3 border-b border-zinc-800 pb-4 overflow-x-auto">
+          {/* Tab Selector Bento Card */}
+          <div className="bg-[#121218] border border-white/5 p-2 rounded-2xl flex items-center gap-2 overflow-x-auto shadow-xl">
             <button
               onClick={() => setActiveTab('experience')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'experience'
-                  ? 'bg-white text-black shadow-sm'
-                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  ? 'bg-[#8b5cf6] text-white shadow-md shadow-[#8b5cf6]/20'
+                  : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
               }`}
             >
               <Briefcase className="w-3.5 h-3.5" />
@@ -538,10 +542,10 @@ export const AdminCV = () => {
 
             <button
               onClick={() => setActiveTab('education')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'education'
-                  ? 'bg-white text-black shadow-sm'
-                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  ? 'bg-[#8b5cf6] text-white shadow-md shadow-[#8b5cf6]/20'
+                  : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
               }`}
             >
               <GraduationCap className="w-3.5 h-3.5" />
@@ -550,10 +554,10 @@ export const AdminCV = () => {
 
             <button
               onClick={() => setActiveTab('certifications')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'certifications'
-                  ? 'bg-white text-black shadow-sm'
-                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  ? 'bg-[#8b5cf6] text-white shadow-md shadow-[#8b5cf6]/20'
+                  : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
               }`}
             >
               <Award className="w-3.5 h-3.5" />
@@ -562,10 +566,10 @@ export const AdminCV = () => {
 
             <button
               onClick={() => setActiveTab('skills')}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                 activeTab === 'skills'
-                  ? 'bg-white text-black shadow-sm'
-                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  ? 'bg-[#8b5cf6] text-white shadow-md shadow-[#8b5cf6]/20'
+                  : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
               }`}
             >
               <Code className="w-3.5 h-3.5" />

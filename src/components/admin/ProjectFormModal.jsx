@@ -278,9 +278,9 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 16 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-4xl bg-[#000000] border border-white/10 rounded-2xl shadow-2xl overflow-hidden my-auto text-zinc-100"
+          className="relative w-full max-w-4xl bg-[#121218] border border-white/10 rounded-3xl shadow-2xl overflow-hidden my-auto text-zinc-100"
         >
-          {/* OLED Modal Header */}
+          {/* OLED Bento Modal Header */}
           <div className="px-6 py-4.5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
@@ -774,16 +774,16 @@ export const ProjectFormModal = ({ isOpen, onClose, onSave, project = null, isSa
                 <button
                   type="submit"
                   disabled={isSaving || isUploading}
-                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-[#8b5cf6] hover:bg-[#7c3aed] text-white shadow-lg shadow-[#8b5cf6]/30 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSaving ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin text-black" />
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
                       <span>Saving Project...</span>
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4 text-black" />
+                      <Save className="w-4 h-4 text-white" />
                       <span>{project ? 'Update Project' : 'Create Project'}</span>
                     </>
                   )}

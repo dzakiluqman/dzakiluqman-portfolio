@@ -380,27 +380,39 @@ export const AdminTracks = () => {
   }
 
   return (
-    <div className="flex h-screen bg-black text-zinc-100 overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col lg:flex-row p-3 sm:p-4 lg:p-5 gap-4 font-sans selection:bg-[#8b5cf6]/30 selection:text-white">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        <AdminHeader title="Soundtrack Management" />
+      <div className="flex-1 flex flex-col min-w-0 space-y-4">
+        <AdminHeader
+          title="Soundtrack Management"
+          subtitle="Manage ambient background tracks, storage buckets, and audio player playback"
+          action={
+            <button
+              onClick={handleOpenModal}
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-[#8b5cf6] hover:bg-[#7c3aed] text-white shadow-lg shadow-[#8b5cf6]/30 transition-all cursor-pointer font-sans active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Upload Track</span>
+            </button>
+          }
+        />
 
-        <main className="flex-1 p-6 max-w-7xl w-full mx-auto space-y-6">
+        <main className="flex-1 space-y-4 overflow-y-auto">
           {/* Notification Toast */}
           {notification && (
             <div
-              className={`p-4 rounded-xl border flex items-center justify-between shadow-lg transition-all ${
+              className={`p-4 rounded-2xl border flex items-center justify-between shadow-xl transition-all ${
                 notification.type === 'error'
-                  ? 'bg-rose-950/70 border-rose-800 text-rose-200'
-                  : 'bg-emerald-950/70 border-emerald-800 text-emerald-200'
+                  ? 'bg-rose-950/80 border-rose-800 text-rose-200'
+                  : 'bg-[#121218] border-[#8b5cf6]/40 text-white'
               }`}
             >
               <div className="flex items-center gap-3">
                 {notification.type === 'error' ? (
                   <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
                 ) : (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-[#8b5cf6] shrink-0" />
                 )}
                 <div>
                   <p className="text-sm font-medium">{notification.message}</p>
@@ -418,72 +430,72 @@ export const AdminTracks = () => {
             </div>
           )}
 
-          {/* Header Banner */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 shadow-md">
+          {/* Header Bento Card */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#121218] border border-white/5 shadow-xl">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Disc3 className="w-5 h-5 text-zinc-400" />
+                <Disc3 className="w-5 h-5 text-[#8b5cf6]" />
                 <h1 className="text-xl font-bold text-white tracking-tight">Audio Lounge Tracks</h1>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-zinc-800/80 border border-zinc-700/80 text-zinc-300 font-mono">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-[#06b6d4] font-mono">
                   {tracks.length} {tracks.length === 1 ? 'Track' : 'Tracks'}
                 </span>
               </div>
-              <p className="text-sm text-zinc-400">
+              <p className="text-xs text-zinc-400">
                 Upload and manage background audio tracks streamed by the floating portfolio player.
               </p>
             </div>
 
             <button
               onClick={handleOpenModal}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] active:scale-95 shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#8b5cf6] text-white font-semibold text-xs hover:bg-[#7c3aed] transition-all shadow-lg shadow-[#8b5cf6]/30 active:scale-95 shrink-0"
             >
               <Plus className="w-4 h-4" />
               Upload New Track
             </button>
           </div>
 
-          {/* Quick Metrics Bar */}
+          {/* Quick Metrics Bar Bento Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800/80 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 flex items-center justify-between shadow-xl transition-all">
               <div>
                 <p className="text-xs text-zinc-400 uppercase font-mono tracking-wider">Total Tracks</p>
-                <p className="text-2xl font-bold text-white mt-1">{tracks.length}</p>
+                <p className="text-3xl font-extrabold text-white mt-1">{tracks.length}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-zinc-300">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#8b5cf6] shadow-md">
                 <Music className="w-5 h-5" />
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800/80 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 flex items-center justify-between shadow-xl transition-all">
               <div>
                 <p className="text-xs text-zinc-400 uppercase font-mono tracking-wider">Active in Player</p>
-                <p className="text-2xl font-bold text-emerald-400 mt-1">
+                <p className="text-3xl font-extrabold text-[#10b981] mt-1">
                   {tracks.filter((t) => t.is_active).length}
                 </p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <div className="w-12 h-12 rounded-2xl bg-[#10b981]/10 border border-[#10b981]/20 flex items-center justify-center text-[#10b981] shadow-md">
                 <Radio className="w-5 h-5" />
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800/80 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 flex items-center justify-between shadow-xl transition-all">
               <div>
                 <p className="text-xs text-zinc-400 uppercase font-mono tracking-wider">Storage Target</p>
-                <p className="text-sm font-semibold text-white mt-1.5 flex items-center gap-1.5 font-mono">
+                <p className="text-xs font-semibold text-white mt-1.5 flex items-center gap-1.5 font-mono">
                   audio-tracks
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.06] text-[#06b6d4]">
                     Bucket
                   </span>
                 </p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-zinc-300">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#06b6d4] shadow-md">
                 <ShieldCheck className="w-5 h-5" />
               </div>
             </div>
           </div>
 
-          {/* Tracks Table / List */}
-          <div className="bg-zinc-950 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-xl">
+          {/* Tracks Table / List Bento Card */}
+          <div className="bg-[#121218] border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
             {loading ? (
               <div className="py-20 flex flex-col items-center justify-center">
                 <LoadingSpinner text="Loading soundtrack records..." />

@@ -84,10 +84,10 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
-          className="relative w-full max-w-xl bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden my-8"
+          className="relative w-full max-w-xl bg-[#121218] border border-white/10 rounded-3xl shadow-2xl overflow-hidden my-8"
         >
           {/* Header */}
-          <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between bg-black">
+          <div className="px-6 py-4.5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
             <div>
               <h3 className="text-lg font-bold text-white tracking-tight">
                 {experience ? 'Edit Experience' : 'Add Work Experience'}
@@ -257,16 +257,16 @@ export const ExperienceFormModal = ({ isOpen, onClose, onSave, experience = null
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-white text-black hover:bg-zinc-200 shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-[#8b5cf6] text-white hover:bg-[#7c3aed] shadow-lg shadow-[#8b5cf6]/30 transition-all flex items-center gap-2 disabled:opacity-50"
               >
                 {isSaving ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin text-white" />
                     <span>Saving...</span>
                   </>
                 ) : (
                   <>
-                    <Save className="w-4 h-4" />
+                    <Save className="w-4 h-4 text-white" />
                     <span>{experience ? 'Update Experience' : 'Save Experience'}</span>
                   </>
                 )}

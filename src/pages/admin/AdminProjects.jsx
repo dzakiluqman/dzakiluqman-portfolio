@@ -304,17 +304,17 @@ export const AdminProjects = () => {
   const featuredCount = projects.filter((p) => p.is_featured).length
 
   return (
-    <div className="min-h-screen bg-[#000000] flex flex-col md:flex-row text-zinc-100">
+    <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col lg:flex-row p-3 sm:p-4 lg:p-5 gap-4 font-sans selection:bg-[#8b5cf6]/30 selection:text-white">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 space-y-4">
         <AdminHeader
           title="Project Management"
           subtitle="Manage portfolio showcase projects, Supabase Storage image galleries, tech stacks & URLs"
           action={
             <button
               onClick={handleOpenCreateModal}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all cursor-pointer font-sans"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-[#8b5cf6] hover:bg-[#7c3aed] text-white shadow-lg shadow-[#8b5cf6]/30 transition-all cursor-pointer font-sans active:scale-95"
             >
               <Plus className="w-4 h-4" />
               <span>Add Project</span>
@@ -322,20 +322,21 @@ export const AdminProjects = () => {
           }
         />
 
-        <main className="flex-1 p-5 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
+        <main className="flex-1 space-y-4 overflow-y-auto">
           {/* Floating Toast Notification */}
           {notification && (
             <div
-              className={`p-4 rounded-2xl flex items-start justify-between gap-3 text-xs border backdrop-blur-md shadow-2xl transition-all ${notification.type === 'error'
-                  ? 'bg-zinc-900 border-zinc-700 text-zinc-300'
-                  : 'bg-zinc-900 border-zinc-700 text-zinc-200'
-                }`}
+              className={`p-4 rounded-2xl flex items-start justify-between gap-3 text-xs border backdrop-blur-md shadow-2xl transition-all ${
+                notification.type === 'error'
+                  ? 'bg-rose-950/80 border-rose-800/80 text-rose-200'
+                  : 'bg-[#121218] border-[#8b5cf6]/40 text-zinc-200'
+              }`}
             >
               <div className="flex items-start gap-3">
                 {notification.type === 'error' ? (
-                  <AlertCircle className="w-5 h-5 text-zinc-400 shrink-0 mt-0.5" />
+                  <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
                 ) : (
-                  <CheckCircle2 className="w-5 h-5 text-white shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#8b5cf6] shrink-0 mt-0.5" />
                 )}
                 <div>
                   <p className="font-bold text-white text-sm">{notification.message}</p>
@@ -353,41 +354,41 @@ export const AdminProjects = () => {
             </div>
           )}
 
-          {/* Quick Metrics */}
+          {/* Quick Metrics Bento Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 flex items-center justify-between shadow-xl transition-all">
               <div>
-                <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Total Projects</p>
-                <p className="text-2xl font-bold text-white mt-1">{projects.length}</p>
+                <p className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Total Projects</p>
+                <p className="text-3xl font-extrabold text-white mt-1">{projects.length}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#8b5cf6] shadow-md">
                 <FolderGit2 className="w-5 h-5" />
               </div>
             </div>
 
-            <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 flex items-center justify-between shadow-xl transition-all">
               <div>
-                <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Published</p>
-                <p className="text-2xl font-bold text-white mt-1">{publishedCount}</p>
+                <p className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Published</p>
+                <p className="text-3xl font-extrabold text-white mt-1">{publishedCount}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-[#06b6d4] shadow-md">
                 <Eye className="w-5 h-5" />
               </div>
             </div>
 
-            <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 flex items-center justify-between shadow-xl transition-all">
               <div>
-                <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Featured on Home</p>
-                <p className="text-2xl font-bold text-white mt-1">{featuredCount}</p>
+                <p className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Featured on Home</p>
+                <p className="text-3xl font-extrabold text-white mt-1">{featuredCount}</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-amber-400 shadow-md">
                 <Star className="w-5 h-5" />
               </div>
             </div>
           </div>
 
-          {/* Filters & Search */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/[0.02] border border-white/10 p-4 rounded-2xl">
+          {/* Filters & Search Bento Card */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#121218] border border-white/5 p-4 rounded-2xl shadow-xl">
             <div className="relative w-full sm:w-72">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
@@ -395,7 +396,7 @@ export const AdminProjects = () => {
                 placeholder="Search title, tech stack, category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white/40"
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-black/40 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30"
               />
             </div>
 
@@ -405,10 +406,11 @@ export const AdminProjects = () => {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${selectedCategory === cat
-                      ? 'bg-white text-black font-bold shadow-sm'
-                      : 'bg-white/[0.03] text-zinc-400 hover:text-white border border-white/10'
-                    }`}
+                  className={`px-3 py-1 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                    selectedCategory === cat
+                      ? 'bg-[#8b5cf6] text-white font-bold shadow-md shadow-[#8b5cf6]/20'
+                      : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
+                  }`}
                 >
                   {cat}
                 </button>
@@ -416,20 +418,20 @@ export const AdminProjects = () => {
             </div>
           </div>
 
-          {/* Projects Table */}
+          {/* Projects Table Bento Card */}
           {loading ? (
             <LoadingSpinner text="Retrieving portfolio projects database..." />
           ) : filteredProjects.length === 0 ? (
-            <div className="text-center py-16 bg-white/[0.02] rounded-2xl border border-white/10 space-y-3">
+            <div className="text-center py-16 bg-[#121218] rounded-3xl border border-white/5 space-y-3 shadow-xl">
               <FolderGit2 className="w-10 h-10 text-zinc-600 mx-auto" />
               <h3 className="text-base font-semibold text-white">No projects found</h3>
               <p className="text-xs text-zinc-400">Click "Add Project" above to create your first portfolio entry.</p>
             </div>
           ) : (
-            <div className="bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="bg-[#121218] border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-white/[0.03] border-b border-white/10 text-zinc-400 uppercase font-mono tracking-wider">
+                  <thead className="bg-white/[0.02] border-b border-white/10 text-zinc-400 uppercase font-mono tracking-wider">
                     <tr>
                       <th className="py-4 px-4">Project & Showcase Cover</th>
                       <th className="py-4 px-4">Category</th>

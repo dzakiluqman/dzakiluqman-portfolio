@@ -424,10 +424,10 @@ export const AdminSkills = () => {
   const PreviewIcon = ICON_COMPONENTS[formData.icon_name] || Code
 
   return (
-    <div className="min-h-screen bg-dark-950 flex flex-col md:flex-row text-slate-100">
+    <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col lg:flex-row p-3 sm:p-4 lg:p-5 gap-4 font-sans selection:bg-[#8b5cf6]/30 selection:text-white">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 space-y-4">
         <AdminHeader
           title="Technical Competencies CMS"
           subtitle="Manage production technologies, domain categorization, and order indices"
@@ -435,7 +435,7 @@ export const AdminSkills = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={handleRefreshSkills}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-white/[0.04] border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 transition-all"
                 title="Refresh skills from database"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -443,7 +443,7 @@ export const AdminSkills = () => {
               </button>
               <button
                 onClick={handleOpenCreateModal}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-white hover:bg-zinc-200 text-black shadow-sm transition-all"
+                className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-[#8b5cf6] hover:bg-[#7c3aed] text-white shadow-lg shadow-[#8b5cf6]/30 transition-all active:scale-95"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Skill</span>
@@ -456,45 +456,45 @@ export const AdminSkills = () => {
         {notification && (
           <div className="fixed top-6 right-6 z-50 animate-slide-in">
             <div
-              className={`flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl backdrop-blur-md border text-xs font-mono font-semibold ${
+              className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-2xl backdrop-blur-md border text-xs font-mono font-semibold ${
                 notification.type === 'error'
-                  ? 'bg-zinc-900 border-zinc-700 text-zinc-300'
-                  : 'bg-zinc-900 border-zinc-700 text-zinc-200'
+                  ? 'bg-rose-950/90 border-rose-800 text-rose-200'
+                  : 'bg-[#121218] border-[#8b5cf6]/50 text-white shadow-[#8b5cf6]/20'
               }`}
             >
               {notification.type === 'error' ? (
-                <AlertCircle className="w-4 h-4 text-zinc-400 shrink-0" />
+                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
               ) : (
-                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#8b5cf6] shrink-0" />
               )}
               <span>{notification.message}</span>
             </div>
           </div>
         )}
 
-        <main className="flex-1 p-6 lg:p-8 space-y-6 overflow-y-auto">
-          {/* Domain Breakdown Metrics */}
+        <main className="flex-1 space-y-4 overflow-y-auto">
+          {/* Domain Breakdown Bento Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-              <div className="text-[11px] font-mono text-zinc-400 uppercase">Total Items</div>
-              <div className="text-2xl font-bold text-white mt-1">{stats.total}</div>
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 transition-all shadow-xl">
+              <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Total Items</div>
+              <div className="text-3xl font-extrabold text-white mt-1.5">{stats.total}</div>
             </div>
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-              <div className="text-[11px] font-mono text-zinc-400 uppercase">Frontend</div>
-              <div className="text-2xl font-bold text-white mt-1">{stats.frontend}</div>
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 transition-all shadow-xl">
+              <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Frontend</div>
+              <div className="text-3xl font-extrabold text-[#06b6d4] mt-1.5">{stats.frontend}</div>
             </div>
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-              <div className="text-[11px] font-mono text-zinc-400 uppercase">Backend</div>
-              <div className="text-2xl font-bold text-white mt-1">{stats.backend}</div>
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 transition-all shadow-xl">
+              <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Backend</div>
+              <div className="text-3xl font-extrabold text-[#8b5cf6] mt-1.5">{stats.backend}</div>
             </div>
-            <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800">
-              <div className="text-[11px] font-mono text-zinc-400 uppercase">DevOps & Cloud</div>
-              <div className="text-2xl font-bold text-white mt-1">{stats.devops}</div>
+            <div className="p-5 rounded-3xl bg-[#121218] border border-white/5 hover:border-white/10 transition-all shadow-xl">
+              <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">DevOps & Cloud</div>
+              <div className="text-3xl font-extrabold text-[#10b981] mt-1.5">{stats.devops}</div>
             </div>
           </div>
 
-          {/* Search & Category Filter Bar */}
-          <div className="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          {/* Search & Category Filter Bento Card */}
+          <div className="bg-[#121218] p-4 rounded-2xl border border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between shadow-xl">
             <div className="relative w-full sm:w-80">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
@@ -502,7 +502,7 @@ export const AdminSkills = () => {
                 placeholder="Search skills, subtitles, categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-[#000000] border border-zinc-800 rounded-xl pl-10 pr-4 py-2 text-xs font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-white/40 transition-colors"
+                className="w-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-[#8b5cf6]/50 focus:ring-1 focus:ring-[#8b5cf6]/30 transition-colors"
               />
             </div>
 
@@ -516,10 +516,10 @@ export const AdminSkills = () => {
                 <button
                   key={tab.id}
                   onClick={() => setSelectedCategory(tab.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all shrink-0 ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all shrink-0 ${
                     selectedCategory === tab.id
-                      ? 'bg-white text-black font-bold shadow-sm'
-                      : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                      ? 'bg-[#8b5cf6] text-white font-bold shadow-md shadow-[#8b5cf6]/20'
+                      : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5'
                   }`}
                 >
                   {tab.label}
@@ -528,24 +528,24 @@ export const AdminSkills = () => {
             </div>
           </div>
 
-          {/* Competencies List */}
+          {/* Competencies List Bento Card */}
           {loading ? (
             <LoadingSpinner text="Retrieving technical competencies..." />
           ) : filteredSkills.length === 0 ? (
-            <div className="hud-glass rounded-2xl border border-slate-800 p-12 text-center space-y-3">
-              <Code className="w-10 h-10 text-slate-600 mx-auto" />
-              <p className="text-slate-400 text-sm font-sans">No technical skills found matching your filter.</p>
+            <div className="bg-[#121218] rounded-3xl border border-white/5 p-12 text-center space-y-3 shadow-xl">
+              <Code className="w-10 h-10 text-zinc-600 mx-auto" />
+              <p className="text-zinc-400 text-sm font-sans">No technical skills found matching your filter.</p>
               <button
                 onClick={handleOpenCreateModal}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-white text-black hover:bg-zinc-200 shadow-sm"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-semibold bg-[#8b5cf6] text-white hover:bg-[#7c3aed] shadow-md"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add first skill</span>
               </button>
             </div>
           ) : (
-            <div className="hud-glass rounded-2xl border border-slate-800 overflow-hidden">
-              <div className="divide-y divide-slate-800/80">
+            <div className="bg-[#121218] rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
+              <div className="divide-y divide-white/5">
                 {filteredSkills.map((skill, index) => {
                   const IconComp = ICON_COMPONENTS[skill.icon_name] || Code
                   const catConfig = CATEGORY_CONFIG[skill.category] || {
