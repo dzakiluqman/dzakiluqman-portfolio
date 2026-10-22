@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Database, ShieldCheck, Sparkles, User, ChevronRight } from 'lucide-react'
+import { User, ChevronRight } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 export const AdminHeader = ({ title, subtitle, action, breadcrumb }) => {
-  const { user, isConfigured, isDemoMode } = useAuth()
+  const { user, isDemoMode } = useAuth()
   const location = useLocation()
 
   const navPills = [
@@ -66,24 +66,8 @@ export const AdminHeader = ({ title, subtitle, action, breadcrumb }) => {
         })}
       </nav>
 
-      {/* Right: Actions, System Status & Admin Profile Capsule */}
+      {/* Right: Actions & Admin Profile Capsule */}
       <div className="flex items-center flex-wrap gap-2.5 sm:gap-3">
-        {/* Connection status badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono border bg-white/[0.03] border-white/10">
-          <Database className="w-3.5 h-3.5 text-[#06b6d4]" />
-          {isConfigured ? (
-            <span className="text-zinc-200 flex items-center gap-1.5 text-[11px]">
-              <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
-              <span className="hidden sm:inline">Supabase</span> Live
-            </span>
-          ) : (
-            <span className="text-zinc-400 flex items-center gap-1.5 text-[11px]">
-              <span className="w-2 h-2 rounded-full bg-amber-400" />
-              Demo Mode
-            </span>
-          )}
-        </div>
-
         {/* Custom Action Trigger Button (e.g. + Add New Item) */}
         {action && <div className="flex items-center">{action}</div>}
 
