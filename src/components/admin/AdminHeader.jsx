@@ -67,22 +67,22 @@ export const AdminHeader = ({ title, subtitle, action, breadcrumb }) => {
       </nav>
 
       {/* Right: Actions & Admin Profile Capsule */}
-      <div className="flex items-center flex-wrap gap-2.5 sm:gap-3">
+      <div className="flex flex-row items-center flex-nowrap gap-3 shrink-0">
         {/* Custom Action Trigger Button (e.g. + Add New Item) */}
-        {action && <div className="flex items-center">{action}</div>}
+        {action && <div className="flex items-center shrink-0">{action}</div>}
 
-        {/* Admin Profile Capsule Indicator */}
-        <div className="flex items-center gap-2.5 pl-2 py-1 pr-3 rounded-full bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#8b5cf6] to-[#06b6d4] flex items-center justify-center text-white text-[10px] font-bold shadow-sm">
+        {/* Admin Profile Badge (Moved to the Right) */}
+        <div className="flex items-center gap-2.5 px-3 py-1.5 bg-neutral-900/80 border border-white/10 rounded-2xl shrink-0">
+          <div className="w-8 h-8 rounded-full bg-blue-600/30 border border-blue-400/30 flex items-center justify-center text-xs font-bold text-blue-400 shrink-0">
             {initials || <User className="w-3.5 h-3.5" />}
           </div>
-          <div className="hidden sm:block text-left leading-none">
-            <p className="text-xs font-semibold text-white truncate max-w-[110px]">
+          <div className="flex flex-col text-left pr-1">
+            <span className="text-xs font-bold text-white leading-tight truncate max-w-[120px]">
               {displayName}
-            </p>
-            <p className="text-[10px] text-zinc-400 font-mono mt-0.5 truncate max-w-[110px]">
+            </span>
+            <span className="text-[10px] text-neutral-400 font-medium">
               {isDemoMode ? 'Preview Admin' : 'Super Admin'}
-            </p>
+            </span>
           </div>
         </div>
       </div>

@@ -130,7 +130,7 @@ export const Dashboard = () => {
           action={
             <Link
               to="/admin/projects"
-              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-[#8b5cf6] text-white hover:bg-[#7c3aed] shadow-lg shadow-[#8b5cf6]/30 transition-all cursor-pointer font-sans active:scale-95"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold bg-[#8b5cf6] text-white hover:bg-[#7c3aed] shadow-lg shadow-[#8b5cf6]/30 transition-all cursor-pointer font-sans active:scale-95 whitespace-nowrap shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Add Project</span>
