@@ -519,19 +519,20 @@ export const AudioPlayer = () => {
               <div className="flex items-center justify-between gap-2 sm:gap-3.5">
                 
                 {/* 1. Track Info & Spinning Vinyl Disc */}
-                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 max-w-[110px] sm:max-w-[150px]">
-                  <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-950 border border-white/20 p-1 flex items-center justify-center shrink-0 shadow-sm">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 max-w-[120px] sm:max-w-[160px] md:max-w-none">
+                  {/* LEFT ALBUM / VINYL DISC ICON WRAPPER */}
+                  <div className="hidden md:flex relative w-8 h-8 rounded-full bg-gradient-to-tr from-zinc-800 to-zinc-950 border border-white/20 p-1 items-center justify-center shrink-0 shadow-sm">
                     <Disc3 className={`w-full h-full text-zinc-300 ${isPlaying ? 'animate-spin' : ''}`} style={{ animationDuration: '4s' }} />
                     <span className="absolute w-1.5 h-1.5 rounded-full bg-white/80" />
                   </div>
 
-                  <div className="min-w-0">
-                    <p className="text-xs sm:text-[13px] font-semibold text-white truncate tracking-tight">
-                      {currentTrack.title}
-                    </p>
-                    <p className="text-[10px] sm:text-[11px] text-zinc-400 truncate">
-                      {currentTrack.artist || 'Dzaki Luqman'}
-                    </p>
+                  <div className="flex flex-col min-w-0 max-w-[120px] sm:max-w-[160px] md:max-w-none">
+                    <span className="text-xs sm:text-[13px] font-bold text-white truncate tracking-tight">
+                      {currentTrack?.title}
+                    </span>
+                    <span className="text-[10px] sm:text-[11px] text-neutral-400 truncate">
+                      {currentTrack?.artist || 'Dzaki Luqman'}
+                    </span>
                   </div>
                 </div>
 
