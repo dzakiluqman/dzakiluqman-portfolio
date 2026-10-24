@@ -12,7 +12,8 @@ import {
   Disc3, 
   ListMusic, 
   X, 
-  Minimize2
+  Minimize2,
+  MoreVertical
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase'
 
@@ -47,14 +48,28 @@ export const AudioPlayer = () => {
   const [isPlaylistOpen, setIsPlaylistOpen] = useState(false)
   const [isBarVisible, setIsBarVisible] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // References
   const audioRef = useRef(null)
   const progressBarRef = useRef(null)
   const pausedTimeRef = useRef(0)
   const handleNextRef = useRef(null)
+  const mobileMenuRef = useRef(null)
 
   const currentTrack = tracks.length > 0 ? (tracks[currentTrackIndex] || tracks[0]) : null
+
+  // Close mobile menu on click outside
+  useEffect(() => {
+    if (!isMobileMenuOpen) return
+    const handleClickOutside = (e) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+    document.addEventListener('pointerdown', handleClickOutside)
+    return () => document.removeEventListener('pointerdown', handleClickOutside)
+  }, [isMobileMenuOpen])
 
   // 1. SCROLL LISTENER (window.scrollY > 100) with rAF throttle & passive listener
   useEffect(() => {
@@ -66,6 +81,7 @@ export const AudioPlayer = () => {
           setIsScrolledPast(scrolled)
           if (!scrolled) {
             setIsPlaylistOpen(false)
+            setIsMobileMenuOpen(false)
           }
           ticking = false
         })
@@ -605,7 +621,8 @@ export const AudioPlayer = () => {
                 </div>
 
                 {/* 3. Volume Control & Auxiliary Actions */}
-                <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                {/* DESKTOP ACTIONS (Inline - Hidden on Mobile) */}
+                <div className="hidden md:flex items-center gap-1 sm:gap-1.5 shrink-0">
                   {/* Volume Toggle / Popover */}
                   <div 
                     className="relative"
@@ -679,6 +696,99 @@ export const AudioPlayer = () => {
                   >
                     <Minimize2 className="w-3.5 h-3.5" />
                   </button>
+                </div>
+
+                {/* MOBILE SINGLE MENU BUTTON (Visible < md) */}
+                <div ref={mobileMenuRef} className="relative flex md:hidden items-center shrink-0">
+                  <button 
+                    id="audio-mobile-menu-btn"
+                    type="button"
+                    onClick={() => setIsMobileMenuOpen((prev) => !prev)} 
+                    className={`p-1.5 rounded-full border transition-all duration-300 active:scale-95 ${
+                      isMobileMenuOpen 
+                        ? 'bg-white/20 border-white/40 text-white shadow-[0_0_12px_rgba(255,255,255,0.3)]' 
+                        : 'bg-white/5 border-white/10 text-zinc-300 hover:text-white hover:bg-white/10'
+                    }`}
+                    aria-label="Player Options"
+                    title="Player Options"
+                  >
+                    <MoreVertical className="w-3.5 h-3.5" />
+                  </button>
+
+                  {/* MOBILE DROPDOWN POPOVER */}
+                  <AnimatePresence>
+                    {isMobileMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute bottom-full mb-3 right-0 w-48 p-3 rounded-2xl bg-neutral-950/95 border border-white/15 backdrop-blur-2xl shadow-[0_12px_36px_0_rgba(0,0,0,0.7)] flex flex-col gap-2.5 z-50 select-none"
+                      >
+                        {/* Volume Control Row */}
+                        <div className="flex items-center gap-2 pb-2.5 border-b border-white/10">
+                          <button
+                            type="button"
+                            onClick={toggleMute}
+                            aria-label="Toggle Mute"
+                            className="text-neutral-400 hover:text-white transition-colors shrink-0"
+                          >
+                            {isMuted || volume === 0 ? (
+                              <VolumeX className="w-4 h-4 text-rose-400" />
+                            ) : volume < 0.5 ? (
+                              <Volume1 className="w-4 h-4" />
+                            ) : (
+                              <Volume2 className="w-4 h-4" />
+                            )}
+                          </button>
+                          <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.01" 
+                            value={isMuted ? 0 : volume} 
+                            onChange={handleVolumeChange}
+                            className="w-full accent-white h-1.5 bg-white/20 rounded-lg cursor-pointer" 
+                          />
+                          <span className="text-[10px] font-mono text-zinc-400 shrink-0 w-8 text-right">
+                            {isMuted ? '0%' : `${Math.round(volume * 100)}%`}
+                          </span>
+                        </div>
+
+                        {/* Playlist Option */}
+                        <button 
+                          id="mobile-menu-playlist-btn"
+                          type="button"
+                          onClick={() => { 
+                            setIsPlaylistOpen((prev) => !prev); 
+                            setIsMobileMenuOpen(false); 
+                          }}
+                          className={`flex items-center gap-2.5 text-xs font-semibold px-2 py-1.5 rounded-xl transition-all ${
+                            isPlaylistOpen 
+                              ? 'bg-white/15 text-white' 
+                              : 'text-neutral-300 hover:text-white hover:bg-white/10'
+                          }`}
+                        >
+                          <ListMusic className="w-4 h-4 text-zinc-300" />
+                          <span>Tracks Playlist</span>
+                        </button>
+
+                        {/* Minimize Option */}
+                        <button 
+                          id="mobile-menu-minimize-btn"
+                          type="button"
+                          onClick={() => { 
+                            setIsBarVisible(false); 
+                            setIsMobileMenuOpen(false); 
+                          }}
+                          className="flex items-center gap-2.5 text-xs font-semibold text-neutral-400 hover:text-white hover:bg-white/10 px-2 py-1.5 rounded-xl transition-all"
+                        >
+                          <Minimize2 className="w-4 h-4" />
+                          <span>Minimize Player</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
