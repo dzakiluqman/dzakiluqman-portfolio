@@ -539,7 +539,7 @@ export const AdminProjects = () => {
                             <div className="flex items-center justify-end gap-1.5">
                               {/* View public project page */}
                               <Link
-                                to={`/projects/${project.id || project.slug}`}
+                                to={`/projects/${project.slug || project.id}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.05] transition-colors"

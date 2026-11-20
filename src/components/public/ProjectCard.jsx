@@ -19,7 +19,7 @@ export const ProjectCard = ({ project, index = 0 }) => {
     thumbnail_url,
   } = project
 
-  const projectHref = `/projects/${id || slug}`
+  const projectHref = `/projects/${slug || id}`
 
   // Normalize images array
   const imageList = Array.isArray(images)

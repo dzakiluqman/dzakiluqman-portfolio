@@ -166,9 +166,13 @@ export const FormattedDescription = ({ text, className = '' }) => {
   )
 }
 
+const isValidUUID = (str) =>
+  typeof str === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str.trim())
+
 export const ProjectDetail = () => {
   const { id, slug } = useParams()
-  const projectId = id || slug
+  const rawParam = id || slug
+  const projectId = rawParam ? decodeURIComponent(rawParam).trim() : ''
 
   const [project, setProject] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -183,23 +187,44 @@ export const ProjectDetail = () => {
     async function fetchProject() {
       setLoading(true)
       try {
-        if (!isSupabaseConfigured) {
+        if (!isSupabaseConfigured || !projectId) {
           setProject(null)
           setLoading(false)
           return
         }
 
-        // Live Supabase query matching ID or URL slug
-        const { data, error } = await supabase
-          .from('projects')
-          .select('*')
-          .or(`id.eq.${projectId},slug.eq.${projectId}`)
-          .single()
+        let projectData = null
 
-        if (error || !data) {
+        // 1. If valid UUID format, query by id first
+        if (isValidUUID(projectId)) {
+          const { data, error } = await supabase
+            .from('projects')
+            .select('*')
+            .eq('id', projectId)
+            .maybeSingle()
+
+          if (!error && data) {
+            projectData = data
+          }
+        }
+
+        // 2. If not UUID or not found by id, query by slug (case-insensitive)
+        if (!projectData) {
+          const { data, error } = await supabase
+            .from('projects')
+            .select('*')
+            .ilike('slug', projectId)
+            .maybeSingle()
+
+          if (!error && data) {
+            projectData = data
+          }
+        }
+
+        if (!projectData) {
           setProject(null)
         } else {
-          setProject(data)
+          setProject(projectData)
         }
       } catch (err) {
         console.error('Error fetching project:', err)
